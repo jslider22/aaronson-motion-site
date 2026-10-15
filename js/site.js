@@ -1,0 +1,194 @@
+/* ==========================================================================
+   Aaronson Motion — shared behavior (no dependencies)
+   1. Mobile nav toggle
+   2. Video embeds  (Vimeo / YouTube / Figma / iframe / self-hosted file)
+   3. Image placeholders for files that haven't been added yet
+   4. Gallery lightbox
+   5. Carousel buttons
+   6. Jump-nav highlighting
+   ========================================================================== */
+(() => {
+  "use strict";
+
+  /* ---- 1. Mobile nav ---------------------------------------------------- */
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.getElementById("site-nav");
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      const open = nav.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", String(open));
+    });
+  }
+
+  /* ---- Shared placeholder builder --------------------------------------- */
+  function makeSlot(tag, name, hint) {
+    const box = document.createElement("div");
+    box.className = "slot";
+    const t = document.createElement("span");
+    t.className = "slot__tag slot__tag--" + tag.toLowerCase();
+    t.textContent = tag;
+    const n = document.createElement("span");
+    n.className = "slot__name";
+    n.textContent = name;
+    box.append(t, n);
+    if (hint) {
+      const h = document.createElement("span");
+      h.className = "slot__hint";
+      h.textContent = hint;
+      box.append(h);
+    }
+    return box;
+  }
+
+  /* ---- 2. Video embeds --------------------------------------------------
+     Markup:  <div class="embed" data-provider="vimeo" data-id="123456789"
+                   data-slot="motion/celtics-hype-intro"></div>
+     Optional: data-hash   (Vimeo unlisted "h=" key)
+               data-ratio  ("9:16", "4:3"… default 16:9)
+               data-autoplay  (muted, looping — used for the home reel)
+               data-url    (figma / iframe providers)
+               data-src    (file provider: path to an .mp4)               */
+  function embedUrl(el) {
+    const d = el.dataset;
+    const id = (d.id || "").trim();
+    const auto = "autoplay" in d;
+    switch (d.provider) {
+      case "vimeo": {
+        if (!id) return "";
+        const p = new URLSearchParams({ dnt: "1", title: "0", byline: "0", portrait: "0" });
+        if (d.hash) p.set("h", d.hash);
+        if (auto) { p.set("autoplay", "1"); p.set("muted", "1"); p.set("loop", "1"); }
+        return "https://player.vimeo.com/video/" + encodeURIComponent(id) + "?" + p;
+      }
+      case "youtube": {
+        if (!id) return "";
+        const p = new URLSearchParams({ rel: "0", modestbranding: "1" });
+        if (auto) { p.set("autoplay", "1"); p.set("mute", "1"); p.set("loop", "1"); p.set("playlist", id); }
+        return "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?" + p;
+      }
+      case "figma":
+        return d.url ? "https://www.figma.com/embed?embed_host=share&url=" + encodeURIComponent(d.url) : "";
+      case "iframe":
+        return d.url || "";
+      default:
+        return "";
+    }
+  }
+
+  document.querySelectorAll(".embed").forEach((el) => {
+    const d = el.dataset;
+    if (d.ratio) el.style.setProperty("--ratio", d.ratio.replace(":", " / "));
+    const label = d.title || d.slot || "video";
+
+    if (d.provider === "file") {
+      if (!d.src) {
+        el.append(makeSlot("video file", d.slot || "", "set data-src to an .mp4 path"));
+        return;
+      }
+      const v = document.createElement("video");
+      v.src = d.src;
+      v.playsInline = true;
+      if ("autoplay" in d) { v.autoplay = v.muted = v.loop = true; } else { v.controls = true; }
+      v.preload = "metadata";
+      v.addEventListener("error", () => { v.replaceWith(makeSlot("video file", d.src, "file not found yet")); });
+      el.append(v);
+      return;
+    }
+
+    const src = embedUrl(el);
+    if (!src) {
+      const need = d.provider === "figma" || d.provider === "iframe" ? "add data-url" : "add data-id";
+      el.append(makeSlot(d.provider || "video", d.slot || "", need));
+      return;
+    }
+    const f = document.createElement("iframe");
+    f.src = src;
+    f.title = label;
+    f.loading = "autoplay" in d ? "eager" : "lazy";
+    f.allow = "autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media";
+    f.allowFullscreen = true;
+    f.referrerPolicy = "strict-origin-when-cross-origin";
+    el.append(f);
+  });
+
+  /* ---- 3. Image placeholders ---------------------------------------------
+     Any <img> whose file is missing becomes a labelled grey box showing the
+     exact path to save the real file at. Set the box shape with
+     style="--ar: 3/4" on the <img> (defaults to 4:3).                    */
+  function toSlot(img) {
+    if (img.dataset.slotted) return;
+    img.dataset.slotted = "1";
+    const src = img.getAttribute("src") || "";
+    const cut = src.lastIndexOf("/") + 1;
+    // name = file to add, hint = folder it goes in
+    const box = makeSlot("image", src.slice(cut), src.slice(0, cut));
+    box.title = src + (img.alt ? " — " + img.alt : "");
+    box.classList.add("slot--img", ...img.classList); // keep grid classes (wide/big…)
+    box.style.cssText = img.style.cssText; // keeps --ar, max-width, margins
+    img.hidden = true;
+    img.after(box);
+    // If the file shows up later (e.g. dev server reload), swap back.
+    img.addEventListener("load", () => { img.hidden = false; box.remove(); delete img.dataset.slotted; }, { once: true });
+  }
+  document.querySelectorAll("img").forEach((img) => {
+    if (img.complete && img.naturalWidth === 0) toSlot(img);
+    else img.addEventListener("error", () => toSlot(img), { once: true });
+  });
+
+  /* ---- 4. Lightbox ------------------------------------------------------ */
+  const galleries = document.querySelectorAll(".gallery");
+  if (galleries.length && "HTMLDialogElement" in window) {
+    const dlg = document.createElement("dialog");
+    dlg.className = "lightbox";
+    dlg.innerHTML = '<button type="button" aria-label="Close">×</button><img alt=""><p></p>';
+    document.body.append(dlg);
+    const big = dlg.querySelector("img");
+    const cap = dlg.querySelector("p");
+    dlg.querySelector("button").addEventListener("click", () => dlg.close());
+    dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+
+    galleries.forEach((g) => {
+      g.querySelectorAll("img").forEach((img) => {
+        img.setAttribute("data-zoomable", "");
+        img.addEventListener("click", () => {
+          if (!img.naturalWidth) return; // still a placeholder
+          big.src = img.currentSrc || img.src;
+          big.alt = img.alt;
+          const fc = img.closest("figure")?.querySelector("figcaption");
+          cap.textContent = fc ? fc.textContent.trim().replace(/\s+/g, " ") : img.alt;
+          dlg.showModal();
+        });
+      });
+    });
+  }
+
+  /* ---- 5. Carousels ----------------------------------------------------- */
+  document.querySelectorAll(".carousel").forEach((c) => {
+    const track = c.querySelector(".carousel__track");
+    c.querySelector(".carousel__btn--prev")?.addEventListener("click", () => track.scrollBy({ left: -track.clientWidth, behavior: "smooth" }));
+    c.querySelector(".carousel__btn--next")?.addEventListener("click", () => track.scrollBy({ left: track.clientWidth, behavior: "smooth" }));
+  });
+
+  /* ---- 6. Jump-nav: highlight the section in view ------------------------ */
+  const jumpLinks = document.querySelectorAll(".jump-nav a[href^='#']");
+  if (jumpLinks.length && "IntersectionObserver" in window) {
+    const map = new Map();
+    jumpLinks.forEach((a) => {
+      const sec = document.getElementById(a.getAttribute("href").slice(1));
+      if (sec) map.set(sec, a);
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        jumpLinks.forEach((a) => a.classList.remove("is-current"));
+        const a = map.get(en.target);
+        a.classList.add("is-current");
+        // Keep the active chip visible in the horizontal mobile bar
+        // (scrolls only the bar, never the page).
+        const bar = a.closest(".jump-nav");
+        if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: a.offsetLeft - 16, behavior: "smooth" });
+      });
+    }, { rootMargin: "-30% 0px -60% 0px" });
+    map.forEach((_, sec) => io.observe(sec));
+  }
+})();
