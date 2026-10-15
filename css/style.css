@@ -317,15 +317,26 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
 .work p { color: var(--muted); font-weight: 300; font-size: 15.5px; }
 .work-stack { display: grid; gap: 20px; }
 
-/* Lee Company: tall + wide spots side by side */
-.work--split { display: grid; gap: 20px; }
-.work--split .work__aside { display: grid; gap: 16px; align-content: start; }
-.work--split > .embed { max-width: 240px; margin-inline: auto; } /* tall 2:5 banner */
-.work--split > .embed { width: 100%; }
+/* Lee Company: tall video left, everything else to its right (like the Wix layout).
+   Phones: title/text across the top, tall video beside the two wide videos. */
+.work--split {
+  display: grid; gap: 14px 16px; align-items: start;
+  grid-template-columns: minmax(0, 34%) minmax(0, 1fr);
+  grid-template-areas: "text text" "tall wide" "tall main";
+  grid-template-rows: auto auto 1fr;
+}
+.split__tall { grid-area: tall; }
+.split__text { grid-area: text; }
+.split__wide { grid-area: wide; }
+.split__main { grid-area: main; }
 .work--split h3 { margin-top: 0; }
-@media (min-width: 700px) {
-  .work--split { grid-template-columns: minmax(150px, 30%) minmax(0, 1fr); }
-  .work--split > .embed { max-width: none; }
+.work--split p { margin-bottom: 0; }
+@media (min-width: 560px) {
+  .work--split {
+    column-gap: 24px;
+    grid-template-columns: minmax(150px, 30%) minmax(0, 1fr);
+    grid-template-areas: "tall text" "tall wide" "tall main";
+  }
 }
 
 /* GIF grid */
