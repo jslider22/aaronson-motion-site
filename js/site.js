@@ -20,6 +20,32 @@
     });
   }
 
+  /* ---- 1b. Dropdowns on touch screens (iPad) -----------------------------
+     No hover on a touchscreen, so the first tap on "Design" / "About" opens
+     its submenu and a second tap follows the link. Tapping elsewhere closes. */
+  const subParents = document.querySelectorAll(".has-submenu");
+  const wideNav = window.matchMedia("(min-width: 768px)");
+  const noHover = window.matchMedia("(hover: none)");
+  const closeMenus = (except) => subParents.forEach((li) => {
+    if (li === except) return;
+    li.classList.remove("is-open");
+    li.firstElementChild.setAttribute("aria-expanded", "false");
+  });
+  subParents.forEach((li) => {
+    const link = li.firstElementChild;
+    link.setAttribute("aria-haspopup", "true");
+    link.setAttribute("aria-expanded", "false");
+    link.addEventListener("click", (e) => {
+      if (!wideNav.matches || !noHover.matches || li.classList.contains("is-open")) return;
+      e.preventDefault();
+      closeMenus(li);
+      li.classList.add("is-open");
+      link.setAttribute("aria-expanded", "true");
+    });
+  });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".has-submenu")) closeMenus(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenus(); });
+
   /* ---- Shared placeholder builder --------------------------------------- */
   function makeSlot(tag, name, hint) {
     const box = document.createElement("div");
@@ -55,14 +81,14 @@
     switch (d.provider) {
       case "vimeo": {
         if (!id) return "";
-        const p = new URLSearchParams({ dnt: "1", title: "0", byline: "0", portrait: "0" });
+        const p = new URLSearchParams({ dnt: "1", title: "0", byline: "0", portrait: "0", playsinline: "1" });
         if (d.hash) p.set("h", d.hash);
         if (auto) { p.set("autoplay", "1"); p.set("muted", "1"); p.set("loop", "1"); }
         return "https://player.vimeo.com/video/" + encodeURIComponent(id) + "?" + p;
       }
       case "youtube": {
         if (!id) return "";
-        const p = new URLSearchParams({ rel: "0", modestbranding: "1" });
+        const p = new URLSearchParams({ rel: "0", modestbranding: "1", playsinline: "1" });
         if (auto) { p.set("autoplay", "1"); p.set("mute", "1"); p.set("loop", "1"); p.set("playlist", id); }
         return "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?" + p;
       }

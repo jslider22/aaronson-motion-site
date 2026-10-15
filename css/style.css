@@ -103,7 +103,7 @@ p { margin: 0 0 1em; }
 .site-nav a[aria-current="page"], .site-nav .is-active > a { color: var(--blue-light); }
 .site-nav .submenu a { text-transform: none; padding: 8px 4px 8px 20px; color: #ccc; font-size: 15px; }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
   .site-header__top { min-height: 96px; border-bottom: 1px solid #3a3a3a; }
   .brand { font-size: 30px; }
   .tagline { display: block; }
@@ -112,17 +112,26 @@ p { margin: 0 0 1em; }
   .site-nav > ul { display: grid; grid-template-columns: 1.4fr 2fr 2.3fr 1.5fr 1.5fr; }
   .site-nav > ul > li { position: relative; border-left: 1px solid #777; }
   .site-nav > ul > li:first-child { border-left: 0; }
-  .site-nav > ul > li > a { padding: 10px 12px; font-size: 14px; line-height: 1.2; }
+  .site-nav > ul > li > a { padding: 12px; font-size: 14px; line-height: 1.2; }
   .site-nav > ul > li > a[aria-current="page"], .site-nav > ul > .is-active > a { background: var(--blue); color: #fff; }
-  .site-nav > ul > li > a:hover { background: #333; }
-  /* Desktop dropdowns: show on hover or keyboard focus */
+  /* Dropdowns: hover (mouse), keyboard focus, or .is-open (tap on iPad — see site.js) */
   .submenu {
     position: absolute; top: 100%; left: -1px; min-width: 100%;
     background: var(--blue); display: none; z-index: 60; box-shadow: 0 6px 16px rgba(0,0,0,.25);
   }
-  .has-submenu:hover .submenu, .has-submenu:focus-within .submenu { display: block; }
+  .has-submenu:focus-within .submenu, .has-submenu.is-open .submenu { display: block; }
   .site-nav .submenu a { color: #fff; padding: 6px 10px; font-size: 14px; border-top: 1px solid rgba(255,255,255,.25); }
-  .site-nav .submenu a:hover, .site-nav .submenu a[aria-current="page"] { background: #2d5089; }
+  .site-nav .submenu a[aria-current="page"] { background: #2d5089; }
+}
+@media (min-width: 768px) and (hover: hover) {
+  .site-nav > ul > li > a:hover { background: #333; }
+  .has-submenu:hover .submenu { display: block; }
+  .site-nav .submenu a:hover { background: #2d5089; }
+}
+@media (min-width: 768px) and (max-width: 899px) {
+  .brand { font-size: 24px; }
+  .tagline { font-size: 12px; }
+  .site-nav > ul > li > a { padding: 12px 8px; font-size: 13px; }
 }
 
 /* ---- Footer ------------------------------------------------------------ */
@@ -173,7 +182,8 @@ p { margin: 0 0 1em; }
   color: #6a8fc8; text-decoration: none; font: 400 15px var(--font-ui); letter-spacing: .04em;
   text-transform: uppercase; background: #fff; transition: background .2s, color .2s, border-color .2s;
 }
-.btn-outline:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+@media (hover: hover) { .btn-outline:hover { background: var(--blue); border-color: var(--blue); color: #fff; } }
+.btn-outline:active { background: var(--blue); border-color: var(--blue); color: #fff; }
 .btn-solid {
   display: inline-block; background: var(--blue-pale); color: #fff; text-decoration: none;
   padding: 14px 28px; font: 700 clamp(16px, 2.4vw, 22px) var(--font-body); letter-spacing: .12em;
@@ -530,3 +540,29 @@ figure { margin: 0; }
 @media (min-width: 760px) { .split { grid-template-columns: 1fr 2fr; } }
 .btn-block { display: block; text-align: center; }
 .ux-h4 { font: 400 clamp(26px, 3.5vw, 34px) var(--font-body); color: #2c4f80; }
+
+/* ---- Touch devices (phones, iPad) ------------------------------------- */
+/* Bigger tap targets (~44px) wherever the pointer is a finger. */
+@media (pointer: coarse) {
+  html { -webkit-tap-highlight-color: rgba(79, 143, 216, .2); }
+  .social { gap: 12px; }
+  .social a { width: 40px; height: 40px; }
+  .social svg { width: 20px; height: 20px; }
+  .home-btn { padding: 10px 14px; }
+  .site-nav .submenu a { padding-block: 12px; }
+  .jump-nav a { padding: 10px 14px; }
+  .carousel__btn { width: 44px; height: 64px; }
+  .lightbox button { width: 48px; height: 48px; }
+}
+@media (pointer: coarse) and (min-width: 1200px) {
+  .jump-nav a { padding: 8px 0; font-size: 13px; }
+}
+
+/* ---- Tablet (iPad portrait ~768–1023px) ------------------------------- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .masonry--4 { columns: 3; }
+  .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .vfx { grid-template-columns: 1fr; }               /* video full width, notes below */
+  .vfx__notes { border-left: 0; }
+  .ux-intro p, .case p { font-size: 17px; }
+}

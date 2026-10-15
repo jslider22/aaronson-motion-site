@@ -77,6 +77,16 @@ python3 -m http.server 8080
 Then open http://localhost:8080. Opening the `.html` files directly also works, but video
 embeds behave best through the local server.
 
+## Phones, iPad and desktop
+
+It's one site that adapts to screen width. There's no separate mobile version to maintain.
+`css/style.css` has three layout ranges:
+
+- **Phone** (under 768px): menu button, single-column layouts, about 44px tap targets.
+- **Tablet / iPad portrait** (768–1023px): full menu bar, 2–4 column galleries.
+  Tapping Design or About opens its submenu, and a second tap follows the link.
+- **Desktop / iPad landscape** (1024px and up): the full layout.
+
 ## Editing the menu or footer
 
 The header and footer are copied into every page. To change a menu item, social link or
