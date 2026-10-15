@@ -269,11 +269,13 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
 .home-reel .embed { border-color: #2c4f80; }
 
 .clients {
-  list-style: none; margin: 0 auto; padding: 0; max-width: 620px;
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 18px; align-items: center;
+  list-style: none; margin: 0 auto; padding: 0; max-width: 720px;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; align-items: center;
 }
 .clients a { display: block; }
-.clients img { width: 100%; max-height: 54px; object-fit: contain; filter: grayscale(1); opacity: .75; transition: filter .2s, opacity .2s; }
+/* Every logo file is the same 2:1 canvas, pre-balanced for equal visual weight
+   (see README: Client logos), so they all display at the same size. */
+.clients img { width: 100%; aspect-ratio: 2 / 1; object-fit: contain; filter: grayscale(1); opacity: .8; transition: filter .2s, opacity .2s; }
 @media (hover: hover) { .clients a:hover img { filter: none; opacity: 1; } }
 .clients .slot { min-height: 46px; aspect-ratio: 5 / 2; font-size: 10px; padding: 4px; }
 .clients .slot__tag, .clients .slot__hint, .services .slot__hint, .tiles .slot__hint { display: none; }

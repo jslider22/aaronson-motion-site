@@ -77,6 +77,15 @@ python3 tools/asset-checklist.py
 Image tips: export JPG for photos and renders, PNG for logos and line art. About 2000px on
 the long side is plenty. Keep each file under about 500 KB where you can.
 
+## Client logos
+
+The home page logos are pre-balanced so they look equally weighted. Each file is the
+same 320×160 canvas, with the logo sized by area (not by width or height) and nudged
+smaller if it's very solid or dark. To add or swap a logo, put the original (named after
+its slot, e.g. `navient.png`) in a folder and run
+`python3 tools/balance-logos.py <that-folder> assets/images/home/clients`.
+Don't just drop in a raw logo, or it will look too big or too small next to the others.
+
 ## Previewing locally
 
 ```bash
