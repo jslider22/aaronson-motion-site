@@ -4,7 +4,7 @@ Balance client logos so they all carry equal visual weight on the home page.
 
 Each logo is trimmed of its white border, sized by AREA (so wide wordmarks and
 square badges look equally important), nudged smaller if it's very solid/dark,
-and centered on an identical 320x160 white canvas.
+and centered on an identical 320x120 white canvas.
 
 Usage (needs Pillow:  python3 -m pip install pillow):
     python3 tools/balance-logos.py <folder-of-originals> assets/images/home/clients
@@ -15,9 +15,9 @@ Pre-crop anything that needs it (taglines, captions) before running.
 import math, os, statistics, sys
 from PIL import Image, ImageChops
 
-W, H = 320, 160                 # canvas; shown ~90-110px wide, so ~2x for Retina
-TARGET = 0.30 * W * H           # area each logo should cover
-MAXW, MAXH = 0.96 * W, 0.86 * H
+W, H = 320, 120                 # canvas (8:3); shown ~90-115px wide, so ~2x for Retina
+TARGET = 0.40 * W * H           # area each logo should cover
+MAXW, MAXH = 0.96 * W, 0.92 * H
 
 def load(path):
     im = Image.open(path); im.seek(0); im = im.convert("RGBA")
