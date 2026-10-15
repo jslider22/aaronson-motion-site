@@ -146,10 +146,12 @@ p { margin: 0 0 1em; }
 .social svg { width: 16px; height: 16px; fill: currentColor; }
 .home-btn {
   display: inline-flex; align-items: center; gap: 4px; background: #fff; color: var(--blue);
-  padding: 6px 10px; border-radius: 4px; text-decoration: none; font: 500 13px var(--font-ui);
+  padding: 6px 10px; border: 2px solid #fff; border-radius: 6px; text-decoration: none; font: 500 13px var(--font-ui);
+  transition: background .2s, color .2s;
 }
 .home-btn img { height: 16px; width: auto; }
-.home-btn:hover { background: #e9f1fc; }
+@media (hover: hover) { .home-btn:hover { background: transparent; color: #fff; } }
+.home-btn:active { background: transparent; color: #fff; }
 
 /* Grey swoosh that rises into the footer on many pages */
 .swoosh { display: block; width: 100%; height: clamp(40px, 8vw, 110px); margin-top: 40px; }
@@ -184,6 +186,7 @@ p { margin: 0 0 1em; }
 }
 @media (hover: hover) { .btn-outline:hover { background: var(--blue); border-color: var(--blue); color: #fff; } }
 .btn-outline:active { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn-connect { border-radius: 16px; min-width: 140px; }
 .btn-solid {
   display: inline-block; background: var(--blue-pale); color: #fff; text-decoration: none;
   padding: 14px 28px; font: 700 clamp(16px, 2.4vw, 22px) var(--font-body); letter-spacing: .12em;
@@ -241,12 +244,15 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
    Page: Home
    ========================================================================== */
 .home-logo { padding-top: 32px; text-align: center; }
-.home-logo img, .home-logo .slot { width: min(240px, 60vw); margin: 0 auto; }
+.home-logo .lottie { width: min(320px, 72vw); aspect-ratio: 1; margin: -24px auto -36px; }
+.home-logo .slot { width: 100%; height: 100%; }
 
 .services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; max-width: 760px; margin: 0 auto; }
 .service { text-align: center; text-decoration: none; color: var(--text); font-size: 14px; }
 .service img, .service .slot { width: 110px; aspect-ratio: 1; border-radius: 50%; margin: 10px auto 0; }
-.service:hover { color: var(--blue); }
+.service { display: block; transition: color .2s; }
+.service:active { color: var(--blue); }
+@media (hover: hover) { .service:hover { color: var(--blue); font-weight: 700; letter-spacing: .01em; } }
 @media (min-width: 640px) { .services { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
 .home-ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin: 40px 0 8px; }
@@ -263,7 +269,9 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
   list-style: none; margin: 0 auto; padding: 0; max-width: 620px;
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 18px; align-items: center;
 }
-.clients img { width: 100%; max-height: 54px; object-fit: contain; filter: grayscale(1); opacity: .75; }
+.clients a { display: block; }
+.clients img { width: 100%; max-height: 54px; object-fit: contain; filter: grayscale(1); opacity: .75; transition: filter .2s, opacity .2s; }
+@media (hover: hover) { .clients a:hover img { filter: none; opacity: 1; } }
 .clients .slot { min-height: 46px; aspect-ratio: 5 / 2; font-size: 10px; padding: 4px; }
 .clients .slot__tag, .clients .slot__hint, .services .slot__hint, .tiles .slot__hint { display: none; }
 .slot { overflow: hidden; }
@@ -486,7 +494,8 @@ figure { margin: 0; }
 
 .stat-card {
   margin: 24px auto 0; max-width: 760px; padding: clamp(16px, 4vw, 32px);
-  border: 3px solid #2c4f80; border-radius: 28px; background: #efe7d6;
+  border: 3px solid #2c4f80; border-radius: 28px;
+  background: #efe7d6 url("../assets/images/about/paper-texture.jpg") center / cover; /* colour shows until the texture is added */
   font-family: "Avenir Next", var(--font-brand);
 }
 .stat-card__head { display: grid; gap: 16px; align-items: center; }
@@ -566,3 +575,30 @@ figure { margin: 0; }
   .vfx__notes { border-left: 0; }
   .ux-intro p, .case p { font-size: 17px; }
 }
+/* Figma prototype frames: light grey border like Figma's own embed code */
+.embed--figma { background: #f5f5f5; border: 6px solid rgba(0, 0, 0, .1); }
+.try-grid .embed--figma { max-width: 600px; margin-inline: auto; }
+
+/* ==========================================================================
+   Page: Design (landing grid of six sections)
+   ========================================================================== */
+.design-grid {
+  list-style: none; margin: 32px auto 56px; padding: 0; max-width: 960px;
+  display: grid; grid-template-columns: 1fr; gap: 36px clamp(24px, 4vw, 48px);
+}
+.design-grid a { display: block; text-decoration: none; color: var(--blue); }
+.design-grid__label {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  font: 400 14px var(--font-brand);
+}
+.design-grid__label::before, .design-grid__label::after { content: ""; flex: 1; height: 1px; background: #d8a8b4; }
+.design-grid img, .design-grid .slot {
+  width: 100%; aspect-ratio: 8 / 5; object-fit: cover;
+  border: 1px solid #999; border-radius: 4px; transition: transform .25s, box-shadow .25s;
+}
+@media (hover: hover) {
+  .design-grid a:hover img { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(0,0,0,.18); }
+  .design-grid a:hover .design-grid__label { font-weight: 700; }
+}
+@media (min-width: 560px) { .design-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .design-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 48px; } }

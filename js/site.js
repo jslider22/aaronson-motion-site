@@ -6,6 +6,7 @@
    4. Gallery lightbox
    5. Carousel buttons
    6. Jump-nav highlighting
+   7. Lottie animations (home logo)
    ========================================================================== */
 (() => {
   "use strict";
@@ -193,6 +194,28 @@
     const track = c.querySelector(".carousel__track");
     c.querySelector(".carousel__btn--prev")?.addEventListener("click", () => track.scrollBy({ left: -track.clientWidth, behavior: "smooth" }));
     c.querySelector(".carousel__btn--next")?.addEventListener("click", () => track.scrollBy({ left: track.clientWidth, behavior: "smooth" }));
+  });
+
+  /* ---- 7. Lottie animations ---------------------------------------------
+     <div class="lottie" data-src="assets/lottie/file.json" data-loop="true">
+     Needs the lottie_light script on that page (see index.html <head>).
+     With "reduce motion" turned on, shows the finished logo without animating. */
+  document.querySelectorAll(".lottie[data-src]").forEach((el) => {
+    if (!window.lottie) {
+      el.append(makeSlot("lottie", el.dataset.src.split("/").pop(), "player didn't load"));
+      return;
+    }
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const anim = window.lottie.loadAnimation({
+      container: el,
+      renderer: "svg",
+      path: el.dataset.src,
+      loop: el.dataset.loop !== "false" && !still,
+      autoplay: !still,
+      rendererSettings: { preserveAspectRatio: "xMidYMid meet" },
+    });
+    if (still) anim.addEventListener("DOMLoaded", () => anim.goToAndStop(anim.totalFrames - 1, true));
+    anim.addEventListener("data_failed", () => el.append(makeSlot("lottie", el.dataset.src, "file not found")));
   });
 
   /* ---- 6. Jump-nav: highlight the section in view ------------------------ */

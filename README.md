@@ -7,7 +7,8 @@ file you can open and edit.
 ## Project layout
 
 ```
-index.html                Home
+index.html                Home (animated Lottie logo, demo reel, client logos)
+design.html               Design landing page (6 thumbnail cards)
 motion-design.html        Motion Design (5 sections, jump links)
 vfx-video-editing.html    VFX & Video Editing
 ux-design.html            Design → UX Design (SkiPS, AutoExpreso, Navient.com, OpenToon)
@@ -25,6 +26,7 @@ css/style.css             All styles (mobile-first; colors/fonts are variables a
 js/site.js                Menu toggle, video embeds, image placeholders, lightbox, carousel
 assets/images/<page>/     Images, one folder per page
 assets/files/             Resume PDF / DOCX downloads
+assets/lottie/            Lottie animation files (home logo)
 tools/asset-checklist.py  Lists every image/video slot and whether it's filled
 ASSETS.md                 Output of the checklist
 ```
@@ -52,6 +54,13 @@ Other options:
 - `data-provider="file" data-src="assets/video/clip.mp4"` for a self-hosted clip.
 
 An empty slot shows a grey placeholder with its name, so you can always see what's missing.
+
+## The animated logo (Lottie)
+
+The home page logo plays `assets/lottie/aaronson-motion-logo.json`, a copy of your LottieFiles
+animation saved in the project, so it keeps working if anything changes on LottieFiles.
+To replace it, export a new Lottie JSON and save it at that path. To play it once instead
+of looping, set `data-loop="false"` on the `.lottie` element in `index.html`.
 
 ## Adding images
 

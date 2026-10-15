@@ -26,6 +26,8 @@ class Collector(HTMLParser):
             self.links.append(a["href"])
         elif tag == "div" and "embed" in (a.get("class") or "").split():
             self.embeds.append(a)
+        elif tag == "div" and "lottie" in (a.get("class") or "").split() and a.get("data-src"):
+            self.links.append(a["data-src"])
 
 
 def main():
@@ -63,6 +65,15 @@ def main():
             done_vid += ok; todo_vid += not ok
             label = e.get("data-slot", "")
             lines.append(f"- [{'x' if ok else ' '}] **{prov}** `{label}`" + (f" = {val}" if ok else ""))
+        lines.append("")
+    css = (ROOT / "css/style.css").read_text(encoding="utf-8")
+    bg = sorted(set(re.findall(r'url\("\.\./(assets/[^"]+)"\)', css)))
+    if bg:
+        lines += ["## Background images (css/style.css)", ""]
+        for src in bg:
+            ok = (ROOT / src).exists()
+            done_img += ok; todo_img += not ok
+            lines.append(f"- [{'x' if ok else ' '}] `{src}`")
         lines.append("")
     (ROOT / "ASSETS.md").write_text("\n".join(lines), encoding="utf-8")
     print(f"Images/files: {done_img} added, {todo_img} still needed")
