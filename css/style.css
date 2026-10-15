@@ -49,6 +49,9 @@ body {
 }
 img { max-width: 100%; height: auto; display: block; }
 [hidden] { display: none !important; }
+/* Reserve each image's space before it loads (from its --ar) so the page doesn't jump;
+   once loaded, the image's real proportions take over. */
+img[style*="--ar"] { aspect-ratio: auto var(--ar); }
 a { color: var(--blue-light); }
 a:hover { color: var(--blue); }
 h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5em; font-weight: 400; }
