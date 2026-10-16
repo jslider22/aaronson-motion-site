@@ -301,21 +301,19 @@
   showTop();
   /* ---- 9. Home intro ------------------------------------------------------
      The <head> of index.html adds class "intro" on the first Home visit of a
-     session. The page starts scaled up around the logo and pulls back to
-     normal size just as the demo reel's own opening logo fades out
-     (REEL_LOGO_GONE seconds into the video), so the two logos never show at
-     once. If the reel doesn't start playing (autoplay blocked, slow
-     connection), it pulls out once the logo has drawn. Any tap, key or
-     scroll skips straight to the end. */
+     session. The page starts scaled up around the logo (everything else
+     hidden) and pulls back to normal size a beat after the logo's
+     "AARONSONMOTION" wordmark has faded in (PULL_AT_FRAME of the Lottie).
+     Any tap, key or scroll skips straight to the end. */
   const root = document.documentElement;
   const introMain = document.getElementById("main");
   const introLogo = document.querySelector(".home-logo .lottie");
   if (root.classList.contains("intro") && introMain && introLogo && introMain.animate) {
     try { sessionStorage.setItem("am-intro", "1"); } catch (e) { /* private mode: play every time */ }
-    const REEL_LOGO_GONE = 4.0;  // seconds into the reel (its logo is fading by then); change if the reel is re-cut
+    // The logo runs at 30fps; its wordmark fades in over frames 73-90 (2.4-3.0s)
+    const PULL_AT_FRAME = 105;   // ~3.5s: half a second after the wordmark is in
     const PULL = 1000;           // length of the pull-out, ms
-    const NO_REEL = 3000;        // ms to wait for the reel to start before giving up on it
-    const MAX_WAIT = 9000;       // never hold longer than this, ms
+    const MAX_WAIT = 5000;       // pull out anyway if the logo is slow or fails to load, ms
 
     root.style.overflow = "hidden";
     const m = introMain.getBoundingClientRect();
@@ -344,7 +342,6 @@
       if (done) return;
       done = true;
       timers.forEach(clearTimeout);
-      window.removeEventListener("message", onReel);
       events.forEach((t) => window.removeEventListener(t, skip));
       introMain.classList.remove("intro-hold");
       introMain.style.transform = "";
@@ -365,21 +362,11 @@
       pull.onfinish = finish;
     };
 
-    // Follow the reel's playback through the Vimeo player's postMessage API
-    const reel = document.querySelector(".home-reel iframe[src*='player.vimeo.com']");
-    const send = (method, value) => reel.contentWindow.postMessage(JSON.stringify({ method, value }), "https://player.vimeo.com");
-    function onReel(e) {
-      if (!reel || e.source !== reel.contentWindow) return;
-      let d = e.data;
-      try { if (typeof d === "string") d = JSON.parse(d); } catch (err) { return; }
-      if (d.event === "ready") { send("addEventListener", "play"); send("addEventListener", "timeupdate"); }
-      // The player reports progress as "playProgress" (older name) or "timeupdate"
-      const progress = d.event === "playProgress" || d.event === "timeupdate";
-      if (d.event === "play" || progress) clearTimeout(timers[0]);
-      if (progress && d.data && d.data.seconds >= REEL_LOGO_GONE) go();
-    }
-    if (reel) window.addEventListener("message", onReel);
-    timers.push(setTimeout(go, NO_REEL), setTimeout(go, MAX_WAIT));
+    const anim = introLogo.anim;
+    if (anim) anim.addEventListener("enterFrame", function check() {
+      if (anim.currentFrame >= PULL_AT_FRAME) { anim.removeEventListener("enterFrame", check); go(); }
+    });
+    timers.push(setTimeout(go, MAX_WAIT));
   } else {
     root.classList.remove("intro");
   }
