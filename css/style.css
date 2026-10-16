@@ -538,12 +538,13 @@ figure { margin: 0; }
 .now p { font: 15px/1.9 "Avenir Next", var(--font-body); color: #333; }
 .now-foot { border-top: 1px solid var(--line); padding: 16px 0 24px; font-size: 14px; }
 
-.resume { font: 13px/1.55 "Avenir Next", var(--font-body); color: #222; }
+/* Resume text uses Carlito, a free metric-compatible match for Calibri (the font in the CV PDF/DOCX) */
+.resume { --font-cv: "Carlito", Calibri, "Segoe UI", Arial, sans-serif; font: 14.5px/1.5 var(--font-cv); color: #222; }
 .resume__head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.resume__head h2 { font: 700 15px var(--font-body); margin: 0; }
+.resume__head h2 { font: 700 17px var(--font-cv); margin: 0; }
 .resume__head h2 span { font-weight: 400; color: var(--blue); }
-.resume__tagline { margin: 2px 0 6px; color: var(--muted); font-size: 13px; letter-spacing: .02em; }
-.downloads { text-align: center; font-size: 12px; }
+.resume__tagline { margin: 2px 0 6px; color: var(--muted); font-size: 14.5px; }
+.downloads { text-align: center; font: 700 15px var(--font-ui); }
 .downloads a { color: #222; }
 .downloads ul { display: flex; gap: 8px; list-style: none; margin: 4px 0 0; padding: 0; }
 .downloads li a {
@@ -551,9 +552,9 @@ figure { margin: 0; }
   font: 700 9px var(--font-ui); text-decoration: none; color: #666;
 }
 .resume section { border-top: 1px solid #c9a39a; padding-top: 14px; margin-top: 14px; }
-.resume h3 { font: 700 13px var(--font-body); text-decoration: underline; margin: 4px 0 12px; }
-.resume h4 { font: 400 13px var(--font-body); margin: 14px 0 0; text-transform: uppercase; }
-.resume h5 { font: 700 13px var(--font-body); margin: 0; }
+.resume h3 { font: 700 14.5px var(--font-cv); text-decoration: underline; margin: 4px 0 12px; }
+.resume h4 { font: 400 14.5px var(--font-cv); margin: 14px 0 0; text-transform: uppercase; }
+.resume h5 { font: 700 14.5px var(--font-cv); margin: 0; }
 .resume h5 span { font-weight: 400; }
 .resume ul { margin: 2px 0 0; padding-left: 0; list-style: none; }
 .resume li::before { content: "- "; }
