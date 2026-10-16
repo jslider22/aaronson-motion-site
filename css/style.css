@@ -123,6 +123,21 @@ p { margin: 0 0 1em; }
 }
 .site-nav a[aria-current="page"], .site-nav .is-active > a { color: var(--blue-light); }
 .site-nav .submenu a { text-transform: none; padding: 8px 4px 8px 20px; color: #ccc; font-size: 15px; }
+/* Phone menu: Design / About sub-pages fold away behind a chevron (see site.js) */
+@media (max-width: 767px) {
+  .site-nav .has-submenu { display: grid; grid-template-columns: 1fr auto; align-items: center; }
+  .site-nav .has-submenu > .submenu { grid-column: 1 / -1; }
+  .site-nav.nav-js .has-submenu:not(.is-expanded) > .submenu { display: none; }
+  .sub-toggle {
+    width: 44px; height: 44px; display: grid; place-items: center; margin-right: -8px;
+    background: none; border: 0; border-radius: 6px; color: #ccc; cursor: pointer;
+  }
+  .sub-toggle:hover, .sub-toggle:focus-visible { color: #fff; background: #333; }
+  .sub-toggle svg { transition: transform .2s; }
+  .is-expanded > .sub-toggle svg { transform: rotate(180deg); }
+  .site-nav > ul > li > a { padding-block: 10px; }
+}
+@media (min-width: 768px) { .sub-toggle { display: none; } }
 
 @media (min-width: 768px) {
   .site-header__top { min-height: 96px; border-bottom: 1px solid #3a3a3a; }

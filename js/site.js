@@ -1,6 +1,6 @@
 /* ==========================================================================
    Aaronson Motion — shared behavior (no dependencies)
-   1. Mobile nav toggle
+   1. Mobile nav toggle (+ collapsible Design/About on phones)
    2. Video embeds  (Vimeo / YouTube / Figma / iframe / self-hosted file)
    3. Image placeholders for files that haven't been added yet
    4. Gallery lightbox
@@ -15,9 +15,41 @@
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.getElementById("site-nav");
   if (toggle && nav) {
-    toggle.addEventListener("click", () => {
-      const open = nav.classList.toggle("is-open");
+    const setOpen = (open) => {
+      nav.classList.toggle("is-open", open);
       toggle.setAttribute("aria-expanded", String(open));
+    };
+    toggle.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
+    // Close the phone menu on a tap outside the header, or with Escape.
+    document.addEventListener("click", (e) => {
+      if (nav.classList.contains("is-open") && !e.target.closest(".site-header")) setOpen(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && nav.classList.contains("is-open")) { setOpen(false); toggle.focus(); }
+    });
+
+    // Phone menu: Design and About collapse behind a chevron button so the menu
+    // stays short. The section holding the current page starts open.
+    // (Hidden on wider screens, where these are hover/tap dropdowns instead.)
+    nav.classList.add("nav-js");
+    nav.querySelectorAll(".has-submenu").forEach((li, i) => {
+      const link = li.firstElementChild;
+      const sub = li.querySelector(".submenu");
+      if (!sub) return;
+      sub.id = sub.id || "submenu-" + i;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "sub-toggle";
+      btn.setAttribute("aria-controls", sub.id);
+      btn.setAttribute("aria-label", "Show " + link.textContent.trim() + " pages");
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const setExpanded = (open) => {
+        li.classList.toggle("is-expanded", open);
+        btn.setAttribute("aria-expanded", String(open));
+      };
+      setExpanded(li.classList.contains("is-active") || !!li.querySelector('[aria-current="page"]'));
+      btn.addEventListener("click", () => setExpanded(!li.classList.contains("is-expanded")));
+      link.after(btn);
     });
   }
 
