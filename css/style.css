@@ -200,7 +200,8 @@ p { margin: 0 0 1em; }
 /* Brand accents: blues for text, mint (from the logo) as the one accent colour.
    <header class="page-head"><h1 class="page-title">Motion Design</h1></header>
    = a pale blue band across the window, big left-aligned title, and a
-   "motion trail" underline (mint dash + two shrinking blue dashes). */
+   "motion trail" underline: brand blue, then mint, then a dark-blue tip
+   (blues lead and close it out, mint is the accent in between). */
 main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scroll */
 .page-head { position: relative; isolation: isolate; margin: 0 auto 30px; padding: 40px 0 38px; max-width: var(--head-w, none); }
 /* Pages with a narrower centred column set --head-w on the header so the title
@@ -215,20 +216,35 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
 @media (max-width: 1199px) { .page-head:has(+ .jump-nav) { margin-bottom: 10px; } }
 .page-title { margin: 0; font: 400 clamp(30px, 4.6vw, 44px)/1.1 var(--font-brand); color: #2c4f80; letter-spacing: .01em; }
 .page-title::after {
-  content: ""; display: block; width: 104px; height: 5px; margin-top: 14px; border-radius: 3px;
+  content: ""; display: block; width: 124px; height: 5px; margin-top: 14px; border-radius: 3px;
   background:
-    linear-gradient(var(--mint), var(--mint)) 0 0 / 56px 5px no-repeat,
-    linear-gradient(var(--blue-light), var(--blue-light)) 64px 0 / 22px 5px no-repeat,
-    linear-gradient(#2c4f80, #2c4f80) 94px 0 / 10px 5px no-repeat;
+    linear-gradient(var(--blue-light), var(--blue-light)) 0 0 / 64px 5px no-repeat,
+    linear-gradient(var(--mint), var(--mint)) 72px 0 / 28px 5px no-repeat,
+    linear-gradient(#2c4f80, #2c4f80) 108px 0 / 16px 5px no-repeat;
 }
 
-/* Section label: centred caps with a short mint dash either side (Home: SERVICES) */
+/* Section label: centred caps with the motion trail either side, mirrored
+   (blue next to the word, then mint, then dark blue) */
 .rule-label {
   display: flex; align-items: center; justify-content: center; gap: 14px; margin: 32px 0;
   color: var(--blue); font-size: 15px; letter-spacing: .08em; text-transform: uppercase; text-align: center;
 }
-.rule-label::before, .rule-label::after { content: ""; flex: none; width: 28px; height: 4px; border-radius: 2px; background: var(--mint); }
-
+.rule-label::before, .rule-label::after { content: ""; flex: none; width: 57px; height: 4px; }
+.rule-label::after {
+  background: linear-gradient(var(--blue-light), var(--blue-light)) 0 0 / 26px 4px no-repeat,
+              linear-gradient(var(--mint), var(--mint)) 31px 0 / 13px 4px no-repeat,
+              linear-gradient(#2c4f80, #2c4f80) 49px 0 / 8px 4px no-repeat;
+}
+.rule-label::before {
+  background: linear-gradient(#2c4f80, #2c4f80) 0 0 / 8px 4px no-repeat,
+              linear-gradient(var(--mint), var(--mint)) 13px 0 / 13px 4px no-repeat,
+              linear-gradient(var(--blue-light), var(--blue-light)) 31px 0 / 26px 4px no-repeat;
+}
+/* Scroll-scrubbed reveal (site.js adds .reveal-labels to <html> and sets --trail
+   from 0 to 1 on each label): the whole trail draws outward from the word. */
+.reveal-labels .rule-label { --trail: 0; }
+.reveal-labels .rule-label::after { clip-path: inset(0 calc(57px * (1 - var(--trail))) 0 0); }
+.reveal-labels .rule-label::before { clip-path: inset(0 0 0 calc(57px * (1 - var(--trail)))); }
 /* ---- Buttons ----------------------------------------------------------- */
 .btn-outline {
   display: inline-flex; align-items: center; justify-content: center;
@@ -338,7 +354,7 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
 /* ==========================================================================
    Page: Home
    ========================================================================== */
-.home-logo { padding-top: 32px; text-align: center; }
+.home-logo { padding-top: 22px; text-align: center; }
 .home-logo .lottie { width: min(220px, 50vw); aspect-ratio: 1; margin: -18px auto -22px; } /* logo renders ~178×150 on desktop (Wix was 258×218) */
 .home-logo .slot { width: 100%; height: 100%; }
 
@@ -368,6 +384,37 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 .svc-card:active { border-color: var(--blue-light); }
 
 .home-reel { max-width: 1000px; margin: 0 auto; }
+/* Services on a light band across the window, like the Motion Design sections */
+.home-band { position: relative; isolation: isolate; margin-top: 48px; padding: 36px 0 48px; }
+.home-band::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%);
+  background: #f2f5fa; border-top: 1px solid #e3e9f2; border-bottom: 1px solid #e3e9f2;
+}
+.home-band > .rule-label { margin-top: 0; }
+.home-band + .rule-label { margin-top: 44px; }
+/* Demo reel on a deep navy stage across the window. Spacing keeps the logo
+   artwork centred between the menu bar and the stage (the logo box has a
+   negative bottom margin and empty space around the drawing). */
+.home-stage { position: relative; isolation: isolate; margin-top: 26px; padding: 34px 0 44px; }
+.home-stage::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%);
+  background: #1f3554;
+}
+.home-stage > .rule-label { margin-top: 0; color: #fff; }
+/* On navy the dark-blue tip would vanish, so it turns pale blue here */
+.home-stage > .rule-label::after {
+  background: linear-gradient(var(--blue-light), var(--blue-light)) 0 0 / 26px 4px no-repeat,
+              linear-gradient(var(--mint), var(--mint)) 31px 0 / 13px 4px no-repeat,
+              linear-gradient(var(--blue-pale), var(--blue-pale)) 49px 0 / 8px 4px no-repeat;
+}
+.home-stage > .rule-label::before {
+  background: linear-gradient(var(--blue-pale), var(--blue-pale)) 0 0 / 8px 4px no-repeat,
+              linear-gradient(var(--mint), var(--mint)) 13px 0 / 13px 4px no-repeat,
+              linear-gradient(var(--blue-light), var(--blue-light)) 31px 0 / 26px 4px no-repeat;
+}
+.home-stage .home-reel .embed { border-color: rgba(0, 0, 0, .5); }
+.home-stage + .home-band { margin-top: 0; }
+.home-stage + .home-band::before { border-top: 0; }
 .home-reel .embed { border-color: #2c4f80; }
 
 .clients {
@@ -589,7 +636,8 @@ figure { margin: 0; }
 .case--light { background: var(--paper-2); }
 .case h2 {
   display: inline-block; font: 900 clamp(32px, 5vw, 44px) var(--font-body); color: #2c4f80;
-  border-bottom: 4px solid var(--mint); padding-bottom: 4px; margin-bottom: 16px;
+  border-bottom: 4px solid var(--blue-light); padding-bottom: 4px; margin-bottom: 16px;
+  border-image: linear-gradient(90deg, var(--blue-light) 0 72%, transparent 72% 76%, var(--mint) 76% 87%, transparent 87% 90%, #2c4f80 90%) 1;
 }
 .case p { font-size: clamp(16px, 1.7vw, 18px); color: #222; }
 .case-grid { display: grid; gap: 24px; align-items: center; }

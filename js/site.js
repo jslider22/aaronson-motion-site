@@ -10,6 +10,7 @@
    8. Back-to-top button
    9. Home intro (zoom in on the logo, then pull out)
   10. GIFs that take turns animating
+  11. Section labels: motion trail scrubbed by scrolling
    ========================================================================== */
 (() => {
   "use strict";
@@ -323,7 +324,9 @@
     if (!grid || !document.startViewTransition || still) { change(); if (after) after(); return; }
     const items = [...grid.children];
     items.forEach((c, i) => { c.style.viewTransitionName = "am-card-" + i; });
-    document.startViewTransition(change).finished.finally(() => {
+    const vt = document.startViewTransition(change);
+    vt.ready.catch(() => {}); // a skipped transition is fine; don't log it as an error
+    vt.finished.finally(() => {
       items.forEach((c) => { c.style.viewTransitionName = ""; });
       if (stage) stage.style.viewTransitionName = "";
       if (after) after();
@@ -680,4 +683,38 @@
       if (!onScreen) { clearTimeout(timer); if (current >= 0) stop(current); }
     }, { threshold: 0.35 }).observe(grid);
   });
+  /* ---- 11. Section labels: motion trail scrubbed by scrolling ----------
+     Each .rule-label's trail is tied to scroll position: it draws outward
+     from the word (blue, then mint, then dark blue) as the label rises from
+     near the bottom of the window to just above the middle, and draws back
+     in if you scroll up. site.js sets --trail (0 to 1); CSS
+     clips the trail to match. Without JS, or with "reduce motion", the full
+     trail simply shows. */
+  const labels = [...document.querySelectorAll(".rule-label")];
+  if (labels.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    root.classList.add("reveal-labels");
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const vh = window.innerHeight;
+      labels.forEach((l) => {
+        const top = l.getBoundingClientRect().top;
+        // 0 while the label is in the bottom 10% of the window, 1 once it's
+        // just above the middle (40% from the top) — eased so it starts and
+        // settles smoothly
+        const t = Math.min(1, Math.max(0, (vh * 0.9 - top) / (vh * 0.5)));
+        const p = t * t * (3 - 2 * t);
+        l.style.setProperty("--trail", p.toFixed(3));
+      });
+    };
+    const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+    // On Home, wait until the zoom intro has finished so the motion is seen
+    const start = () => {
+      if (document.querySelector("#main.intro-hold")) { setTimeout(start, 250); return; }
+      update();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+    };
+    start();
+  }
 })();

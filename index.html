@@ -13,12 +13,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,900&family=Questrial&family=Roboto:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=3e7c8875">
+  <link rel="stylesheet" href="css/style.css?v=7fa4e939">
   <!-- Lottie player (home logo animation only) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie_light.min.js" integrity="sha512-Pe5arL9TnWlLgXT1VY0d50tfo6J9bh0qM7irYJuACQcGz7mbIahBXZmNeav+46mTQBtPY170Vi89KDa4kd4QVg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
   <!-- Home intro: start zoomed in on the logo, then pull out (once per visit; skipped with "reduce motion") -->
   <script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.getItem("am-intro")&&!location.hash)document.documentElement.classList.add("intro")}catch(e){}</script>
-  <script src="js/site.js?v=24b6ff18" defer></script>
+  <script src="js/site.js?v=f9182dd4" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -63,12 +63,17 @@
       <div class="lottie" data-src="assets/lottie/aaronson-motion-logo.json" data-loop="true" role="img" aria-label="Aaronson Motion"></div>
     </div>
 
+    <!-- Demo reel on a deep navy "stage" running across the window -->
+    <section class="home-stage">
     <h2 class="rule-label">Demo Reel</h2>
     <div class="home-reel">
       <!-- Demo reel: autoplays muted and loops; visitors can turn the sound on. -->
       <div class="embed" data-provider="vimeo" data-id="838503171" data-autoplay data-slot="home/featured-reel" data-title="Aaronson Motion demo reel"></div>
     </div>
+    </section>
 
+    <!-- Services sits on a light band across the window (like Motion Design's sections) -->
+    <section class="home-band">
     <h2 class="rule-label">Services</h2>
     <!-- One card per service: animated icon, name, link. (The Design page is reached from the menu.) -->
     <nav class="svc-cards" aria-label="Services">
@@ -77,6 +82,7 @@
       <a class="svc-card" href="ux-design.html"><img src="assets/images/home/services/ux-design.webp" alt="" style="--ar: 1/1"><span class="svc-card__name">UX Design</span></a>
       <a class="svc-card" href="storyboards.html"><img src="assets/images/home/services/storyboarding.webp" alt="" style="--ar: 1/1"><span class="svc-card__name">Storyboarding</span></a>
     </nav>
+    </section>
 
     <h2 class="rule-label">Clients</h2>
     <!-- Client logos. Linked ones open in a new tab; add href to link the others. -->
