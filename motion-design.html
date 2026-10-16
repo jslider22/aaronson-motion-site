@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,900&family=Questrial&family=Roboto:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=a708dec8">
-  <script src="js/site.js?v=8bddd5ba" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=9a5ee6c5">
+  <script src="js/site.js?v=24b6ff18" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -52,7 +52,7 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="motion-grid" data-lite-embeds="stage">
   <div class="wrap with-jumpnav">
     <h1 class="page-title">Motion Design</h1>
 
@@ -78,13 +78,13 @@
         <!-- Tall video on the left; title, text, banner and Heat Check on the right
              (on phones the title/text sit on top, videos side by side below). -->
         <article class="work work--split">
-          <div class="embed split__tall" data-provider="vimeo" data-id="1145735372" data-ratio="83:213" data-slot="motion/lee-fan-duel-vertical" data-title="Lee Company Fan Duel — vertical banner"></div>
+          <div class="embed split__tall" data-provider="vimeo" data-id="1145735372" data-ratio="83:213" data-poster="assets/images/motion/posters/lee-fan-duel-vertical.jpg" data-slot="motion/lee-fan-duel-vertical" data-title="Lee Company Fan Duel — vertical banner"></div>
           <div class="split__text">
             <h3>Lee Company Fan Duel Nashville Predators Ad</h3>
             <p>An in-game banner ad created for display on screens during Nashville Predators hockey games.<br>
                Two 10 second (vertical and horizontal) animations were designed for different ad space formats.</p>
           </div>
-          <div class="embed split__wide" data-provider="vimeo" data-id="1145735347" data-ratio="213:20" data-slot="motion/lee-fan-duel-horizontal" data-title="Lee Company Fan Duel — horizontal banner"></div>
+          <div class="embed split__wide" data-provider="vimeo" data-id="1145735347" data-ratio="213:20" data-background data-slot="motion/lee-fan-duel-horizontal" data-title="Lee Company Fan Duel — horizontal banner"></div>
           <div class="embed split__main" data-provider="vimeo" data-id="1151634158" data-slot="motion/lee-heat-check" data-title="Lee Company Heat Check"></div>
         </article>
 
@@ -274,18 +274,20 @@
       <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true" style="transform:scaleX(-1)"><path d="M0 78C600 70 1000 18 1440 4V80H0Z" fill="#d5d5d5"/><path d="M0 79C600 74 1000 34 1440 24V80H0Z" fill="#8a8a8a"/><path d="M0 80C600 78 1000 50 1440 46V80H0Z" fill="#1e1e1e"/></svg>
 
       <!-- ================================================================ ANIMATED GIFS
-           Animated WebP (converted from the original GIFs: 560px wide, ~17fps) — much lighter than GIF. -->
+           Animated WebP (converted from the original GIFs: 560px wide, ~17fps) — much lighter than GIF.
+           Each shows a still (*-still.webp) and they take turns animating, one at a time
+           (data-anim = the animation, data-ms = one loop in milliseconds). -->
       <section id="gifs" class="work-section">
         <h2 class="subhead">GIFs</h2>
-        <div class="gif-grid">
-          <img src="assets/images/motion-gifs/email-laptop.webp" alt="Animated email arriving on a laptop" loading="lazy" style="--ar: 940/788">
-          <img src="assets/images/motion-gifs/explore-your-options.webp" alt="Explore your options — animated dollar icon" loading="lazy" style="--ar: 940/788">
-          <img src="assets/images/motion-gifs/finance-icons-grid.webp" alt="Animated table comparing retirement savings with and without a 401(k) match" loading="lazy" style="--ar: 940/788">
-          <img src="assets/images/motion-gifs/climber-icon.webp" alt="Animated climber icon" loading="lazy" style="--ar: 940/788">
-          <img src="assets/images/motion-gifs/retirement-vs-student-loans.webp" alt="Retirement savings and student loan payment trade off behavior" loading="lazy" style="--ar: 940/788">
-          <img src="assets/images/motion-gifs/world-emoji-day.webp" alt="Celebrating World Emoji Day" loading="lazy" style="--ar: 940/788">
-          <img src="assets/images/motion-gifs/fourth-of-july.webp" alt="Fourth of July calendar animation" loading="lazy" style="--ar: 940/788">
-          <img src="assets/images/motion-gifs/5-habits-successful-borrowers.webp" alt="5 habits of successful borrowers" loading="lazy" style="--ar: 940/788">
+        <div class="gif-grid" data-take-turns>
+          <img src="assets/images/motion-gifs/email-laptop-still.webp" data-anim="assets/images/motion-gifs/email-laptop.webp" data-ms="5760" alt="Animated email arriving on a laptop" loading="lazy" style="--ar: 940/788">
+          <img src="assets/images/motion-gifs/explore-your-options-still.webp" data-anim="assets/images/motion-gifs/explore-your-options.webp" data-ms="6240" alt="Explore your options — animated dollar icon" loading="lazy" style="--ar: 940/788">
+          <img src="assets/images/motion-gifs/finance-icons-grid-still.webp" data-anim="assets/images/motion-gifs/finance-icons-grid.webp" data-ms="10800" alt="Animated table comparing retirement savings with and without a 401(k) match" loading="lazy" style="--ar: 940/788">
+          <img src="assets/images/motion-gifs/climber-icon-still.webp" data-anim="assets/images/motion-gifs/climber-icon.webp" data-ms="3180" alt="Animated climber icon" loading="lazy" style="--ar: 940/788">
+          <img src="assets/images/motion-gifs/retirement-vs-student-loans-still.webp" data-anim="assets/images/motion-gifs/retirement-vs-student-loans.webp" data-ms="10800" alt="Retirement savings and student loan payment trade off behavior" loading="lazy" style="--ar: 940/788">
+          <img src="assets/images/motion-gifs/world-emoji-day-still.webp" data-anim="assets/images/motion-gifs/world-emoji-day.webp" data-ms="1980" alt="Celebrating World Emoji Day" loading="lazy" style="--ar: 940/788">
+          <img src="assets/images/motion-gifs/fourth-of-july-still.webp" data-anim="assets/images/motion-gifs/fourth-of-july.webp" data-ms="3600" alt="Fourth of July calendar animation" loading="lazy" style="--ar: 940/788">
+          <img src="assets/images/motion-gifs/5-habits-successful-borrowers-still.webp" data-anim="assets/images/motion-gifs/5-habits-successful-borrowers.webp" data-ms="10020" alt="5 habits of successful borrowers" loading="lazy" style="--ar: 940/788">
         </div>
       </section>
     </div>
