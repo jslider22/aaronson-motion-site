@@ -21,6 +21,7 @@
   --teal: #84b6c6;
   --rule: #b8413c;           /* thin red section rules */
   --dots: #6aa6f0;           /* dotted dividers between works */
+  --mint: #60d7a2;           /* green bar in the AM logo */
 
   --font-brand: "Questrial", "Century Gothic", "Avenir Next", system-ui, sans-serif;
   --font-body: "Lato", "Helvetica Neue", Arial, sans-serif;
@@ -78,8 +79,25 @@ p { margin: 0 0 1em; }
   font-family: var(--font-brand); font-size: 22px; letter-spacing: .02em;
   text-decoration: none; color: #bdbdbd; white-space: nowrap;
 }
-.brand b { font-weight: 400; color: var(--blue-light); }
-.brand:hover { color: #fff; }
+/* Header logo: hover AARONSON -> it lights up; hover MOTION -> letters ripple in a wave and turn
+   the logo's mint green. Reduced-motion users get the colour change only. */
+.brand__a { color: var(--blue-light); transition: color .25s; }
+.brand__a:hover { color: #fff; }
+.brand__m { display: inline-block; }
+.brand__m span { display: inline-block; transition: color .25s; }
+.brand__m:hover span { color: var(--mint); animation: brand-wave .55s cubic-bezier(.3, .7, .4, 1) both; }
+.brand__m:hover span:nth-child(2) { animation-delay: .05s; }
+.brand__m:hover span:nth-child(3) { animation-delay: .10s; }
+.brand__m:hover span:nth-child(4) { animation-delay: .15s; }
+.brand__m:hover span:nth-child(5) { animation-delay: .20s; }
+.brand__m:hover span:nth-child(6) { animation-delay: .25s; }
+@keyframes brand-wave {
+  0%   { transform: translateY(0); }
+  35%  { transform: translateY(-.28em); }
+  65%  { transform: translateY(.05em); }
+  100% { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) { .brand__m:hover span { animation: none; } }
 .tagline { display: none; font-size: 14px; letter-spacing: .04em; color: #fff; }
 .tagline span { color: var(--blue-light); border-left: 1px solid #666; padding-left: 6px; margin-left: 4px; }
 
@@ -247,27 +265,27 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
    Page: Home
    ========================================================================== */
 .home-logo { padding-top: 32px; text-align: center; }
-.home-logo .lottie { width: min(258px, 58vw); aspect-ratio: 1; margin: -20px auto -22px; } /* logo renders ~208×176 on desktop (Wix was 258×218) */
+.home-logo .lottie { width: min(220px, 50vw); aspect-ratio: 1; margin: -18px auto -22px; } /* logo renders ~178×150 on desktop (Wix was 258×218) */
 .home-logo .slot { width: 100%; height: 100%; }
 
-/* Services: always 4 across (like the Wix layout); icons and labels scale down on phones */
-.services {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px clamp(6px, 2vw, 16px); max-width: 760px; margin: 0 auto; align-items: end;
+/* Services: one row of 4 clickable cards (icon, name, "View work"), then an "All design work" button */
+.svc-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 2vw, 20px); max-width: 820px; margin: 0 auto; }
+.svc-card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; padding: clamp(10px, 2vw, 18px) 6px clamp(10px, 2vw, 16px);
+  border: 1px solid #e3e7ee; border-radius: 12px; background: #fff; text-decoration: none; color: var(--text); text-align: center;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
 }
-.service { display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none;
-  color: var(--text); font-size: clamp(11px, 3vw, 14px); line-height: 1.25; transition: color .2s; }
-.service img, .service .slot { width: min(110px, 100%); aspect-ratio: 1; border-radius: 50%; margin: 8px auto 0; }
-.service:active { color: var(--blue); }
-@media (hover: hover) { .service:hover { color: var(--blue); font-weight: 700; letter-spacing: .01em; } }
-
-/* Buttons: always one row of 3, middle one larger (like the Wix layout) */
-.home-ctas { display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;
-  gap: clamp(8px, 2.5vw, 24px); margin: clamp(24px, 5vw, 40px) auto 8px; max-width: 600px; }
-.home-ctas .btn-outline { flex: 1 1 0; min-width: 0; max-width: 190px; min-height: clamp(40px, 9vw, 52px);
-  padding: 0 clamp(4px, 1.5vw, 16px); font-size: clamp(11px, 3vw, 15px); letter-spacing: .02em; text-align: center; }
-.home-ctas .btn-outline--big { flex-grow: 1.15; max-width: 210px; min-height: clamp(46px, 10.5vw, 60px); }
-
+.svc-card img, .svc-card .slot { width: min(110px, 100%); border-radius: 50%; }
+.svc-card__name { font: 400 clamp(11px, 2.8vw, 15px)/1.25 var(--font-brand); min-height: 2.5em; display: flex; align-items: center; }
+.svc-card__go { font: 500 clamp(10px, 2.4vw, 12px) var(--font-ui); color: var(--blue-light); letter-spacing: .02em; }
+@media (hover: hover) {
+  .svc-card:hover { border-color: var(--blue-light); box-shadow: 0 6px 18px rgba(58, 100, 160, .15); transform: translateY(-2px); }
+  .svc-card:hover .svc-card__name { color: var(--blue); }
+}
+.svc-card:active { border-color: var(--blue-light); }
+@media (max-width: 600px) { .svc-card__go { display: none; } }
+.svc-more { text-align: center; margin: 22px 0 0; }
+.svc-more .btn-outline { min-height: 46px; padding: 0 26px; border-radius: 14px; font-size: 14px; }
 
 .home-reel { max-width: 1000px; margin: 0 auto; }
 .home-reel .embed { border-color: #2c4f80; }
@@ -282,7 +300,7 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
 .clients img { width: 100%; aspect-ratio: 8 / 3; object-fit: contain; filter: grayscale(1); opacity: .8; transition: filter .2s, opacity .2s; }
 @media (hover: hover) { .clients a:hover img { filter: none; opacity: 1; } }
 .clients .slot { min-height: 46px; aspect-ratio: 5 / 2; font-size: 10px; padding: 4px; }
-.clients .slot__tag, .clients .slot__hint, .services .slot__hint, .tiles .slot__hint { display: none; }
+.clients .slot__tag, .clients .slot__hint, .svc-cards .slot__hint, .tiles .slot__hint { display: none; }
 .slot { overflow: hidden; }
 @media (min-width: 520px) { .clients { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(16px, 3vw, 34px) clamp(6px, 1.6vw, 22px); } }
 
