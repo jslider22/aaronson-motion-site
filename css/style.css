@@ -303,13 +303,11 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 }
 .svc-card img, .svc-card .slot { width: min(110px, 100%); border-radius: 50%; }
 .svc-card__name { font: 400 clamp(11px, 2.8vw, 15px)/1.25 var(--font-brand); min-height: 2.5em; display: flex; align-items: center; }
-.svc-card__go { font: 500 clamp(10px, 2.4vw, 12px) var(--font-ui); color: var(--blue-light); letter-spacing: .02em; }
 @media (hover: hover) {
   .svc-card:hover { border-color: var(--blue-light); box-shadow: 0 6px 18px rgba(58, 100, 160, .15); transform: translateY(-2px); }
   .svc-card:hover .svc-card__name { color: var(--blue); }
 }
 .svc-card:active { border-color: var(--blue-light); }
-@media (max-width: 600px) { .svc-card__go { display: none; } }
 
 .home-reel { max-width: 1000px; margin: 0 auto; }
 .home-reel .embed { border-color: #2c4f80; }
