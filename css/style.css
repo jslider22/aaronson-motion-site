@@ -433,12 +433,14 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
   }
 }
 
-/* Motion Design grid (<main class="motion-grid">): two columns from iPad up.
+/* Motion Design grid (<main class="motion-grid">): two columns on iPad and up.
    Promos opens with the full-width Lee Company block; everything else sits in
    pairs. Videos show a still until played (data-lite-embeds="stage" in site.js). */
 .motion-grid .col { max-width: 940px; }
 @media (min-width: 1200px) { .motion-grid .col { max-width: min(940px, calc(100vw - 400px)); } } /* clear the section list on the right */
-@media (min-width: 768px) {
+/* 700px, not the usual 768px, so every iPad gets pairs (iPad mini portrait
+   and Split View are 744px); phones stay one column. */
+@media (min-width: 700px) {
   .motion-grid #promos, .motion-grid #logos-titles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
   .motion-grid .work-section > h2, .motion-grid .work--split { grid-column: 1 / -1; }
   .motion-grid .work-section > .work:not(.work--split) h3 { font-size: 16px; margin-top: 14px; }
