@@ -98,7 +98,7 @@ p { margin: 0 0 1em; }
   100% { transform: translateY(0); }
 }
 @media (prefers-reduced-motion: reduce) { .brand__m:hover span { animation: none; } }
-.tagline { display: none; font-size: 14px; letter-spacing: .04em; color: #fff; }
+.tagline { display: none; margin: 0; font-size: 14px; letter-spacing: .04em; color: #fff; }
 .tagline span { color: var(--blue-light); border-left: 1px solid #666; padding-left: 6px; margin-left: 4px; }
 
 .nav-toggle {
@@ -140,7 +140,8 @@ p { margin: 0 0 1em; }
 @media (min-width: 768px) { .sub-toggle { display: none; } }
 
 @media (min-width: 768px) {
-  .site-header__top { min-height: 96px; border-bottom: 1px solid #3a3a3a; }
+  /* Logo and tagline share a baseline (as on Wix); padding keeps the 96px bar height */
+  .site-header__top { min-height: 96px; align-items: baseline; padding: 31px 0 17px; border-bottom: 1px solid #3a3a3a; }
   .brand { font-size: 30px; }
   .tagline { display: block; }
   .nav-toggle { display: none; }
