@@ -592,6 +592,28 @@ figure { margin: 0; }
 
 /* ---- Touch devices (phones, iPad) ------------------------------------- */
 /* Bigger tap targets (~44px) wherever the pointer is a finger. */
+/* ---- Back-to-top button (added by site.js on every page) ---------------- */
+/* Anchor jumps land below the pinned section bar instead of under it */
+html:has(.jump-nav) { scroll-padding-top: 64px; }
+@media (min-width: 1200px) { html:has(.jump-nav) { scroll-padding-top: 16px; } }
+.to-top {
+  position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 40; width: 44px; height: 44px; border: 0; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer;
+  background: var(--ink); color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.25);
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity .25s, transform .25s, visibility .25s, background .2s;
+}
+.to-top.is-visible { opacity: .9; visibility: visible; transform: none; }
+.to-top svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.to-top:focus-visible { outline: 3px solid var(--blue-light); outline-offset: 2px; }
+@media (hover: hover) {
+  .to-top:hover { background: var(--blue-light); opacity: 1; }
+  .to-top:hover svg { animation: to-top-nudge .5s ease; }
+}
+@keyframes to-top-nudge { 40% { transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .to-top { transition: opacity .2s, visibility .2s; transform: none; } .to-top:hover svg { animation: none; } }
+
 @media (pointer: coarse) {
   html { -webkit-tap-highlight-color: rgba(79, 143, 216, .2); }
   .social { gap: 12px; }

@@ -7,6 +7,7 @@
    5. Carousel buttons
    6. Jump-nav highlighting
    7. Lottie animations (home logo)
+   8. Back-to-top button
    ========================================================================== */
 (() => {
   "use strict";
@@ -272,4 +273,28 @@
     }, { rootMargin: "-30% 0px -60% 0px" });
     map.forEach((_, sec) => io.observe(sec));
   }
+  /* ---- 8. Back-to-top button --------------------------------------------- */
+  // Appears once you've scrolled about a screen and a half; one per page,
+  // built here so no page needs extra markup.
+  const toTop = document.createElement("button");
+  toTop.type = "button";
+  toTop.className = "to-top";
+  toTop.setAttribute("aria-label", "Back to top");
+  toTop.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  toTop.addEventListener("click", () => {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: still ? "auto" : "smooth" });
+    const skip = document.querySelector(".brand");
+    if (skip) skip.focus({ preventScroll: true });
+  });
+  document.body.append(toTop);
+  let ticking = false;
+  const showTop = () => {
+    toTop.classList.toggle("is-visible", window.scrollY > window.innerHeight * 1.5);
+    ticking = false;
+  };
+  window.addEventListener("scroll", () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(showTop); }
+  }, { passive: true });
+  showTop();
 })();
