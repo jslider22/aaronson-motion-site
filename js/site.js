@@ -9,6 +9,7 @@
    7. Lottie animations (home logo)
    8. Back-to-top button
    9. Home intro (zoom in on the logo, then pull out)
+  10. GIFs that take turns animating
    ========================================================================== */
 (() => {
   "use strict";
@@ -106,25 +107,36 @@
                    data-slot="motion/celtics-hype-intro"></div>
      Optional: data-hash   (Vimeo unlisted "h=" key)
                data-ratio  ("9:16", "4:3"… default 16:9)
+               data-poster (own still image, when Vimeo's pick is a bad frame)
                data-autoplay  (muted, looping — used for the home reel)
+               data-background (Vimeo: silent loop with no controls — for
+                               short banners too thin for the control bar)
                data-url    (figma / iframe providers)
-               data-src    (file provider: path to an .mp4)               */
-  function embedUrl(el) {
+               data-src    (file provider: path to an .mp4)
+     Thumbnail-first: put data-lite-embeds on a parent (e.g. <main>) and each
+     Vimeo/YouTube video shows its still image + a play button; the real
+     player only loads when pressed (much faster pages). Use
+     data-lite-embeds="stage" to open a full-width player above or below the
+     card's row instead (the grid itself never moves).                     */
+  function embedUrl(el, play) {
     const d = el.dataset;
     const id = (d.id || "").trim();
-    const auto = "autoplay" in d;
+    const auto = "autoplay" in d || "background" in d;
     switch (d.provider) {
       case "vimeo": {
         if (!id) return "";
         const p = new URLSearchParams({ dnt: "1", title: "0", byline: "0", portrait: "0", playsinline: "1" });
         if (d.hash) p.set("h", d.hash);
-        if (auto) { p.set("autoplay", "1"); p.set("muted", "1"); p.set("loop", "1"); }
+        if ("background" in d) p.set("background", "1");
+        else if (auto) { p.set("autoplay", "1"); p.set("muted", "1"); p.set("loop", "1"); }
+        else if (play) p.set("autoplay", "1");
         return "https://player.vimeo.com/video/" + encodeURIComponent(id) + "?" + p;
       }
       case "youtube": {
         if (!id) return "";
         const p = new URLSearchParams({ rel: "0", modestbranding: "1", playsinline: "1" });
         if (auto) { p.set("autoplay", "1"); p.set("mute", "1"); p.set("loop", "1"); p.set("playlist", id); }
+        else if (play) { p.set("autoplay", "1"); p.set("enablejsapi", "1"); p.set("origin", location.origin); }
         return "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?" + p;
       }
       case "figma":
@@ -135,6 +147,248 @@
         return "";
     }
   }
+
+  function makeFrame(src, label, eager) {
+    const f = document.createElement("iframe");
+    f.src = src;
+    f.title = label;
+    f.loading = eager ? "eager" : "lazy";
+    f.allow = "autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media";
+    f.allowFullscreen = true;
+    f.referrerPolicy = "strict-origin-when-cross-origin";
+    return f;
+  }
+
+  // Find out when a video someone pressed play on finishes, through the
+  // Vimeo and YouTube players' postMessage APIs.
+  const endWatch = new Map(); // iframe -> { provider, onEnd }
+  function watchEnd(f, provider, onEnd) {
+    const w = { provider, onEnd, heard: false };
+    endWatch.set(f, w);
+    // YouTube ignores the request if its player isn't ready yet, so repeat
+    // it until the player answers (as YouTube's own embed script does).
+    if (provider === "youtube") f.addEventListener("load", () => {
+      let tries = 0;
+      const ask = () => {
+        if (w.heard || !f.isConnected || !f.contentWindow || ++tries > 40) return;
+        f.contentWindow.postMessage(JSON.stringify({ event: "listening", id: 1 }), "*");
+        f.contentWindow.postMessage(JSON.stringify({ event: "command", func: "addEventListener", args: ["onStateChange"] }), "*");
+        setTimeout(ask, 250);
+      };
+      ask();
+    });
+  }
+  window.addEventListener("message", (e) => {
+    let hit = null;
+    endWatch.forEach((v, f) => { if (f.contentWindow === e.source) hit = [f, v]; });
+    if (!hit) return;
+    const [f, v] = hit;
+    if (!f.isConnected) { endWatch.delete(f); return; }
+    let d = e.data;
+    try { if (typeof d === "string") d = JSON.parse(d); } catch (err) { return; }
+    if (!d) return;
+    v.heard = true;
+    let ended = false;
+    if (v.provider === "vimeo") {
+      if (d.event === "ready") f.contentWindow.postMessage(JSON.stringify({ method: "addEventListener", value: "finish" }), "https://player.vimeo.com");
+      ended = d.event === "finish";
+    } else {
+      ended = (d.event === "onStateChange" && d.info === 0) || (d.event === "infoDelivery" && d.info && d.info.playerState === 0);
+    }
+    if (ended) { endWatch.delete(f); v.onEnd(); }
+  });
+
+  // Thumbnail-first: still image + play button; the player loads on press.
+  const thumbIO = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) { thumbIO.unobserve(en.target); loadThumb(en.target); } });
+  }, { rootMargin: "800px 0px" }) : null;
+
+  function loadThumb(el) {
+    const img = el.querySelector(".embed__poster img");
+    if (el.dataset.poster) { img.src = el.dataset.poster; return; } // our own still
+    const id = el.dataset.id.trim();
+    if (el.dataset.provider === "youtube") {
+      img.src = "https://i.ytimg.com/vi/" + encodeURIComponent(id) + "/hqdefault.jpg";
+      return;
+    }
+    const url = "https://vimeo.com/" + id + (el.dataset.hash ? "/" + el.dataset.hash : "");
+    fetch("https://vimeo.com/api/oembed.json?width=1280&url=" + encodeURIComponent(url))
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((j) => { if (j.thumbnail_url) img.src = j.thumbnail_url; })
+      .catch(() => {}); // no still: the black box with a play button still works
+  }
+
+  function makePoster(el, label, mode) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "embed__poster";
+    b.setAttribute("aria-label", "Play " + label);
+    b.innerHTML = '<img alt="" decoding="async"><span class="embed__play" aria-hidden="true"></span>';
+    b.querySelector("img").addEventListener("load", (e) => e.target.classList.add("is-loaded"));
+    b.addEventListener("click", () => {
+      if (mode === "stage") openStage(el, b, label);
+      else playInline(el, b, label);
+    });
+    el.append(b);
+    if (thumbIO) thumbIO.observe(el); else loadThumb(el);
+  }
+
+  // One video at a time: starting any video puts every other one that is
+  // playing in place back to its still image (silent background loops stay).
+  function stopOthers(keep) {
+    document.querySelectorAll(".embed[data-playing]").forEach((e) => {
+      if (e === keep) return;
+      const f = e.querySelector("iframe");
+      if (f && e.posterEl) f.replaceWith(e.posterEl);
+      delete e.dataset.playing;
+    });
+  }
+  function playInline(el, poster, label) {
+    stopOthers(el);
+    if (stage) closeStage();
+    el.posterEl = poster;
+    el.dataset.playing = "";
+    const f = makeFrame(embedUrl(el, true), label, true);
+    poster.replaceWith(f);
+    // When it finishes, go back to the still image, ready to play again
+    watchEnd(f, el.dataset.provider, () => {
+      if (!f.isConnected) return;
+      f.replaceWith(poster);
+      delete el.dataset.playing;
+    });
+  }
+  function playInStage(el, label, box) {
+    const f = makeFrame(embedUrl(el, true), label, true);
+    box.replaceChildren(f);
+    watchEnd(f, el.dataset.provider, () => {
+      if (!f.isConnected) return;
+      const again = document.createElement("button");
+      again.type = "button";
+      again.className = "embed__poster";
+      again.setAttribute("aria-label", "Play " + label + " again");
+      again.innerHTML = '<img alt="" class="is-loaded"><span class="embed__play" aria-hidden="true"></span>';
+      const still = el.querySelector(".embed__poster img");
+      if (still && still.src) again.querySelector("img").src = still.src;
+      again.addEventListener("click", () => playInStage(el, label, box));
+      f.replaceWith(again);
+    });
+  }
+
+  // data-lite-embeds="stage": a full-width player opens under (or over) the
+  // row of the card that was pressed, whichever side has more room, with a
+  // notch pointing at it. The picked card stays put on screen. Cards that already fill the row
+  // (featured pieces, phones) just play where they are.
+  let stage = null, stageCard = null, stageAbove = false;
+  // First / last card in the same grid row as `card`
+  function rowEdge(card, dir) {
+    let edge = card;
+    for (let n = card[dir]; n; n = n[dir]) {
+      if (n === stage) continue;
+      if (Math.abs(n.offsetTop - card.offsetTop) > 2) break;
+      edge = n;
+    }
+    return edge;
+  }
+  function placeStage() {
+    if (!stage || !stageCard) return;
+    if (stageAbove) rowEdge(stageCard, "previousElementSibling").before(stage);
+    else rowEdge(stageCard, "nextElementSibling").after(stage);
+    stage.classList.toggle("stage--above", stageAbove);
+    const g = stageCard.parentElement.getBoundingClientRect();
+    const c = stageCard.getBoundingClientRect();
+    stage.style.setProperty("--notch-x", Math.round(c.left - g.left + c.width / 2) + "px");
+  }
+  // Run a layout change without the given card moving on screen
+  function holdStill(card, change) {
+    const before = card ? card.getBoundingClientRect().top : 0;
+    change();
+    if (!card) return;
+    const by = card.getBoundingClientRect().top - before;
+    if (Math.abs(by) > 1) window.scrollBy({ top: by, behavior: "instant" });
+  }
+  function closeStage() {
+    if (!stage) return;
+    const card = stageCard;
+    withGlide(card && card.parentElement, () => holdStill(card, () => {
+      stage.remove();
+      stage = null;
+      if (card) card.classList.remove("is-staged");
+      stageCard = null;
+    }));
+    const btn = card && card.querySelector(".embed__poster");
+    if (btn) btn.focus({ preventScroll: true });
+  }
+  function withGlide(grid, change, after) {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!grid || !document.startViewTransition || still) { change(); if (after) after(); return; }
+    const items = [...grid.children];
+    items.forEach((c, i) => { c.style.viewTransitionName = "am-card-" + i; });
+    document.startViewTransition(change).finished.finally(() => {
+      items.forEach((c) => { c.style.viewTransitionName = ""; });
+      if (stage) stage.style.viewTransitionName = "";
+      if (after) after();
+    });
+  }
+  function openStage(el, poster, label) {
+    const card = el.closest("article") || el;
+    const grid = card.parentElement;
+    // Already as wide as its grid (featured piece, phone layout): play in place
+    if (card.offsetWidth > grid.clientWidth * 0.8) {
+      playInline(el, poster, label);
+      return;
+    }
+    stopOthers(null);
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Open on whichever side of the card has more room on screen
+    const cr = card.getBoundingClientRect();
+    const above = cr.top - 70 > window.innerHeight - cr.bottom;
+    const change = () => holdStill(card, () => {
+      if (!stage) {
+        stage = document.createElement("div");
+        stage.className = "stage";
+        stage.innerHTML = '<button type="button" class="stage__close" aria-label="Close video">×</button><div class="embed"></div><div class="stage__text"></div>';
+        stage.querySelector(".stage__close").addEventListener("click", closeStage);
+      }
+      if (stageCard) stageCard.classList.remove("is-staged");
+      stageCard = card;
+      stageAbove = above;
+      card.classList.add("is-staged");
+      const box = stage.querySelector(".embed");
+      const [w, h] = (el.dataset.ratio || "16:9").split(":").map(Number);
+      box.style.setProperty("--ratio", w + " / " + h);
+      box.style.maxWidth = "calc((88vh - 140px) * " + (w / h).toFixed(4) + ")"; // tall videos fit the window
+      playInStage(el, label, box);
+      // The title/description already sit on the card, so only video-only
+      // cards (Social, Educational) get a caption in the player.
+      const text = stage.querySelector(".stage__text");
+      text.replaceChildren();
+      const h3 = card.querySelector("h3");
+      text.hidden = !!h3;
+      if (!h3) {
+        const t = document.createElement("h3");
+        t.textContent = label;
+        text.append(t);
+      }
+      placeStage();
+      stage.style.viewTransitionName = "am-stage";
+    });
+    const settle = () => {
+      if (!stage) return;
+      // Bring the whole player into view, keeping as much of the picked card
+      // on screen as fits: a player below sits at the bottom of the window,
+      // a player above sits at the top.
+      const r = stage.getBoundingClientRect();
+      const topLine = 70, bottomLine = window.innerHeight - 16;
+      let by = 0;
+      if (stageAbove) { if (r.top < topLine) by = r.top - topLine; else if (r.bottom > bottomLine) by = r.bottom - bottomLine; }
+      else { if (r.bottom > bottomLine) by = r.bottom - bottomLine; if (r.top - by < topLine) by = r.top - topLine; }
+      if (Math.abs(by) > 2) window.scrollBy({ top: by, behavior: still ? "auto" : "smooth" });
+    };
+    withGlide(grid, change, settle);
+  }
+  let stageResize = 0;
+  window.addEventListener("resize", () => { clearTimeout(stageResize); stageResize = setTimeout(placeStage, 150); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && stage) closeStage(); });
 
   document.querySelectorAll(".embed").forEach((el) => {
     const d = el.dataset;
@@ -162,14 +416,13 @@
       el.append(makeSlot(d.provider || "video", d.slot || "", need));
       return;
     }
-    const f = document.createElement("iframe");
-    f.src = src;
-    f.title = label;
-    f.loading = "autoplay" in d ? "eager" : "lazy";
-    f.allow = "autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media";
-    f.allowFullscreen = true;
-    f.referrerPolicy = "strict-origin-when-cross-origin";
-    el.append(f);
+    const lite = el.closest("[data-lite-embeds]");
+    const ambient = "autoplay" in d || "background" in d;
+    if (lite && !ambient && (d.provider === "vimeo" || d.provider === "youtube")) {
+      makePoster(el, label, lite.dataset.liteEmbeds);
+      return;
+    }
+    el.append(makeFrame(src, label, ambient));
   });
 
   /* ---- 3. Image placeholders ---------------------------------------------
@@ -370,4 +623,61 @@
   } else {
     root.classList.remove("intro");
   }
+  /* ---- 10. GIFs that take turns ------------------------------------------
+     <div class="gif-grid" data-take-turns>
+       <img src="x-still.webp" data-anim="x.webp" data-ms="4000"> …
+     Every GIF shows a still of its finished design; one at a time plays
+     through (at least ~3.5s) and fades back to its still, then the next one
+     goes. Hover or tap one to play it now. Only runs while the grid is on
+     screen; with "reduce motion" they stay still unless tapped. */
+  document.querySelectorAll("[data-take-turns]").forEach((grid) => {
+    const items = [...grid.querySelectorAll("img[data-anim]")];
+    if (!items.length) return;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let current = -1, timer = 0, onScreen = false, plays = 0;
+    // Wrap each still so the animation can sit on top of it and fade away
+    items.forEach((img, i) => {
+      const box = document.createElement("span");
+      box.className = "gif-turn";
+      img.before(box);
+      box.append(img);
+      box.addEventListener("mouseenter", () => play(i));
+      box.addEventListener("click", () => play(i));
+    });
+    function stop(i) {
+      const top = items[i] && items[i].parentElement.querySelector(".gif-turn__anim");
+      if (items[i]) items[i].parentElement.classList.remove("is-turn");
+      if (!top) return;
+      top.classList.remove("is-on");
+      setTimeout(() => top.remove(), 450);
+    }
+    function play(i) {
+      clearTimeout(timer);
+      if (current >= 0 && current !== i) stop(current);
+      current = i;
+      const img = items[i];
+      const box = img.parentElement;
+      box.classList.add("is-turn"); // blue outline: this one is playing
+      if (box.querySelector(".gif-turn__anim")) box.querySelector(".gif-turn__anim").remove();
+      const top = new Image();
+      top.className = "gif-turn__anim";
+      top.alt = "";
+      // A fresh URL each time so the animation starts from its first frame
+      top.src = img.dataset.anim + "#play" + ++plays;
+      top.addEventListener("load", () => top.classList.add("is-on"), { once: true });
+      box.append(top);
+      const ms = Number(img.dataset.ms) || 4000;
+      const length = ms * Math.max(1, Math.ceil(3500 / ms)); // short loops play twice
+      timer = setTimeout(() => {
+        stop(i);
+        if (!still && onScreen) timer = setTimeout(() => play((i + 1) % items.length), 500);
+      }, length);
+    }
+    if (still || !("IntersectionObserver" in window)) return;
+    new IntersectionObserver(([en]) => {
+      onScreen = en.isIntersecting;
+      if (onScreen && !grid.querySelector(".gif-turn__anim")) timer = setTimeout(() => play((current + 1) % items.length), 600);
+      if (!onScreen) { clearTimeout(timer); if (current >= 0) stop(current); }
+    }, { threshold: 0.35 }).observe(grid);
+  });
 })();

@@ -52,8 +52,20 @@ Other options:
 - `data-autoplay` plays muted and on loop. The home page reel uses this.
 - `data-provider="figma" data-url="<Figma prototype link>"` for interactive prototypes.
 - `data-provider="file" data-src="assets/video/clip.mp4"` for a self-hosted clip.
+- `data-background` (Vimeo only) plays a silent loop with no controls, for banners too thin for the control bar.
+- `data-poster="assets/images/…jpg"` uses your own still image when Vimeo's chosen frame looks wrong.
 
 An empty slot shows a grey placeholder with its name, so you can always see what's missing.
+
+### Motion Design page
+
+`<main class="motion-grid" data-lite-embeds="stage">` turns the page into a two-column grid, from iPad width up.
+- Each video shows its still image with a play button, and the real player loads only when someone presses play.
+- Pressing play opens a large player above or below that row, whichever side has more room on screen.
+- Only one video plays at a time, and a finished video goes back to its still.
+- On phones, videos simply play where they are.
+
+The GIFs take turns animating, one at a time. Each `<img>` shows a still (`name-still.webp`), with `data-anim` pointing at the animated file and `data-ms` holding the length of one loop in milliseconds.
 
 ## The animated logo (Lottie)
 
