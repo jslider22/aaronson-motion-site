@@ -438,9 +438,9 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
    pairs. Videos show a still until played (data-lite-embeds="stage" in site.js). */
 .motion-grid .col { max-width: 940px; }
 @media (min-width: 1200px) { .motion-grid .col { max-width: min(940px, calc(100vw - 400px)); } } /* clear the section list on the right */
-/* 700px, not the usual 768px, so every iPad gets pairs (iPad mini portrait
-   and Split View are 744px); phones stay one column. */
-@media (min-width: 700px) {
+/* Pairs from 600px: every iPad and sideways phone gets two columns; phones
+   held upright (under ~430px) stay one column. */
+@media (min-width: 600px) {
   .motion-grid #promos, .motion-grid #logos-titles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
   .motion-grid .work-section > h2, .motion-grid .work--split { grid-column: 1 / -1; }
   .motion-grid .work-section > .work:not(.work--split) h3 { font-size: 16px; margin-top: 14px; }
@@ -452,6 +452,10 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 }
 @media (min-width: 1024px) { .motion-grid .gif-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 ::view-transition-group(*) { animation-duration: .4s; animation-timing-function: cubic-bezier(.3, .7, .3, 1); }
+/* Keep the pinned section bar and back-to-top button above cards while they glide */
+.motion-grid .jump-nav { view-transition-name: am-jumpnav; }
+.to-top { view-transition-name: am-totop; }
+::view-transition-group(am-jumpnav), ::view-transition-group(am-totop) { z-index: 100; }
 
 /* GIF grid */
 .gif-grid { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 8px 0; }
