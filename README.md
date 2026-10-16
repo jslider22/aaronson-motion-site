@@ -105,6 +105,15 @@ It's one site that adapts to screen width. There's no separate mobile version to
   Tapping Design or About opens its submenu, and a second tap follows the link.
 - **Desktop / iPad landscape** (1024px and up): the full layout.
 
+## Browser caching (why changes show up right away)
+
+Every page links `css/style.css?v=…` and `js/site.js?v=…`. The `v` is a fingerprint of
+the file, so when the CSS or JS changes, browsers fetch the new copy instead of reusing
+a saved one. GitHub Pages otherwise lets browsers keep it for 10 minutes. A git hook
+(`.githooks/pre-commit`) updates the fingerprints automatically on every commit. On a
+fresh clone, turn it on once with `git config core.hooksPath .githooks`, or run
+`python3 tools/bump-version.py` by hand.
+
 ## Editing the menu or footer
 
 The header and footer are copied into every page. To change a menu item, social link or
