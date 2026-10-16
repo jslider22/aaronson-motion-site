@@ -19,7 +19,7 @@
   --blue-light: #4f8fd8;     /* logo "AARONSON", links */
   --blue-pale: #8db8f5;      /* UX feature cards */
   --teal: #84b6c6;
-  --rule: #b8413c;           /* thin red section rules */
+  --rule: #c9d6ea;           /* quiet blue-grey hairline (the old Wix red is retired) */
   --dots: #6aa6f0;           /* dotted dividers between works */
   --mint: #60d7a2;           /* green bar in the AM logo */
 
@@ -196,25 +196,34 @@ p { margin: 0 0 1em; }
 .swoosh { display: block; width: 100%; height: clamp(40px, 8vw, 110px); margin-top: 40px; }
 .swoosh + .site-footer { margin-top: -1px; }
 
-/* ---- Section titles ---------------------------------------------------- */
-/* "Motion Design ———————" : title with a thin red rule running to the right */
-.page-title {
-  display: flex; align-items: center; gap: 14px; margin: 24px 0 24px;
-  font-size: 18px; color: var(--blue);
+/* ---- Page headers and section labels --------------------------------- */
+/* Brand accents: blues for text, mint (from the logo) as the one accent colour.
+   <header class="page-head"><h1 class="page-title">Motion Design</h1></header>
+   = a pale blue band across the window, big left-aligned title, and a
+   "motion trail" underline (mint dash + two shrinking blue dashes). */
+main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scroll */
+.page-head { position: relative; isolation: isolate; margin: 0 0 30px; padding: 40px 0 38px; }
+.page-head::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%);
+  background: #e4ecf7; border-bottom: 1px solid #d2deef;
 }
-.page-title::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+/* Phones/iPad: section buttons sit right under the band */
+@media (max-width: 1199px) { .page-head:has(+ .jump-nav) { margin-bottom: 10px; } }
+.page-title { margin: 0; font: 400 clamp(30px, 4.6vw, 44px)/1.1 var(--font-brand); color: #2c4f80; letter-spacing: .01em; }
+.page-title::after {
+  content: ""; display: block; width: 104px; height: 5px; margin-top: 14px; border-radius: 3px;
+  background:
+    linear-gradient(var(--mint), var(--mint)) 0 0 / 56px 5px no-repeat,
+    linear-gradient(var(--blue-light), var(--blue-light)) 64px 0 / 22px 5px no-repeat,
+    linear-gradient(#2c4f80, #2c4f80) 94px 0 / 10px 5px no-repeat;
+}
 
-/* Centered label with rules on both sides (Home: SERVICES) */
+/* Section label: centred caps with a short mint dash either side (Home: SERVICES) */
 .rule-label {
-  display: flex; align-items: center; gap: 20px; margin: 32px 0;
-  color: var(--blue); font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+  display: flex; align-items: center; justify-content: center; gap: 14px; margin: 32px 0;
+  color: var(--blue); font-size: 15px; letter-spacing: .08em; text-transform: uppercase; text-align: center;
 }
-.rule-label::before, .rule-label::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
-
-.subhead {
-  font: 400 15px var(--font-ui); color: var(--text); margin: 8px 0 20px;
-  padding-bottom: 4px; border-bottom: 1px solid var(--rule);
-}
+.rule-label::before, .rule-label::after { content: ""; flex: none; width: 28px; height: 4px; border-radius: 2px; background: var(--mint); }
 
 /* ---- Buttons ----------------------------------------------------------- */
 .btn-outline {
@@ -451,6 +460,22 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
   .motion-grid .work-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; }
 }
 @media (min-width: 1024px) { .motion-grid .gif-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* Sections: space + label, every other one on a light band across the window */
+.motion-grid .work-section { padding: 38px 0 56px; }
+.motion-grid .work-section:first-of-type { padding-top: 0; }
+.motion-grid .work-section > .rule-label { grid-column: 1 / -1; margin: 0 0 32px; }
+.motion-grid .work-section:nth-of-type(even) { position: relative; isolation: isolate; }
+.motion-grid .work-section:nth-of-type(even)::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%);
+  background: #f2f5fa; border-top: 1px solid #e3e9f2; border-bottom: 1px solid #e3e9f2;
+}
+.motion-grid .work-section > .work:last-child { padding-bottom: 0; border-bottom: 0; }
+.motion-grid .work-section > .work:last-child > p:last-child { margin-bottom: 0; }
+@media (min-width: 600px) {
+  .motion-grid .work-section > .work { border-bottom: 0; padding: 0 0 40px; }
+  .motion-grid .work-section > .work:nth-last-child(-n+2 of .work):not(.work--split) { padding-bottom: 0; }
+  .motion-grid .work-section > .work--split { padding-bottom: 48px; }
+}
 ::view-transition-group(*) { animation-duration: .4s; animation-timing-function: cubic-bezier(.3, .7, .3, 1); }
 /* Keep the pinned section bar and back-to-top button above cards while they glide */
 .motion-grid .jump-nav { view-transition-name: am-jumpnav; }
@@ -560,7 +585,7 @@ figure { margin: 0; }
 .case--light { background: var(--paper-2); }
 .case h2 {
   display: inline-block; font: 900 clamp(32px, 5vw, 44px) var(--font-body); color: #2c4f80;
-  border-bottom: 2px solid var(--rule); padding-bottom: 2px; margin-bottom: 16px;
+  border-bottom: 4px solid var(--mint); padding-bottom: 4px; margin-bottom: 16px;
 }
 .case p { font-size: clamp(16px, 1.7vw, 18px); color: #222; }
 .case-grid { display: grid; gap: 24px; align-items: center; }
@@ -672,7 +697,8 @@ figure { margin: 0; }
 @media (min-width: 640px) { .skills ul { columns: 3; } }
 
 /* ---- 404 --------------------------------------------------------------- */
-.not-found { text-align: center; padding: 80px 0; }
+.not-found { text-align: center; padding: 0 0 80px; }
+.not-found .page-title::after { margin-inline: auto; }
 
 /* ---- Small shared helpers --------------------------------------------- */
 .split { display: grid; gap: 24px; align-items: start; }
