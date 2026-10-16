@@ -202,7 +202,11 @@ p { margin: 0 0 1em; }
    = a pale blue band across the window, big left-aligned title, and a
    "motion trail" underline (mint dash + two shrinking blue dashes). */
 main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scroll */
-.page-head { position: relative; isolation: isolate; margin: 0 0 30px; padding: 40px 0 38px; }
+.page-head { position: relative; isolation: isolate; margin: 0 auto 30px; padding: 40px 0 38px; max-width: var(--head-w, none); }
+/* Pages with a narrower centred column set --head-w on the header so the title
+   lines up with the content below it (the band still runs edge to edge). */
+.motion-grid .page-head { --head-w: 940px; }
+@media (min-width: 1200px) { .motion-grid .page-head { --head-w: min(940px, calc(100vw - 400px)); } }
 .page-head::before {
   content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%);
   background: #e4ecf7; border-bottom: 1px solid #d2deef;
