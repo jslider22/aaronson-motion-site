@@ -694,10 +694,12 @@
   if (labels.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     root.classList.add("reveal-labels");
     let queued = false;
+    const playing = new Set(); // labels doing their opening draw
     const update = () => {
       queued = false;
       const vh = window.innerHeight;
       labels.forEach((l) => {
+        if (playing.has(l)) return;
         const top = l.getBoundingClientRect().top;
         // 0 while the label is in the bottom 10% of the window, 1 once it's
         // just above the middle (40% from the top) — eased so it starts and
@@ -710,8 +712,25 @@
     const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
     // On Home, wait until the zoom intro has finished so the motion is seen
     const start = () => {
-      if (document.querySelector("#main.intro-hold")) { setTimeout(start, 250); return; }
+      const m = document.getElementById("main");
+      const zooming = m && (m.classList.contains("intro-hold") || m.style.transform || (m.getAnimations && m.getAnimations().length));
+      if (zooming) { setTimeout(start, 200); return; }
       update();
+      // Labels already on screen (e.g. Home's "Demo Reel") would otherwise
+      // just appear drawn, so they play the draw once, then follow the scroll.
+      labels.forEach((l) => {
+        const end = parseFloat(l.style.getPropertyValue("--trail")) || 0;
+        if (!end) return;
+        playing.add(l);
+        const t0 = performance.now(), dur = 900;
+        const step = (now) => {
+          const t = Math.min(1, (now - t0) / dur);
+          l.style.setProperty("--trail", (end * t * t * (3 - 2 * t)).toFixed(3));
+          if (t < 1) requestAnimationFrame(step); else { playing.delete(l); onScroll(); }
+        };
+        l.style.setProperty("--trail", "0");
+        requestAnimationFrame(step);
+      });
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onScroll);
     };
