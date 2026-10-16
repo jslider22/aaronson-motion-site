@@ -659,7 +659,7 @@ figure { margin: 0; }
 /* Gondola: the exact Wix drawing (white on transparent, 2x), same width as the other icons */
 .feature-list .feature-icon { flex: 0 0 auto; width: clamp(38px, 5vw, 48px); height: auto; }
 
-.ux-block { border-top: 1px solid #d99; padding-top: 32px; margin-top: 40px; }
+.ux-block { border-top: 1px solid var(--rule); padding-top: 32px; margin-top: 40px; }
 .ux-block > h3 { font: 900 clamp(22px, 3vw, 30px) var(--font-body); color: #777; text-transform: uppercase; letter-spacing: .02em; }
 
 /* UX slides and diagrams shown as images (as on Wix) */
