@@ -548,9 +548,19 @@ figure { margin: 0; }
 .downloads a { color: #222; }
 .downloads ul { display: flex; gap: 8px; list-style: none; margin: 4px 0 0; padding: 0; }
 .downloads li a {
-  display: grid; place-items: center; width: 36px; height: 44px; border: 1px solid #999;
-  font: 700 9px var(--font-ui); text-decoration: none; color: #666;
+  display: grid; place-items: center; width: 36px; height: 44px; border: 1px solid #999; border-radius: 2px;
+  font: 700 9px var(--font-ui); text-decoration: none; color: #666; background: #fff;
+  transition: background .18s, color .18s, border-color .18s, transform .18s, box-shadow .18s;
 }
+.downloads > a { text-decoration: underline; transition: color .18s; }
+/* Hover (mouse), keyboard focus, and tap (touch) all get the same "active" look */
+@media (hover: hover) {
+  .downloads li a:hover { background: var(--blue); border-color: var(--blue); color: #fff; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(58, 100, 160, .3); }
+  .downloads > a:hover { color: var(--blue); }
+}
+.downloads li a:focus-visible, .downloads li a:active { background: var(--blue); border-color: var(--blue); color: #fff; }
+.downloads > a:focus-visible, .downloads > a:active { color: var(--blue); }
+@media (pointer: coarse) { .downloads ul { gap: 12px; } .downloads li a { width: 40px; height: 48px; } }
 .resume section { border-top: 1px solid #c9a39a; padding-top: 14px; margin-top: 14px; }
 .resume h3 { font: 700 14.5px var(--font-cv); text-decoration: underline; margin: 4px 0 12px; }
 .resume h4 { font: 400 14.5px var(--font-cv); margin: 14px 0 0; text-transform: uppercase; }
