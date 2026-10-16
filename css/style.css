@@ -380,6 +380,7 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
   background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.18);
   font: 11px/1.5 var(--font-ui); color: #222; text-align: center;
 }
+.card img { width: 100%; }
 .card figcaption { padding: 14px 12px 16px; }
 .card figcaption small { display: block; margin-top: 8px; font-size: 11px; color: #444; }
 .card--left figcaption { text-align: left; }
