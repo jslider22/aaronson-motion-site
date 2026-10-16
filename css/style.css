@@ -488,6 +488,8 @@ figure { margin: 0; }
 .feature-list svg { flex: 0 0 auto; width: clamp(38px, 5vw, 48px); height: clamp(38px, 5vw, 48px); stroke: #fff; fill: none;
   stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .feature-list svg[viewBox="0 0 24 24"] { stroke-width: 1.5; } /* gear is drawn on a smaller grid */
+/* Gondola: the exact Wix drawing (white on transparent, 2x), same width as the other icons */
+.feature-list .feature-icon { flex: 0 0 auto; width: clamp(38px, 5vw, 48px); height: auto; }
 
 .ux-block { border-top: 1px solid #d99; padding-top: 32px; margin-top: 40px; }
 .ux-block > h3 { font: 900 clamp(22px, 3vw, 30px) var(--font-body); color: #777; text-transform: uppercase; letter-spacing: .02em; }
