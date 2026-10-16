@@ -312,7 +312,7 @@
   const introLogo = document.querySelector(".home-logo .lottie");
   if (root.classList.contains("intro") && introMain && introLogo && introMain.animate) {
     try { sessionStorage.setItem("am-intro", "1"); } catch (e) { /* private mode: play every time */ }
-    const REEL_LOGO_GONE = 5.0;  // seconds into the reel; change if the reel is re-cut
+    const REEL_LOGO_GONE = 4.0;  // seconds into the reel (its logo is fading by then); change if the reel is re-cut
     const PULL = 1000;           // length of the pull-out, ms
     const NO_REEL = 3000;        // ms to wait for the reel to start before giving up on it
     const MAX_WAIT = 9000;       // never hold longer than this, ms
