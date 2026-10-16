@@ -539,7 +539,7 @@ figure { margin: 0; }
 .now-foot { border-top: 1px solid var(--line); padding: 16px 0 24px; font-size: 14px; }
 
 /* Resume text uses Carlito, a free metric-compatible match for Calibri (the font in the CV PDF/DOCX) */
-.resume { --font-cv: "Carlito", Calibri, "Segoe UI", Arial, sans-serif; font: 14.5px/1.5 var(--font-cv); color: #222; }
+.resume { --font-cv: "Carlito", Calibri, "Segoe UI", Arial, sans-serif; font: 14.5px/1.7 var(--font-cv); color: #222; }
 .resume__head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .resume__head h2 { font: 700 17px var(--font-cv); margin: 0; }
 .resume__head h2 span { font-weight: 400; color: var(--blue); }
@@ -561,18 +561,21 @@ figure { margin: 0; }
 .downloads li a:focus-visible, .downloads li a:active { background: var(--blue); border-color: var(--blue); color: #fff; }
 .downloads > a:focus-visible, .downloads > a:active { color: var(--blue); }
 @media (pointer: coarse) { .downloads ul { gap: 12px; } .downloads li a { width: 40px; height: 48px; } }
-.resume section { border-top: 1px solid #c9a39a; padding-top: 14px; margin-top: 14px; }
-.resume h3 { font: 700 14.5px var(--font-cv); text-decoration: underline; margin: 4px 0 12px; }
-.resume h4 { font: 400 14.5px var(--font-cv); margin: 14px 0 0; text-transform: uppercase; }
-.resume h5 { font: 700 14.5px var(--font-cv); margin: 0; }
+.resume section { border-top: 1px solid #c9a39a; padding-top: 22px; margin-top: 24px; }
+.resume p { margin: 0 0 6px; }
+.resume h3 { font: 700 14.5px var(--font-cv); text-decoration: underline; margin: 0 0 14px; letter-spacing: .02em; }
+.resume h4 { font: 400 14.5px/1.5 var(--font-cv); margin: 22px 0 2px; text-transform: uppercase; letter-spacing: .02em; }
+.resume section > h4:first-of-type { margin-top: 0; }
+.resume h5 { font: 700 14.5px/1.5 var(--font-cv); margin: 0 0 6px; }
 .resume h5 span { font-weight: 400; }
-.resume ul { margin: 2px 0 0; padding-left: 0; list-style: none; }
+.resume ul { margin: 4px 0 0; padding-left: 0; list-style: none; }
+.resume section li { margin-bottom: 6px; padding-left: .9em; text-indent: -.9em; } /* hanging indent under the dash */
 .resume li::before { content: "- "; }
 .resume .downloads li::before { content: none; }
-.skills { display: grid; gap: 14px; }
+.skills { display: grid; gap: 20px; }
 .skills h4 { text-transform: none; text-decoration: underline; font-weight: 700; margin: 0; }
 .skills ul { columns: 2; column-gap: 20px; margin-top: 4px; }
-.skills li { break-inside: avoid; padding-left: 0; }
+.skills li { break-inside: avoid; padding-left: 0; text-indent: 0; margin-bottom: 3px; }
 .skills li::before { content: none; }
 @media (min-width: 640px) { .skills ul { columns: 3; } }
 
