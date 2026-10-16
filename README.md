@@ -16,7 +16,7 @@ ux-design.html            Design → UX Design (SkiPS, AutoExpreso, Navient.com,
 storyboards.html          Design → Storyboards
 line-drawings.html        Design → Line Drawings
 3d-design.html            Design → 3D Design
-fine-art.html             Design → Fine Art
+fine-art.html             Fine Art (not in the menu, like Wix; reached from the Design page card)
 about.html                About (bio + stat sheet)
 now.html                  About → Now
 resume.html               About → Resume
