@@ -555,7 +555,7 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 .vfx { display: grid; gap: 16px; padding: 28px 0; }
 .vfx__notes h3 {
   font: 400 16px var(--font-brand); color: var(--blue-light);
-  border-block: 1px solid #8b1d1d; padding: 4px 0; margin-bottom: 10px;
+  border-block: 1px solid var(--rule); padding: 4px 0; margin-bottom: 10px;
 }
 .vfx__notes p { font-size: 14px; line-height: 1.5; }
 .vfx__notes .tools { color: var(--muted); }
@@ -730,7 +730,7 @@ figure { margin: 0; }
 .downloads li a:focus-visible, .downloads li a:active { background: var(--blue); border-color: var(--blue); color: #fff; }
 .downloads > a:focus-visible, .downloads > a:active { color: var(--blue); }
 @media (pointer: coarse) { .downloads ul { gap: 12px; } .downloads li a { width: 40px; height: 48px; } }
-.resume section { border-top: 1px solid #c9a39a; padding-top: 22px; margin-top: 24px; }
+.resume section { border-top: 1px solid var(--rule); padding-top: 22px; margin-top: 24px; }
 .resume p { margin: 0 0 6px; }
 .resume h3 { font: 700 14.5px var(--font-cv); text-decoration: underline; margin: 0 0 14px; letter-spacing: .02em; }
 .resume h4 { font: 400 14.5px/1.5 var(--font-cv); margin: 22px 0 2px; text-transform: uppercase; letter-spacing: .02em; }
@@ -823,7 +823,7 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
   display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
   font: 400 14px var(--font-brand);
 }
-.design-grid__label::before, .design-grid__label::after { content: ""; flex: 1; height: 1px; background: #d8a8b4; }
+.design-grid__label::before, .design-grid__label::after { content: ""; flex: 1; height: 1px; background: var(--rule); transition: background .25s; }
 .design-grid img, .design-grid .slot {
   width: 100%; aspect-ratio: 8 / 5; object-fit: cover;
   border: 1px solid #999; border-radius: 4px; transition: transform .25s, box-shadow .25s;
@@ -831,6 +831,7 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
 @media (hover: hover) {
   .design-grid a:hover img { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(0,0,0,.18); }
   .design-grid a:hover .design-grid__label { font-weight: 700; }
+  .design-grid a:hover .design-grid__label::before, .design-grid a:hover .design-grid__label::after { background: var(--blue-light); }
 }
 @media (min-width: 560px) { .design-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 900px) { .design-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 48px; } }
