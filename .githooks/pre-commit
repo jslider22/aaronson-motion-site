@@ -1,0 +1,4 @@
+#!/bin/sh
+# Re-stamp css/js ?v= fingerprints on every page so browsers never show stale styles.
+python3 tools/bump-version.py >/dev/null || exit 1
+git add -- *.html
