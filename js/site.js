@@ -478,7 +478,15 @@
       const fc = img.closest("figure")?.querySelector("figcaption");
       // Only the piece's real caption is shown (alt text is for screen readers).
       // Line breaks and the small tool name become " · " separators.
-      cap.textContent = fc ? fc.innerText.trim().split(/\s*\n+\s*/).join(" · ") : "";
+      let text = "";
+      if (fc) {
+        const c = fc.cloneNode(true);
+        const tool = c.querySelector("small");
+        if (tool) tool.remove();
+        c.querySelectorAll("br").forEach((br) => br.replaceWith(" · "));
+        text = [c.textContent.trim(), tool ? tool.textContent.trim() : ""].filter(Boolean).join(" · ");
+      }
+      cap.textContent = text;
       count.textContent = set.length > 1 ? (idx + 1) + " / " + set.length : "";
       dlg.classList.toggle("is-single", set.length < 2);
     };
