@@ -4,3 +4,4 @@ assets-inbox/
 *.psd
 *.aep
 _*.html
+_*.json
