@@ -457,7 +457,8 @@
      gallery with the arrow buttons, the ← → keys, or a swipe; "3 / 17"
      shows where you are. Caption = the image's <figcaption>, if it has one.
      An image with data-frames="a.jpg b.jpg …" (Storyboards) opens those
-     pieces instead, so a whole board can be stepped through up close. */
+     pieces instead, so a whole board can be stepped through up close;
+     data-notes adds the board's notes for each piece under the frames. */
   const galleries = document.querySelectorAll(".gallery");
   const framed = document.querySelectorAll("img[data-frames]");
   if ((galleries.length || framed.length) && "HTMLDialogElement" in window) {
@@ -466,13 +467,14 @@
     dlg.innerHTML =
       '<button type="button" class="lightbox__close" aria-label="Close">×</button>' +
       '<button type="button" class="lightbox__nav lightbox__nav--prev" aria-label="Previous image">‹</button>' +
-      '<figure class="lightbox__fig"><img alt=""><figcaption><span class="lightbox__cap"></span><span class="lightbox__count"></span></figcaption></figure>' +
+      '<figure class="lightbox__fig"><img alt=""><figcaption><span class="lightbox__cap"></span><span class="lightbox__count"></span><span class="lightbox__note"></span></figcaption></figure>' +
       '<button type="button" class="lightbox__nav lightbox__nav--next" aria-label="Next image">›</button>';
     document.body.append(dlg);
     const big = dlg.querySelector("img");
     const cap = dlg.querySelector(".lightbox__cap");
     const count = dlg.querySelector(".lightbox__count");
-    let set = [], idx = 0; // items: { src, alt, cap }
+    const note = dlg.querySelector(".lightbox__note");
+    let set = [], idx = 0; // items: { src, alt, cap, note }
     const captionOf = (img) => {
       const fc = img.closest("figure")?.querySelector("figcaption");
       if (!fc) return "";
@@ -489,6 +491,8 @@
       big.src = it.src;
       big.alt = it.alt;
       cap.textContent = it.cap;
+      note.textContent = it.note || "";
+      note.hidden = !it.note;
       count.textContent = set.length > 1 ? (idx + 1) + " / " + set.length : "";
       dlg.classList.toggle("is-single", set.length < 2);
     };
@@ -530,10 +534,117 @@
     framed.forEach((img) => {
       img.setAttribute("data-zoomable", "");
       const srcs = img.dataset.frames.trim().split(/\s+/);
+      // Board notes (VO / animation directions), one per view, " | "-separated
+      const notes = (img.dataset.notes || "").split(" | ");
       const label = captionOf(img).split(" · ")[0];
-      img.addEventListener("click", () => {
-        open(srcs.map((src, n) => ({ src, alt: img.alt + ", frames " + (n * 2 + 1) + "–" + (n * 2 + 2), cap: label })), 0, true);
+      const start = () => open(
+        srcs.map((src, n) => ({ src, alt: img.alt + ", frames " + (n * 2 + 1) + "–" + (n * 2 + 2), cap: label, note: (notes[n] || "").trim() })),
+        0, true);
+      // On Storyboards the board image itself opens the full-board view (see 4b);
+      // stepping through is its own button.
+      const item = img.closest(".sb-item");
+      if (item) item.querySelector(".sb-cta--step")?.addEventListener("click", start);
+      else img.addEventListener("click", start);
+    });
+  }
+
+  /* ---- 4b. Full-board view with a magnifier (Storyboards) -----------------
+     <img data-full="big.jpg"> opens the whole board as large as the window
+     allows. With a mouse, a lens snaps to the frame under the cursor and shows
+     it enlarged in the frame's own shape; on touch screens the board opens at
+     full size to drag around. */
+  const boards = document.querySelectorAll("img[data-full]");
+  if (boards.length && "HTMLDialogElement" in window) {
+    const bv = document.createElement("dialog");
+    bv.className = "boardview";
+    bv.innerHTML = '<button type="button" class="lightbox__close" aria-label="Close">×</button>' +
+      '<div class="boardview__stage"><img alt=""><div class="boardview__lens" aria-hidden="true"></div></div>' +
+      '<p class="boardview__cap"></p>';
+    document.body.append(bv);
+    const stage = bv.querySelector(".boardview__stage");
+    const bimg = stage.querySelector("img");
+    const lens = stage.querySelector(".boardview__lens");
+    const bcap = bv.querySelector(".boardview__cap");
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    bv.classList.toggle("is-pan", !fine);
+    bv.querySelector(".lightbox__close").addEventListener("click", () => bv.close());
+    bv.addEventListener("click", (e) => { if (e.target === bv) bv.close(); });
+    // The lens snaps to the frame under the cursor (data-cells: "x,y,w,h …" in the
+    // data-full image's pixels: each frame plus the notes under it) and shows it
+    // enlarged from data-zoom, a sharper copy of the board. ← → step through the
+    // frames in order, ↑ ↓ move a row.
+    let cells = [], cur = -1, title = "";
+    const showCell = (i) => {
+      cur = i;
+      const r = bimg.getBoundingClientRect();
+      const s = r.width / bimg.naturalWidth; // displayed px per image px
+      const [x, y, w, h] = cells[i];
+      const lw = Math.min(600, window.innerWidth * 0.5, window.innerHeight * 0.7 * w / h, Math.max(380, w * s * 2.6)); // lens width on screen
+      const z = lw / (w * s);                                                                                          // magnification
+      const lh = lw * h / w;
+      const sr = stage.getBoundingClientRect();
+      // centre the lens on the frame, kept inside the window
+      let cx = r.left + (x + w / 2) * s, cy = r.top + (y + h / 2) * s;
+      cx = Math.min(Math.max(cx, lw / 2 + 8), window.innerWidth - lw / 2 - 8);
+      cy = Math.min(Math.max(cy, lh / 2 + 8), window.innerHeight - lh / 2 - 8);
+      lens.classList.add("is-on");
+      lens.style.width = lw + "px";
+      lens.style.height = lh + "px";
+      lens.style.left = (cx - sr.left - lw / 2) + "px";
+      lens.style.top = (cy - sr.top - lh / 2) + "px";
+      lens.style.backgroundSize = (r.width * z) + "px " + (r.height * z) + "px";
+      lens.style.backgroundPosition = (-x * s * z) + "px " + (-y * s * z) + "px";
+      bcap.textContent = title + "Frame " + (i + 1) + " of " + cells.length + " · ← → to step";
+    };
+    const hideLens = () => { lens.classList.remove("is-on"); cur = -1; };
+    const moveLens = (e) => {
+      const r = bimg.getBoundingClientRect();
+      const s = r.width / bimg.naturalWidth;
+      const nx = (e.clientX - r.left) / s, ny = (e.clientY - r.top) / s;
+      const pad = 12 / s; // small margin so gaps between frames still count
+      const i = cells.findIndex(([x, y, w, h]) => nx >= x - pad && nx <= x + w + pad && ny >= y - pad && ny <= y + h + pad);
+      if (i < 0) hideLens(); else if (i !== cur) showCell(i);
+    };
+    if (fine) {
+      bimg.addEventListener("mousemove", moveLens);
+      bimg.addEventListener("mouseleave", hideLens);
+      bv.addEventListener("keydown", (e) => {
+        if (!cells.length || !/^Arrow/.test(e.key)) return;
+        e.preventDefault();
+        if (cur < 0) return showCell(0);
+        const [x, y, w] = cells[cur];
+        let i = cur;
+        if (e.key === "ArrowRight") i = Math.min(cells.length - 1, cur + 1);
+        if (e.key === "ArrowLeft") i = Math.max(0, cur - 1);
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          // nearest frame in the next row down (or up)
+          const down = e.key === "ArrowDown";
+          const rows = cells.map((c, j) => j).filter((j) => down ? cells[j][1] > y + w * 0.3 : cells[j][1] < y - w * 0.3);
+          if (rows.length) {
+            const ry = down ? Math.min(...rows.map((j) => cells[j][1])) : Math.max(...rows.map((j) => cells[j][1]));
+            const row = rows.filter((j) => Math.abs(cells[j][1] - ry) < w * 0.3);
+            i = row.reduce((best, j) => Math.abs(cells[j][0] - x) < Math.abs(cells[best][0] - x) ? j : best, row[0]);
+          }
+        }
+        showCell(i);
       });
+    }
+    boards.forEach((img) => {
+      const openBoard = () => {
+        bimg.src = img.dataset.full;
+        bimg.alt = img.alt;
+        lens.style.backgroundImage = 'url("' + (img.dataset.zoom || img.dataset.full) + '")';
+        cells = (img.dataset.cells || "").trim().split(/\s+/).filter(Boolean).map((t) => t.split(",").map(Number));
+        hideLens();
+        const t = img.closest(".sb-item")?.querySelector("h3");
+        title = t ? t.textContent + " · " : "";
+        bcap.textContent = title + (fine ? "Move over the board, or use the arrow keys, to magnify" : "Drag to look around");
+        bv.showModal();
+        if (!fine) bimg.addEventListener("load", () => { stage.scrollLeft = 0; stage.scrollTop = 0; }, { once: true });
+      };
+      img.setAttribute("data-zoomable", "");
+      img.addEventListener("click", openBoard);
+      img.closest(".sb-item")?.querySelector(".sb-cta--full")?.addEventListener("click", openBoard);
     });
   }
 
@@ -608,6 +719,21 @@
       if (i < 0 || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
       const n = tabs[(i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length];
       n.focus(); show(n);
+    });
+  });
+
+  // "More storyboards": each board's "Finished video" button swaps the board for
+  // its video in the same spot; pressing it again brings the board back.
+  document.querySelectorAll(".sb-cta--video").forEach((btn) => {
+    const item = btn.closest(".sb-item");
+    const board = item.querySelector(".sb-item__board img");
+    const video = item.querySelector(".sb-item__video");
+    btn.addEventListener("click", () => {
+      const on = btn.getAttribute("aria-pressed") !== "true";
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      board.hidden = on;
+      video.hidden = !on;
+      if (!on) stopOthers(null);
     });
   });
 
