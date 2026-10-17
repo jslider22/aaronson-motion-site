@@ -722,18 +722,27 @@
     });
   });
 
-  // "More storyboards": each board's "Finished video" button swaps the board for
-  // its video in the same spot; pressing it again brings the board back.
+  // "More storyboards": "Finished video" swaps the board for its video and
+  // starts it; when the video ends (or is stopped, or pressed again), the board
+  // comes back.
   document.querySelectorAll(".sb-cta--video").forEach((btn) => {
     const item = btn.closest(".sb-item");
     const board = item.querySelector(".sb-item__board img");
     const video = item.querySelector(".sb-item__video");
-    btn.addEventListener("click", () => {
-      const on = btn.getAttribute("aria-pressed") !== "true";
+    const embed = video.querySelector(".embed");
+    const show = (on) => {
       btn.setAttribute("aria-pressed", on ? "true" : "false");
       board.hidden = on;
       video.hidden = !on;
-      if (!on) stopOthers(null);
+    };
+    // the player removes data-playing when the video finishes or another starts
+    new MutationObserver(() => {
+      if (!("playing" in embed.dataset) && !video.hidden) show(false);
+    }).observe(embed, { attributes: true, attributeFilter: ["data-playing"] });
+    btn.addEventListener("click", () => {
+      if (!video.hidden) { show(false); stopOthers(null); return; }
+      show(true);
+      embed.querySelector("button")?.click();
     });
   });
 

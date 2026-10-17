@@ -735,6 +735,8 @@ figure { margin: 0; }
 .sb-cta--full:hover svg, .sb-cta--step:hover svg { stroke: #fff; }
 .sb-cta--video:hover svg { fill: #fff; }
 .sb-cta--video[aria-pressed="true"] { background: var(--blue-light); }
+.sb-cta--video .i-stop, .sb-cta--video[aria-pressed="true"] .i-play { display: none; }
+.sb-cta--video[aria-pressed="true"] .i-stop { display: block; fill: #fff; }
 .sb-item__video .embed { border-radius: 8px; border: 0; }
 
 /* Full-board view with a magnifier lens */
