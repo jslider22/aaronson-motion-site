@@ -455,9 +455,12 @@
   /* ---- 4. Lightbox ------------------------------------------------------
      Click any image in a .gallery to open it large. Step through that
      gallery with the arrow buttons, the ← → keys, or a swipe; "3 / 17"
-     shows where you are. Caption = the image's <figcaption>, if it has one. */
+     shows where you are. Caption = the image's <figcaption>, if it has one.
+     An image with data-frames="a.jpg b.jpg …" (Storyboards) opens those
+     pieces instead, so a whole board can be stepped through up close. */
   const galleries = document.querySelectorAll(".gallery");
-  if (galleries.length && "HTMLDialogElement" in window) {
+  const framed = document.querySelectorAll("img[data-frames]");
+  if ((galleries.length || framed.length) && "HTMLDialogElement" in window) {
     const dlg = document.createElement("dialog");
     dlg.className = "lightbox";
     dlg.innerHTML =
@@ -469,26 +472,31 @@
     const big = dlg.querySelector("img");
     const cap = dlg.querySelector(".lightbox__cap");
     const count = dlg.querySelector(".lightbox__count");
-    let set = [], idx = 0;
+    let set = [], idx = 0; // items: { src, alt, cap }
+    const captionOf = (img) => {
+      const fc = img.closest("figure")?.querySelector("figcaption");
+      if (!fc) return "";
+      // Line breaks and the small tool name become " · " separators
+      const c = fc.cloneNode(true);
+      const tool = c.querySelector("small");
+      if (tool) tool.remove();
+      c.querySelectorAll("br").forEach((br) => br.replaceWith(" · "));
+      return [c.textContent.trim(), tool ? tool.textContent.trim() : ""].filter(Boolean).join(" · ");
+    };
     const show = (i) => {
       idx = (i + set.length) % set.length;
-      const img = set[idx];
-      big.src = img.currentSrc || img.src;
-      big.alt = img.alt;
-      const fc = img.closest("figure")?.querySelector("figcaption");
-      // Only the piece's real caption is shown (alt text is for screen readers).
-      // Line breaks and the small tool name become " · " separators.
-      let text = "";
-      if (fc) {
-        const c = fc.cloneNode(true);
-        const tool = c.querySelector("small");
-        if (tool) tool.remove();
-        c.querySelectorAll("br").forEach((br) => br.replaceWith(" · "));
-        text = [c.textContent.trim(), tool ? tool.textContent.trim() : ""].filter(Boolean).join(" · ");
-      }
-      cap.textContent = text;
+      const it = set[idx];
+      big.src = it.src;
+      big.alt = it.alt;
+      cap.textContent = it.cap;
       count.textContent = set.length > 1 ? (idx + 1) + " / " + set.length : "";
       dlg.classList.toggle("is-single", set.length < 2);
+    };
+    const open = (items, start, frames) => {
+      set = items;
+      dlg.classList.toggle("is-frames", !!frames);
+      show(start);
+      dlg.showModal();
     };
     dlg.querySelector(".lightbox__close").addEventListener("click", () => dlg.close());
     dlg.querySelector(".lightbox__nav--prev").addEventListener("click", () => show(idx - 1));
@@ -509,23 +517,98 @@
     });
 
     galleries.forEach((g) => {
-      g.querySelectorAll("img").forEach((img) => {
+      g.querySelectorAll("img:not([data-frames])").forEach((img) => {
         img.setAttribute("data-zoomable", "");
         img.addEventListener("click", () => {
           if (!img.naturalWidth) return; // still a placeholder
-          set = [...g.querySelectorAll("img[data-zoomable]")].filter((i) => i.naturalWidth);
-          show(set.indexOf(img));
-          dlg.showModal();
+          // every real image in the gallery, loaded yet or not (placeholders are hidden)
+          const imgs = [...g.querySelectorAll("img[data-zoomable]")].filter((i) => !i.hidden);
+          open(imgs.map((i) => ({ src: i.currentSrc || i.src, alt: i.alt, cap: captionOf(i) })), imgs.indexOf(img));
         });
+      });
+    });
+    framed.forEach((img) => {
+      img.setAttribute("data-zoomable", "");
+      const srcs = img.dataset.frames.trim().split(/\s+/);
+      const label = captionOf(img).split(" · ")[0];
+      img.addEventListener("click", () => {
+        open(srcs.map((src, n) => ({ src, alt: img.alt + ", frames " + (n * 2 + 1) + "–" + (n * 2 + 2), cap: label })), 0, true);
       });
     });
   }
 
-  /* ---- 5. Carousels ----------------------------------------------------- */
+  /* ---- 5. Carousels -----------------------------------------------------
+     One page at a time. Arrows, the ← → keys (when the carousel has focus),
+     a swipe, or the dots move between pages; "3 / 10" shows where you are. */
   document.querySelectorAll(".carousel").forEach((c) => {
     const track = c.querySelector(".carousel__track");
-    c.querySelector(".carousel__btn--prev")?.addEventListener("click", () => track.scrollBy({ left: -track.clientWidth, behavior: "smooth" }));
-    c.querySelector(".carousel__btn--next")?.addEventListener("click", () => track.scrollBy({ left: track.clientWidth, behavior: "smooth" }));
+    const pages = [...track.children];
+    const prev = c.querySelector(".carousel__btn--prev");
+    const next = c.querySelector(".carousel__btn--next");
+    const go = (i) => track.scrollTo({ left: Math.max(0, Math.min(pages.length - 1, i)) * track.clientWidth, behavior: "smooth" });
+    const at = () => Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+    prev?.addEventListener("click", () => go(at() - 1));
+    next?.addEventListener("click", () => go(at() + 1));
+    track.tabIndex = 0;
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { e.preventDefault(); go(at() - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); go(at() + 1); }
+    });
+    if (pages.length < 2) return;
+    const bar = document.createElement("div");
+    bar.className = "carousel__bar";
+    bar.innerHTML = '<span class="carousel__count" aria-live="polite"></span><div class="carousel__dots"></div>';
+    const dots = bar.querySelector(".carousel__dots");
+    pages.forEach((_, i) => {
+      const d = document.createElement("button");
+      d.type = "button";
+      d.setAttribute("aria-label", "Page " + (i + 1));
+      d.addEventListener("click", () => go(i));
+      dots.append(d);
+    });
+    c.append(bar);
+    const count = bar.querySelector(".carousel__count");
+    const sync = () => {
+      const i = at();
+      count.textContent = (i + 1) + " / " + pages.length;
+      dots.querySelectorAll("button").forEach((d, j) => d.setAttribute("aria-current", j === i ? "true" : "false"));
+      if (prev) prev.disabled = i === 0;
+      if (next) next.disabled = i === pages.length - 1;
+    };
+    let q = false;
+    track.addEventListener("scroll", () => { if (!q) { q = true; requestAnimationFrame(() => { q = false; sync(); }); } }, { passive: true });
+    window.addEventListener("resize", sync);
+    sync();
+  });
+
+  /* ---- 5b. Storyboard / Finished video switch (Storyboards page) --------- */
+  document.querySelectorAll(".sb-switch").forEach((sw) => {
+    const tabs = [...sw.querySelectorAll('[role="tab"]')];
+    const pill = () => { // slide the white pill under the selected tab
+      const t = tabs.find((x) => x.getAttribute("aria-selected") === "true");
+      sw.style.setProperty("--x", t.offsetLeft + "px");
+      sw.style.setProperty("--w", t.offsetWidth + "px");
+    };
+    const show = (tab) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+      });
+      pill();
+      stopOthers(null); // leaving the video stops it
+    };
+    pill();
+    window.addEventListener("resize", pill);
+    document.fonts && document.fonts.ready.then(pill);
+    tabs.forEach((t) => t.addEventListener("click", () => show(t)));
+    sw.addEventListener("keydown", (e) => {
+      const i = tabs.indexOf(document.activeElement);
+      if (i < 0 || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+      const n = tabs[(i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length];
+      n.focus(); show(n);
+    });
   });
 
   /* ---- 7. Lottie animations ---------------------------------------------

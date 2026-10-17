@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,900&family=Questrial&family=Roboto:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=88c38b9d">
-  <script src="js/site.js?v=e0e5f3e2" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=32cd3282">
+  <script src="js/site.js?v=645ee4da" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -57,49 +57,70 @@
     <header class="page-head" style="--head-w:872px"><h1 class="page-title">Storyboards</h1></header>
   </div>
 
-  <!-- HFMA Booth Video 2024 — one storyboard page per slide.
-       10 slides — add more by copying a <figure> and bumping the number. -->
-  <div class="band-blue">
-    <div class="carousel gallery" aria-roledescription="carousel" aria-label="HFMA Booth Video 2024 storyboard">
-      <button class="carousel__btn carousel__btn--prev" type="button" aria-label="Previous board">&#8249;</button>
-      <div class="carousel__track">
-        <figure><img src="assets/images/storyboards/hfma-2024-board-01.jpg" alt="HFMA Booth Video 2024 storyboard, page 1" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-02.jpg" alt="HFMA Booth Video 2024 storyboard, page 2" loading="lazy" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-03.jpg" alt="HFMA Booth Video 2024 storyboard, page 3" loading="lazy" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-04.jpg" alt="HFMA Booth Video 2024 storyboard, page 4" loading="lazy" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-05.jpg" alt="HFMA Booth Video 2024 storyboard, page 5" loading="lazy" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-06.jpg" alt="HFMA Booth Video 2024 storyboard, page 6" loading="lazy" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-07.jpg" alt="HFMA Booth Video 2024 storyboard, page 7" loading="lazy" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-08.jpg" alt="HFMA Booth Video 2024 storyboard, page 8" loading="lazy" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-09.jpg" alt="HFMA Booth Video 2024 storyboard, page 9" loading="lazy" style="--ar: 58/41"></figure>
-        <figure><img src="assets/images/storyboards/hfma-2024-board-10.jpg" alt="HFMA Booth Video 2024 storyboard, page 10" loading="lazy" style="--ar: 58/41"></figure>
+  <!-- Xtend HFMA Booth Video on a navy stage — one storyboard page per slide.
+       Add a page by copying a <figure> in the track and bumping the number;
+       the counter and dots update themselves. -->
+  <section class="sb-stage">
+    <div class="wrap">
+      <h2 class="rule-label">Xtend HFMA Booth Video</h2>
+      <p class="sb-intro">Animation displayed during a health industry conference.</p>
+      <!-- Switch between the storyboard and the finished animation, in place -->
+      <div class="sb-switch" role="tablist" aria-label="Show">
+        <button type="button" role="tab" aria-selected="true" aria-controls="sb-board" id="sb-tab-board"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="5.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="5.5" height="4.5" rx="1"/><rect x="1.5" y="9" width="5.5" height="4.5" rx="1"/><rect x="9" y="9" width="5.5" height="4.5" rx="1"/></svg>Storyboard</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="sb-video" id="sb-tab-video"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L5.9 2.7a.6.6 0 0 0-.9.5z"/></svg>Finished video</button>
       </div>
-      <button class="carousel__btn carousel__btn--next" type="button" aria-label="Next board">&#8250;</button>
+      <div class="sb-panel" id="sb-board" role="tabpanel" aria-labelledby="sb-tab-board">
+      <div class="carousel gallery" aria-roledescription="carousel" aria-label="Xtend HFMA Booth Video storyboard">
+        <button class="carousel__btn carousel__btn--prev" type="button" aria-label="Previous page">&#8249;</button>
+        <div class="carousel__track">
+          <figure><img src="assets/images/storyboards/hfma-2024-board-01.jpg" alt="Xtend HFMA Booth Video storyboard, page 1" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-02.jpg" alt="Xtend HFMA Booth Video storyboard, page 2" loading="lazy" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-03.jpg" alt="Xtend HFMA Booth Video storyboard, page 3" loading="lazy" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-04.jpg" alt="Xtend HFMA Booth Video storyboard, page 4" loading="lazy" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-05.jpg" alt="Xtend HFMA Booth Video storyboard, page 5" loading="lazy" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-06.jpg" alt="Xtend HFMA Booth Video storyboard, page 6" loading="lazy" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-07.jpg" alt="Xtend HFMA Booth Video storyboard, page 7" loading="lazy" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-08.jpg" alt="Xtend HFMA Booth Video storyboard, page 8" loading="lazy" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-09.jpg" alt="Xtend HFMA Booth Video storyboard, page 9" loading="lazy" style="--ar: 58/41"></figure>
+          <figure><img src="assets/images/storyboards/hfma-2024-board-10.jpg" alt="Xtend HFMA Booth Video storyboard, page 10" loading="lazy" style="--ar: 58/41"></figure>
+      </div>
+        <button class="carousel__btn carousel__btn--next" type="button" aria-label="Next page">&#8250;</button>
+      </div>
+      </div>
+      <div class="sb-panel" id="sb-video" role="tabpanel" aria-labelledby="sb-tab-video" data-lite-embeds hidden>
+        <div class="embed" data-provider="vimeo" data-id="957830672" data-slot="storyboards/xtend-hfma-final" data-title="Xtend - HFMA Booth Video"></div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="wrap gallery">
-    <p class="board-caption">Animation displayed during a health industry conference</p>
-
-    <figure>
-      <div class="board"><img src="assets/images/storyboards/capabilities-services-ad.jpg" alt="Storyboard grid for an animated capabilities and services ad" loading="lazy" style="--ar: 9/4"></div>
-      <figcaption class="board-caption">Animated capabilities and services ad</figcaption>
-    </figure>
-
-    <figure>
-      <div class="board"><img src="assets/images/storyboards/60-second-conference-animation.jpg" alt="Storyboard grid for a 60 second conference animation" loading="lazy" style="--ar: 47/25"></div>
-      <figcaption class="board-caption">60 second animation displayed during a health industry conference</figcaption>
-    </figure>
-
-    <figure>
-      <div class="board"><img src="assets/images/storyboards/intro-hype-video.jpg" alt="Storyboard grid for a corporate conference intro hype video" loading="lazy" style="--ar: 87/49"></div>
-      <figcaption class="board-caption">Intro hype video shown at a corporate conference</figcaption>
-    </figure>
-
-    <figure>
-      <div class="board"><img src="assets/images/storyboards/capabilities-services-video.jpg" alt="Storyboard grid for a capabilities and services video" loading="lazy" style="--ar: 59/50"></div>
-      <figcaption class="board-caption">Capabilities and services video</figcaption>
-    </figure>
+  <div class="wrap">
+    <h2 class="rule-label">More storyboards</h2>
+    <!-- Each board shows whole; clicking it opens the viewer, which steps through
+         the board two frames at a time. The views (assets/images/storyboards/frames/)
+         are rendered from the original Illustrator/PDF storyboards on the NAVI SSD,
+         in board order, and listed in data-frames. -->
+    <div class="rows sb-boards">
+      <figure class="card sb-board" style="--r: 2.250">
+        <img src="assets/images/storyboards/capabilities-services-ad.jpg" alt="Storyboard for animated capabilities and services ad" loading="lazy"
+             data-frames="assets/images/storyboards/frames/capabilities-services-ad-01.jpg assets/images/storyboards/frames/capabilities-services-ad-02.jpg assets/images/storyboards/frames/capabilities-services-ad-03.jpg assets/images/storyboards/frames/capabilities-services-ad-04.jpg assets/images/storyboards/frames/capabilities-services-ad-05.jpg assets/images/storyboards/frames/capabilities-services-ad-06.jpg assets/images/storyboards/frames/capabilities-services-ad-07.jpg assets/images/storyboards/frames/capabilities-services-ad-08.jpg assets/images/storyboards/frames/capabilities-services-ad-09.jpg assets/images/storyboards/frames/capabilities-services-ad-10.jpg assets/images/storyboards/frames/capabilities-services-ad-11.jpg assets/images/storyboards/frames/capabilities-services-ad-12.jpg assets/images/storyboards/frames/capabilities-services-ad-13.jpg assets/images/storyboards/frames/capabilities-services-ad-14.jpg assets/images/storyboards/frames/capabilities-services-ad-15.jpg assets/images/storyboards/frames/capabilities-services-ad-16.jpg assets/images/storyboards/frames/capabilities-services-ad-17.jpg assets/images/storyboards/frames/capabilities-services-ad-18.jpg">
+        <figcaption>Animated capabilities and services ad<small>18 views · 2 frames each</small></figcaption>
+      </figure>
+      <figure class="card sb-board" style="--r: 1.880">
+        <img src="assets/images/storyboards/60-second-conference-animation.jpg" alt="Storyboard for 60 second animation displayed during a health industry conference" loading="lazy"
+             data-frames="assets/images/storyboards/frames/60-second-conference-animation-01.jpg assets/images/storyboards/frames/60-second-conference-animation-02.jpg assets/images/storyboards/frames/60-second-conference-animation-03.jpg assets/images/storyboards/frames/60-second-conference-animation-04.jpg assets/images/storyboards/frames/60-second-conference-animation-05.jpg assets/images/storyboards/frames/60-second-conference-animation-06.jpg assets/images/storyboards/frames/60-second-conference-animation-07.jpg assets/images/storyboards/frames/60-second-conference-animation-08.jpg assets/images/storyboards/frames/60-second-conference-animation-09.jpg assets/images/storyboards/frames/60-second-conference-animation-10.jpg assets/images/storyboards/frames/60-second-conference-animation-11.jpg assets/images/storyboards/frames/60-second-conference-animation-12.jpg assets/images/storyboards/frames/60-second-conference-animation-13.jpg assets/images/storyboards/frames/60-second-conference-animation-14.jpg assets/images/storyboards/frames/60-second-conference-animation-15.jpg assets/images/storyboards/frames/60-second-conference-animation-16.jpg assets/images/storyboards/frames/60-second-conference-animation-17.jpg assets/images/storyboards/frames/60-second-conference-animation-18.jpg assets/images/storyboards/frames/60-second-conference-animation-19.jpg">
+        <figcaption>60 second animation displayed during a health industry conference<small>19 views · 2 frames each</small></figcaption>
+      </figure>
+      <figure class="card sb-board" style="--r: 1.776">
+        <img src="assets/images/storyboards/intro-hype-video.jpg" alt="Storyboard for intro hype video shown at a corporate conference" loading="lazy"
+             data-frames="assets/images/storyboards/frames/intro-hype-video-01.jpg assets/images/storyboards/frames/intro-hype-video-02.jpg assets/images/storyboards/frames/intro-hype-video-03.jpg assets/images/storyboards/frames/intro-hype-video-04.jpg assets/images/storyboards/frames/intro-hype-video-05.jpg assets/images/storyboards/frames/intro-hype-video-06.jpg assets/images/storyboards/frames/intro-hype-video-07.jpg assets/images/storyboards/frames/intro-hype-video-08.jpg assets/images/storyboards/frames/intro-hype-video-09.jpg assets/images/storyboards/frames/intro-hype-video-10.jpg assets/images/storyboards/frames/intro-hype-video-11.jpg assets/images/storyboards/frames/intro-hype-video-12.jpg assets/images/storyboards/frames/intro-hype-video-13.jpg assets/images/storyboards/frames/intro-hype-video-14.jpg assets/images/storyboards/frames/intro-hype-video-15.jpg assets/images/storyboards/frames/intro-hype-video-16.jpg assets/images/storyboards/frames/intro-hype-video-17.jpg assets/images/storyboards/frames/intro-hype-video-18.jpg assets/images/storyboards/frames/intro-hype-video-19.jpg assets/images/storyboards/frames/intro-hype-video-20.jpg assets/images/storyboards/frames/intro-hype-video-21.jpg assets/images/storyboards/frames/intro-hype-video-22.jpg assets/images/storyboards/frames/intro-hype-video-23.jpg assets/images/storyboards/frames/intro-hype-video-24.jpg assets/images/storyboards/frames/intro-hype-video-25.jpg assets/images/storyboards/frames/intro-hype-video-26.jpg assets/images/storyboards/frames/intro-hype-video-27.jpg assets/images/storyboards/frames/intro-hype-video-28.jpg">
+        <figcaption>Intro hype video shown at a corporate conference<small>28 views · 2 frames each</small></figcaption>
+      </figure>
+      <figure class="card sb-board" style="--r: 1.180">
+        <img src="assets/images/storyboards/capabilities-services-video.jpg" alt="Storyboard for capabilities and services video" loading="lazy"
+             data-frames="assets/images/storyboards/frames/capabilities-services-video-01.jpg assets/images/storyboards/frames/capabilities-services-video-02.jpg assets/images/storyboards/frames/capabilities-services-video-03.jpg assets/images/storyboards/frames/capabilities-services-video-04.jpg assets/images/storyboards/frames/capabilities-services-video-05.jpg assets/images/storyboards/frames/capabilities-services-video-06.jpg assets/images/storyboards/frames/capabilities-services-video-07.jpg assets/images/storyboards/frames/capabilities-services-video-08.jpg assets/images/storyboards/frames/capabilities-services-video-09.jpg assets/images/storyboards/frames/capabilities-services-video-10.jpg assets/images/storyboards/frames/capabilities-services-video-11.jpg assets/images/storyboards/frames/capabilities-services-video-12.jpg assets/images/storyboards/frames/capabilities-services-video-13.jpg assets/images/storyboards/frames/capabilities-services-video-14.jpg assets/images/storyboards/frames/capabilities-services-video-15.jpg assets/images/storyboards/frames/capabilities-services-video-16.jpg assets/images/storyboards/frames/capabilities-services-video-17.jpg assets/images/storyboards/frames/capabilities-services-video-18.jpg assets/images/storyboards/frames/capabilities-services-video-19.jpg assets/images/storyboards/frames/capabilities-services-video-20.jpg assets/images/storyboards/frames/capabilities-services-video-21.jpg assets/images/storyboards/frames/capabilities-services-video-22.jpg assets/images/storyboards/frames/capabilities-services-video-23.jpg assets/images/storyboards/frames/capabilities-services-video-24.jpg assets/images/storyboards/frames/capabilities-services-video-25.jpg assets/images/storyboards/frames/capabilities-services-video-26.jpg assets/images/storyboards/frames/capabilities-services-video-27.jpg assets/images/storyboards/frames/capabilities-services-video-28.jpg assets/images/storyboards/frames/capabilities-services-video-29.jpg assets/images/storyboards/frames/capabilities-services-video-30.jpg">
+        <figcaption>Capabilities and services video<small>30 views · 2 frames each</small></figcaption>
+      </figure>
+    </div>
   </div>
   </main>
 
