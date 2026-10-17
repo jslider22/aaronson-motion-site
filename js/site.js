@@ -455,7 +455,7 @@
   /* ---- 4. Lightbox ------------------------------------------------------
      Click any image in a .gallery to open it large. Step through that
      gallery with the arrow buttons, the ← → keys, or a swipe; "3 / 17"
-     shows where you are. Caption = the image's <figcaption>, else its alt. */
+     shows where you are. Caption = the image's <figcaption>, if it has one. */
   const galleries = document.querySelectorAll(".gallery");
   if (galleries.length && "HTMLDialogElement" in window) {
     const dlg = document.createElement("dialog");
@@ -476,8 +476,9 @@
       big.src = img.currentSrc || img.src;
       big.alt = img.alt;
       const fc = img.closest("figure")?.querySelector("figcaption");
-      // Line breaks and the small tool name become " · " separators
-      cap.textContent = fc ? fc.innerText.trim().split(/\s*\n+\s*/).join(" · ") : img.alt;
+      // Only the piece's real caption is shown (alt text is for screen readers).
+      // Line breaks and the small tool name become " · " separators.
+      cap.textContent = fc ? fc.innerText.trim().split(/\s*\n+\s*/).join(" · ") : "";
       count.textContent = set.length > 1 ? (idx + 1) + " / " + set.length : "";
       dlg.classList.toggle("is-single", set.length < 2);
     };
