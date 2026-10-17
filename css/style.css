@@ -316,6 +316,9 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
    with "Now playing" in place of the play button (no outline to crowd the
    player), and its title turns blue. */
 .is-staged h3 { color: var(--blue); }
+/* The playing card's whole cell gets a soft panel that runs to the player, so
+   any space between a short description and the notch reads as part of it */
+.stage ~ .is-staged, .is-staged:has(~ .stage) { background: rgba(31, 53, 84, .07); border-radius: 12px; box-shadow: 0 0 0 14px rgba(31, 53, 84, .07); }
 .is-staged .embed__poster::after, .is-staged.embed .embed__poster::after {
   content: "Now playing"; position: absolute; inset: 0; display: grid; place-items: center;
   background: rgba(15, 28, 48, .58); color: #fff; font: 500 12px var(--font-ui); letter-spacing: .12em; text-transform: uppercase;
