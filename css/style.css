@@ -279,6 +279,8 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
 }
 .embed__poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .3s, transform .4s; }
 .embed__poster img.is-loaded { opacity: 1; }
+/* Trim a dark edge baked into a provider's thumbnail: style="--trim: 1.05" (zooms from the centre) */
+.embed[style*="--trim"] .embed__poster img { scale: var(--trim); }
 .embed__play {
   position: relative; width: clamp(44px, 12%, 68px); aspect-ratio: 1; border-radius: 50%;
   background: rgba(20, 20, 20, .72); box-shadow: 0 0 0 2px rgba(255,255,255,.85); transition: background .2s, transform .2s;
