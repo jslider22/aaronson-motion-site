@@ -452,27 +452,60 @@
     else img.addEventListener("error", () => toSlot(img), { once: true });
   });
 
-  /* ---- 4. Lightbox ------------------------------------------------------ */
+  /* ---- 4. Lightbox ------------------------------------------------------
+     Click any image in a .gallery to open it large. Step through that
+     gallery with the arrow buttons, the ← → keys, or a swipe; "3 / 17"
+     shows where you are. Caption = the image's <figcaption>, else its alt. */
   const galleries = document.querySelectorAll(".gallery");
   if (galleries.length && "HTMLDialogElement" in window) {
     const dlg = document.createElement("dialog");
     dlg.className = "lightbox";
-    dlg.innerHTML = '<button type="button" aria-label="Close">×</button><img alt=""><p></p>';
+    dlg.innerHTML =
+      '<button type="button" class="lightbox__close" aria-label="Close">×</button>' +
+      '<button type="button" class="lightbox__nav lightbox__nav--prev" aria-label="Previous image">‹</button>' +
+      '<figure class="lightbox__fig"><img alt=""><figcaption><span class="lightbox__cap"></span><span class="lightbox__count"></span></figcaption></figure>' +
+      '<button type="button" class="lightbox__nav lightbox__nav--next" aria-label="Next image">›</button>';
     document.body.append(dlg);
     const big = dlg.querySelector("img");
-    const cap = dlg.querySelector("p");
-    dlg.querySelector("button").addEventListener("click", () => dlg.close());
-    dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+    const cap = dlg.querySelector(".lightbox__cap");
+    const count = dlg.querySelector(".lightbox__count");
+    let set = [], idx = 0;
+    const show = (i) => {
+      idx = (i + set.length) % set.length;
+      const img = set[idx];
+      big.src = img.currentSrc || img.src;
+      big.alt = img.alt;
+      const fc = img.closest("figure")?.querySelector("figcaption");
+      // Line breaks and the small tool name become " · " separators
+      cap.textContent = fc ? fc.innerText.trim().split(/\s*\n+\s*/).join(" · ") : img.alt;
+      count.textContent = set.length > 1 ? (idx + 1) + " / " + set.length : "";
+      dlg.classList.toggle("is-single", set.length < 2);
+    };
+    dlg.querySelector(".lightbox__close").addEventListener("click", () => dlg.close());
+    dlg.querySelector(".lightbox__nav--prev").addEventListener("click", () => show(idx - 1));
+    dlg.querySelector(".lightbox__nav--next").addEventListener("click", () => show(idx + 1));
+    dlg.addEventListener("click", (e) => { if (e.target === dlg || e.target.classList.contains("lightbox__fig")) dlg.close(); });
+    dlg.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(idx - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); show(idx + 1); }
+    });
+    // Swipe left/right on touch screens
+    let x0 = null;
+    dlg.addEventListener("pointerdown", (e) => { x0 = e.clientX; });
+    dlg.addEventListener("pointerup", (e) => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0;
+      x0 = null;
+      if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
+    });
 
     galleries.forEach((g) => {
       g.querySelectorAll("img").forEach((img) => {
         img.setAttribute("data-zoomable", "");
         img.addEventListener("click", () => {
           if (!img.naturalWidth) return; // still a placeholder
-          big.src = img.currentSrc || img.src;
-          big.alt = img.alt;
-          const fc = img.closest("figure")?.querySelector("figcaption");
-          cap.textContent = fc ? fc.textContent.trim().replace(/\s+/g, " ") : img.alt;
+          set = [...g.querySelectorAll("img[data-zoomable]")].filter((i) => i.naturalWidth);
+          show(set.indexOf(img));
           dlg.showModal();
         });
       });
