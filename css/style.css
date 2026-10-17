@@ -592,7 +592,7 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
    the width, with nothing cropped. Each item carries its shape as --r
    (width ÷ height, written into the HTML) so rows lay out before images load.
    <div class="rows gallery"> <figure class="card" style="--r: 1.5"> … */
-.rows { display: flex; flex-wrap: wrap; gap: 26px 18px; }
+.rows { display: flex; flex-wrap: wrap; gap: 20px; }
 .rows > * { flex: var(--r, 1) 1 calc(var(--r, 1) * 150px); min-width: 0; margin: 0; }
 @media (min-width: 900px) { .rows > * { flex-basis: calc(var(--r, 1) * 250px); } }
 .rows::after { content: ""; flex: 999 1 0; } /* keeps a short last row from stretching */
@@ -607,6 +607,18 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 .rows figcaption small {
   display: inline-block; margin-top: 6px; padding: 2px 9px; border-radius: 999px; background: #eef2f8; color: #4a6283;
   font: 500 10.5px var(--font-ui); letter-spacing: .06em; text-transform: uppercase;
+}
+/* With a mouse: captions sit over the bottom of the image and appear on hover,
+   so every gap in the grid is the same 20px. (Touch screens keep them below.) */
+@media (hover: hover) and (pointer: fine) {
+  .rows .card { position: relative; }
+  .rows figcaption {
+    position: absolute; left: 1px; right: 1px; bottom: 1px; padding: 28px 14px 12px; border-radius: 0 0 6px 6px;
+    background: linear-gradient(transparent, rgba(12, 22, 38, .82)); color: #fff;
+    opacity: 0; transform: translateY(6px); transition: opacity .25s, transform .25s; pointer-events: none;
+  }
+  .rows figcaption small { background: rgba(255, 255, 255, .18); color: #e6eef8; }
+  .rows .card:hover figcaption { opacity: 1; transform: translateY(-3px); } /* -3px rides along with the image lift */
 }
 figure { margin: 0; }
 
