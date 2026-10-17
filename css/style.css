@@ -301,7 +301,7 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
   content: ""; position: absolute; top: -11px; left: var(--notch-x, 50%); transform: translateX(-50%);
   border: 12px solid transparent; border-top: 0; border-bottom-color: #1e1e1e; transition: left .3s;
 }
-.stage--above { margin: 22px 0 6px; }
+.stage--above { margin: 24px 0 18px; } /* room for the notch above the card */
 .stage--above::before { top: auto; bottom: -11px; border-bottom: 0; border-top: 12px solid #1e1e1e; }
 .stage .embed { margin: 0 auto; border-color: #000; }
 .stage__text { max-width: 760px; margin: 14px auto 0; text-align: center; font-family: var(--font-body); }
@@ -312,9 +312,15 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
   border: 0; background: rgba(255,255,255,.12); color: #fff; font-size: 22px; line-height: 1; cursor: pointer;
 }
 .stage__close:hover { background: var(--blue-light); }
-.is-staged .embed { outline: 3px solid var(--blue-light); outline-offset: 3px; }
+/* The card whose video is in the player: its still dims under a navy veil
+   with "Now playing" in place of the play button (no outline to crowd the
+   player), and its title turns blue. */
 .is-staged h3 { color: var(--blue); }
-.is-staged.embed { outline: 3px solid var(--blue-light); outline-offset: 3px; }
+.is-staged .embed__poster::after, .is-staged.embed .embed__poster::after {
+  content: "Now playing"; position: absolute; inset: 0; display: grid; place-items: center;
+  background: rgba(15, 28, 48, .58); color: #fff; font: 500 12px var(--font-ui); letter-spacing: .12em; text-transform: uppercase;
+}
+.is-staged .embed__play, .is-staged.embed .embed__play { visibility: hidden; }
 
 .slot {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
