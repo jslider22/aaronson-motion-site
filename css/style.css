@@ -15,8 +15,9 @@
   --paper-2: #f4f4f4;
   --band: #d4d4d4;           /* UX intro / Navient band grey */
 
-  --blue: #3a64a0;           /* active nav, headings */
-  --blue-light: #4f8fd8;     /* logo "AARONSON", links */
+  --blue: #3a64a0;           /* filled buttons and "you are here" (white text sits on it) */
+  --blue-light: #4f8fd8;     /* motion trail, links, the bright accent on light backgrounds */
+  --blue-logo: #4f7fc0;      /* the logo's mid stroke: "AARONSON" and the tagline on the dark header */
   --blue-pale: #8db8f5;      /* UX feature cards */
   --teal: #84b6c6;
   --rule: #c9d6ea;           /* quiet blue-grey hairline (the old Wix red is retired) */
@@ -81,7 +82,7 @@ p { margin: 0 0 1em; }
 }
 /* Header logo: hover AARONSON -> it lights up; hover MOTION -> letters ripple in a wave and turn
    the logo's mint green. Reduced-motion users get the colour change only. */
-.brand__a { color: var(--blue-light); transition: color .25s; }
+.brand__a { color: var(--blue-logo); transition: color .25s; }
 .brand__a:hover { color: #fff; }
 .brand__m { display: inline-block; }
 .brand__m span { display: inline-block; transition: color .25s; }
@@ -99,7 +100,7 @@ p { margin: 0 0 1em; }
 }
 @media (prefers-reduced-motion: reduce) { .brand__m:hover span { animation: none; } }
 .tagline { display: none; margin: 0; font-size: 14px; letter-spacing: .04em; color: #fff; }
-.tagline span { color: var(--blue-light); border-left: 1px solid #666; padding-left: 6px; margin-left: 4px; }
+.tagline span { color: var(--blue-logo); border-left: 1px solid #666; padding-left: 6px; margin-left: 4px; }
 
 .nav-toggle {
   display: inline-flex; align-items: center; gap: 8px;
@@ -179,7 +180,7 @@ p { margin: 0 0 1em; }
   display: grid; place-items: center; width: 28px; height: 28px; border-radius: 4px;
   background: var(--blue); color: #fff; font: 700 11px var(--font-ui); text-decoration: none;
 }
-.social a:hover { background: var(--blue-light); }
+.social a:hover { background: var(--blue); }
 .social svg { width: 16px; height: 16px; fill: currentColor; }
 .social .ico-in { width: 15px; height: 15px; }
 .social a[href*="imdb.com"] { font-size: 9px; letter-spacing: -.01em; } /* wordmark, kept clear of the box edges */ /* the LinkedIn glyph runs edge to edge, so a touch smaller to match */
@@ -259,7 +260,7 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
   display: inline-block; background: var(--blue-pale); color: #fff; text-decoration: none;
   padding: 14px 28px; font: 700 clamp(16px, 2.4vw, 22px) var(--font-body); letter-spacing: .12em;
 }
-.btn-solid:hover { background: var(--blue-light); color: #fff; }
+.btn-solid:hover { background: var(--blue); color: #fff; }
 
 /* ==========================================================================
    Media slots
@@ -290,7 +291,7 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
   border-style: solid; border-width: .5em 0 .5em .85em; border-color: transparent transparent transparent #fff;
   font-size: clamp(12px, 1.6vw, 18px);
 }
-.embed__poster:hover .embed__play, .embed__poster:focus-visible .embed__play { background: var(--blue-light); transform: scale(1.08); }
+.embed__poster:hover .embed__play, .embed__poster:focus-visible .embed__play { background: var(--blue); transform: scale(1.08); }
 .embed__poster:hover img { transform: scale(1.03); }
 .embed__poster:focus-visible { outline: 3px solid var(--blue-light); outline-offset: -3px; }
 
@@ -313,7 +314,7 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
   position: absolute; top: 8px; right: 8px; z-index: 1; width: 36px; height: 36px; border-radius: 50%;
   border: 0; background: rgba(255,255,255,.12); color: #fff; font-size: 22px; line-height: 1; cursor: pointer;
 }
-.stage__close:hover { background: var(--blue-light); }
+.stage__close:hover { background: var(--blue); }
 /* The card whose video is in the player: its still dims under a navy veil
    with "Now playing" in place of the play button (no outline to crowd the
    player), and its title turns blue. */
@@ -370,7 +371,7 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
   width: 48px; height: 48px; margin: 0 8px; border-radius: 50%; border: 0; cursor: pointer;
   background: rgba(255, 255, 255, .14); color: #fff; font-size: 28px; line-height: 1; transition: background .2s;
 }
-.lightbox__nav:hover, .lightbox__nav:focus-visible { background: var(--blue-light); }
+.lightbox__nav:hover, .lightbox__nav:focus-visible { background: var(--blue); }
 .lightbox.is-single .lightbox__nav { visibility: hidden; }
 /* Storyboards: two full frames side by side */
 .lightbox.is-frames .lightbox__fig img { width: min(100%, 1500px); max-height: calc(100vh - 140px); object-fit: contain; }
@@ -483,7 +484,7 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
   display: block; padding: 6px 12px; border: 1px solid #c9d9f1; border-radius: 999px;
   font-size: 13px; color: var(--blue-light); text-decoration: none;
 }
-.jump-nav a.is-current { background: var(--blue-light); color: #fff; border-color: var(--blue-light); }
+.jump-nav a.is-current { background: var(--blue); color: #fff; border-color: var(--blue); }
 @media (min-width: 1200px) {
   /* Desktop: dotted list pinned to the right edge, like the old site */
   .jump-nav {
@@ -697,7 +698,7 @@ figure { margin: 0; }
   position: absolute; top: calc(50% - 22px); width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
   background: rgba(255, 255, 255, .14); color: #fff; font-size: 28px; line-height: 1; transition: background .2s, opacity .2s;
 }
-.carousel__btn:hover, .carousel__btn:focus-visible { background: var(--blue-light); }
+.carousel__btn:hover, .carousel__btn:focus-visible { background: var(--blue); }
 .carousel__btn:disabled { opacity: .3; cursor: default; background: rgba(255, 255, 255, .14); }
 .carousel__btn--prev { left: 0; }
 .carousel__btn--next { right: 0; }
@@ -733,10 +734,10 @@ figure { margin: 0; }
 .sb-cta--full svg, .sb-cta--step svg { stroke: var(--mint); }
 .sb-cta--video svg { stroke: none; fill: var(--mint); }
 .sb-cta--full:hover, .sb-cta--full:focus-visible, .sb-cta--step:hover, .sb-cta--step:focus-visible,
-.sb-cta--video:hover, .sb-cta--video:focus-visible { background: var(--blue-light); }
+.sb-cta--video:hover, .sb-cta--video:focus-visible { background: var(--blue); }
 .sb-cta--full:hover svg, .sb-cta--step:hover svg { stroke: #fff; }
 .sb-cta--video:hover svg { fill: #fff; }
-.sb-cta--video[aria-pressed="true"] { background: var(--blue-light); }
+.sb-cta--video[aria-pressed="true"] { background: var(--blue); }
 .sb-cta--video .i-stop, .sb-cta--video[aria-pressed="true"] .i-play { display: none; }
 .sb-cta--video[aria-pressed="true"] .i-stop { display: block; fill: #fff; }
 .sb-item__video .embed { border-radius: 8px; border: 0; }
@@ -768,11 +769,11 @@ figure { margin: 0; }
 .carousel--light .carousel__track { background: #3a3a3a; align-items: center; }
 .carousel--light .carousel__track img { width: 100%; height: auto; border-radius: 4px; }
 .carousel--light .carousel__btn { background: #e9eef6; color: #1f3554; }
-.carousel--light .carousel__btn:hover, .carousel--light .carousel__btn:focus-visible { background: var(--blue-light); color: #fff; }
+.carousel--light .carousel__btn:hover, .carousel--light .carousel__btn:focus-visible { background: var(--blue); color: #fff; }
 .carousel--light .carousel__btn:disabled { background: #e9eef6; }
 .carousel--light .carousel__count { color: #6b7a90; }
 .carousel--light .carousel__dots button { background: #cfd9e8; }
-.carousel--light .carousel__dots button[aria-current="true"] { background: var(--blue-light); }
+.carousel--light .carousel__dots button[aria-current="true"] { background: var(--blue); }
 @media (max-width: 599px) {
   .carousel { padding-inline: 0; }
   .carousel__btn { top: auto; bottom: -2px; }
@@ -932,7 +933,7 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
 .to-top svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .to-top:focus-visible { outline: 3px solid var(--blue-light); outline-offset: 2px; }
 @media (hover: hover) {
-  .to-top:hover { background: var(--blue-light); opacity: 1; }
+  .to-top:hover { background: var(--blue); opacity: 1; }
   .to-top:hover svg { animation: to-top-nudge .5s ease; }
 }
 @keyframes to-top-nudge { 40% { transform: translateY(-3px); } }
