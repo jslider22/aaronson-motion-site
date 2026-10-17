@@ -368,6 +368,8 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
 }
 .lightbox__nav:hover, .lightbox__nav:focus-visible { background: var(--blue-light); }
 .lightbox.is-single .lightbox__nav { visibility: hidden; }
+/* Storyboards: two full frames side by side */
+.lightbox.is-frames .lightbox__fig img { width: min(100%, 1500px); max-height: calc(100vh - 140px); object-fit: contain; }
 @media (max-width: 599px) {
   .lightbox { grid-template-columns: minmax(0, 1fr); }
   .lightbox__nav { position: fixed; bottom: 14px; z-index: 1; margin: 0; }
@@ -431,12 +433,12 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 }
 .home-stage > .rule-label { margin-top: 0; color: #fff; }
 /* On navy the dark-blue tip would vanish, so it turns pale blue here */
-.home-stage > .rule-label::after {
+.home-stage > .rule-label::after, .sb-stage .rule-label::after {
   background: linear-gradient(var(--blue-light), var(--blue-light)) 0 0 / 26px 4px no-repeat,
               linear-gradient(var(--mint), var(--mint)) 31px 0 / 13px 4px no-repeat,
               linear-gradient(var(--blue-pale), var(--blue-pale)) 49px 0 / 8px 4px no-repeat;
 }
-.home-stage > .rule-label::before {
+.home-stage > .rule-label::before, .sb-stage .rule-label::before {
   background: linear-gradient(var(--blue-pale), var(--blue-pale)) 0 0 / 8px 4px no-repeat,
               linear-gradient(var(--mint), var(--mint)) 13px 0 / 13px 4px no-repeat,
               linear-gradient(var(--blue-light), var(--blue-light)) 31px 0 / 26px 4px no-repeat;
@@ -606,11 +608,24 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 @media (min-width: 900px) { .rows > * { flex-basis: calc(var(--r, 1) * 250px); } }
 .rows::after { content: ""; flex: 999 1 0; } /* keeps a short last row from stretching */
 .rows img {
-  display: block; width: 100%; height: auto; border: 1px solid #e3e7ee; border-radius: 6px; background: #fff;
-  outline: 3px solid transparent; outline-offset: 3px; transition: transform .25s, box-shadow .25s, outline-color .25s;
+  display: block; width: 100%; height: auto; border-radius: 6px; background: #fff;
+  transition: transform .45s cubic-bezier(.2, .7, .2, 1);
 }
-@media (hover: hover) {
-  .rows img:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(31, 53, 84, .18); outline-color: var(--blue-light); }
+/* Hover (mouse): the image zooms slightly inside its frame, the card lifts with a
+   soft shadow, and a small "expand" icon appears — no outline. */
+.rows .card { position: relative; border-radius: 6px; }
+.rows .card > img { box-shadow: 0 0 0 1px #e3e7ee; }
+@media (hover: hover) and (pointer: fine) {
+  .rows .card { overflow: hidden; transition: transform .3s, box-shadow .3s; box-shadow: 0 0 0 1px #e3e7ee; }
+  .rows .card > img { box-shadow: none; }
+  .rows .card:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(31, 53, 84, .2); }
+  .rows .card:hover > img { transform: scale(1.045); }
+  .rows .card::after {
+    content: ""; position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(12, 22, 38, .62) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6'/%3E%3C/svg%3E") center / 16px no-repeat;
+    opacity: 0; transform: scale(.85); transition: opacity .25s, transform .25s; pointer-events: none;
+  }
+  .rows .card:hover::after { opacity: 1; transform: none; }
 }
 .rows figcaption { padding: 10px 2px 0; font: 400 14px/1.45 var(--font-body); color: #222; }
 .rows figcaption small {
@@ -620,36 +635,92 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 /* With a mouse: captions sit over the bottom of the image and appear on hover,
    so every gap in the grid is the same 20px. (Touch screens keep them below.) */
 @media (hover: hover) and (pointer: fine) {
-  .rows .card { position: relative; }
   .rows figcaption {
     position: absolute; left: 1px; right: 1px; bottom: 1px; padding: 28px 14px 12px; border-radius: 0 0 6px 6px;
     background: linear-gradient(transparent, rgba(12, 22, 38, .82)); color: #fff;
     opacity: 0; transform: translateY(6px); transition: opacity .25s, transform .25s; pointer-events: none;
   }
   .rows figcaption small { background: rgba(255, 255, 255, .18); color: #e6eef8; }
-  .rows .card:hover figcaption { opacity: 1; transform: translateY(-3px); } /* -3px rides along with the image lift */
+  .rows .card:hover figcaption { opacity: 1; transform: none; }
 }
 figure { margin: 0; }
 
 /* ==========================================================================
    Page: Storyboards
    ========================================================================== */
-.band-blue { background: #375a8c; padding: 28px 0; margin: 0 0 16px; }
-.carousel { position: relative; max-width: 960px; margin: 0 auto; padding-inline: 44px; }
+/* Storyboards: the main storyboard on a deep navy stage (as on Home) */
+.sb-stage { position: relative; isolation: isolate; padding: 36px 0 40px; margin-bottom: 8px; }
+.sb-stage::before {
+  content: ""; position: absolute; z-index: -1; inset: 0 auto 0 50%; width: 100vw; transform: translateX(-50%); background: #1f3554;
+}
+.sb-stage > .wrap > .rule-label { margin-top: 0; color: #fff; }
+.sb-intro { max-width: 760px; margin: -14px auto 22px; text-align: center; color: #cfd9e8; font: 300 15px/1.6 var(--font-body); }
+/* Storyboard / Finished video switch: segmented control with a sliding pill */
+.sb-switch {
+  position: relative; display: flex; width: max-content; margin: 0 auto 24px; padding: 4px; border-radius: 999px;
+  background: rgba(255, 255, 255, .08); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14);
+}
+.sb-switch::before { /* the pill; site.js sets --x and --w to the selected tab */
+  content: ""; position: absolute; top: 4px; bottom: 4px; left: 0; width: var(--w, 0); transform: translateX(var(--x, 0));
+  border-radius: 999px; background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+  transition: transform .35s cubic-bezier(.3, .7, .2, 1), width .35s cubic-bezier(.3, .7, .2, 1);
+}
+.sb-switch button {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 18px;
+  border: 0; border-radius: 999px; background: none; color: #cfd9e8; cursor: pointer;
+  font: 600 13px var(--font-ui); letter-spacing: .03em; transition: color .25s;
+}
+.sb-switch button:hover { color: #fff; }
+.sb-switch button[aria-selected="true"] { color: #1f3554; }
+.sb-switch button:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+.sb-switch svg { width: 15px; height: 15px; fill: currentColor; }
+.sb-switch button[aria-selected="true"] svg { fill: var(--blue-light); }
+.sb-panel:not([hidden]) { animation: sb-in .35s ease both; }
+@keyframes sb-in { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .sb-switch::before { transition: none; } .sb-panel:not([hidden]) { animation: none; } }
+#sb-video { max-width: 1000px; margin: 0 auto; padding-inline: 60px; }
+#sb-video .embed { border-radius: 8px; border: 0; }
+@media (max-width: 599px) { #sb-video { padding-inline: 0; } }
+/* Carousel: one page at a time, round arrows, "3 / 10" and dots underneath */
+.carousel { position: relative; max-width: 1000px; margin: 0 auto; padding-inline: 60px; }
 .carousel__track {
   display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 0;
-  scrollbar-width: none; background: #fff; border-radius: 4px;
+  scrollbar-width: none; background: #fff; border-radius: 8px; outline-offset: 4px;
 }
 .carousel__track::-webkit-scrollbar { display: none; }
 .carousel__track > * { flex: 0 0 100%; scroll-snap-align: start; padding: 16px; }
 .carousel__btn {
-  position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 56px;
-  background: none; border: 0; color: #fff; font-size: 40px; line-height: 1; cursor: pointer;
+  position: absolute; top: calc(50% - 22px); width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+  background: rgba(255, 255, 255, .14); color: #fff; font-size: 28px; line-height: 1; transition: background .2s, opacity .2s;
 }
+.carousel__btn:hover, .carousel__btn:focus-visible { background: var(--blue-light); }
+.carousel__btn:disabled { opacity: .3; cursor: default; background: rgba(255, 255, 255, .14); }
 .carousel__btn--prev { left: 0; }
 .carousel__btn--next { right: 0; }
-.board-caption { font: 13px var(--font-body); margin: 10px 0 36px; color: #222; }
-.board { background: #555; padding: 12px; border-radius: 4px; }
+.carousel__bar { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; }
+.carousel__count { color: #cfd9e8; font: 13px var(--font-ui); letter-spacing: .06em; min-width: 52px; text-align: right; }
+.carousel__dots { display: flex; gap: 8px; }
+.carousel__dots button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .3); cursor: pointer; transition: background .2s, transform .2s; }
+.carousel__dots button[aria-current="true"] { background: var(--mint); transform: scale(1.25); }
+/* "More storyboards": each board shows whole and opens the viewer, 2 frames at a time */
+.sb-boards img { cursor: zoom-in; }
+.sb-projects { display: grid; gap: 44px; margin: 8px 0 56px; }
+.sb-project h3 { margin: 0 0 12px; font: 400 18px var(--font-body); color: #222; text-align: center; }
+.sb-project .carousel { max-width: none; padding-inline: 56px; }
+.carousel--light .carousel__track > * { padding: 8px; }
+.carousel--light .carousel__track { background: #3a3a3a; align-items: center; }
+.carousel--light .carousel__track img { width: 100%; height: auto; border-radius: 4px; }
+.carousel--light .carousel__btn { background: #e9eef6; color: #1f3554; }
+.carousel--light .carousel__btn:hover, .carousel--light .carousel__btn:focus-visible { background: var(--blue-light); color: #fff; }
+.carousel--light .carousel__btn:disabled { background: #e9eef6; }
+.carousel--light .carousel__count { color: #6b7a90; }
+.carousel--light .carousel__dots button { background: #cfd9e8; }
+.carousel--light .carousel__dots button[aria-current="true"] { background: var(--blue-light); }
+@media (max-width: 599px) {
+  .carousel { padding-inline: 0; }
+  .carousel__btn { top: auto; bottom: -2px; }
+  .carousel__bar { min-height: 44px; }
+}
 
 /* ==========================================================================
    Page: UX Design (case studies)
@@ -820,7 +891,6 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
   .home-btn { padding: 10px 14px; }
   .site-nav .submenu a { padding-block: 12px; }
   .jump-nav a { padding: 10px 14px; }
-  .carousel__btn { width: 44px; height: 64px; }
 }
 @media (pointer: coarse) and (min-width: 1200px) {
   .jump-nav a { padding: 8px 0; font-size: 13px; }
