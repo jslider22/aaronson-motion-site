@@ -338,13 +338,33 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
 .slot__hint { color: #7a8494; font-size: 11px; }
 
 /* ---- Lightbox (gallery images) ----------------------------------------- */
-.lightbox { border: 0; padding: 0; background: transparent; max-width: 94vw; max-height: 94vh; }
-.lightbox::backdrop { background: rgba(0,0,0,.85); }
-.lightbox img { max-width: 94vw; max-height: 86vh; width: auto; margin: 0 auto; }
-.lightbox p { color: #ddd; text-align: center; margin: 8px 0 0; font-size: 14px; }
-.lightbox button {
-  position: fixed; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%;
-  border: 0; background: #fff; font-size: 22px; line-height: 1; cursor: pointer;
+/* Lightbox: full-window viewer with prev/next, caption and "3 / 17" */
+.lightbox {
+  border: 0; padding: 0; margin: 0; background: transparent; width: 100vw; height: 100vh; max-width: none; max-height: none;
+  display: none; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; color: #ddd;
+}
+.lightbox[open] { display: grid; }
+.lightbox::backdrop { background: rgba(10, 16, 26, .92); }
+.lightbox__fig { margin: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 0 16px; }
+.lightbox__fig img { max-width: 100%; max-height: calc(100vh - 140px); width: auto; height: auto; object-fit: contain; border-radius: 3px; }
+.lightbox__fig figcaption { display: flex; gap: 16px; align-items: baseline; justify-content: center; flex-wrap: wrap; margin-top: 12px; padding: 0 12px; text-align: center; font: 14px/1.5 var(--font-body); }
+.lightbox__count { color: #8ea3bf; font: 13px var(--font-ui); letter-spacing: .04em; }
+.lightbox__close {
+  position: fixed; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%;
+  border: 0; background: #fff; color: #222; font-size: 24px; line-height: 1; cursor: pointer;
+}
+.lightbox__nav {
+  width: 48px; height: 48px; margin: 0 8px; border-radius: 50%; border: 0; cursor: pointer;
+  background: rgba(255, 255, 255, .14); color: #fff; font-size: 28px; line-height: 1; transition: background .2s;
+}
+.lightbox__nav:hover, .lightbox__nav:focus-visible { background: var(--blue-light); }
+.lightbox.is-single .lightbox__nav { visibility: hidden; }
+@media (max-width: 599px) {
+  .lightbox { grid-template-columns: minmax(0, 1fr); }
+  .lightbox__nav { position: fixed; bottom: 14px; z-index: 1; margin: 0; }
+  .lightbox__nav--prev { left: 14px; }
+  .lightbox__nav--next { right: 14px; }
+  .lightbox__fig { padding-bottom: 72px; }
 }
 .gallery img[data-zoomable] { cursor: zoom-in; }
 
@@ -427,7 +447,7 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 .clients img { width: 100%; aspect-ratio: 8 / 3; object-fit: contain; filter: grayscale(1); opacity: .8; transition: filter .2s, opacity .2s; }
 @media (hover: hover) { .clients a:hover img { filter: none; opacity: 1; } }
 .clients .slot { min-height: 46px; aspect-ratio: 5 / 2; font-size: 10px; padding: 4px; }
-.clients .slot__tag, .clients .slot__hint, .svc-cards .slot__hint, .tiles .slot__hint { display: none; }
+.clients .slot__tag, .clients .slot__hint, .svc-cards .slot__hint { display: none; }
 .slot { overflow: hidden; }
 @media (min-width: 520px) { .clients { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(16px, 3vw, 34px) clamp(6px, 1.6vw, 22px); } }
 
@@ -568,40 +588,27 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 /* ==========================================================================
    Page: Design galleries (2D, 3D, Line Drawings, Fine Art)
    ========================================================================== */
-/* Masonry via CSS columns — items stay in source order down each column */
-.masonry { columns: 1; column-gap: 28px; }
-.masonry > * { break-inside: avoid; margin-bottom: 28px; }
-@media (min-width: 560px) { .masonry { columns: 2; } }
-@media (min-width: 900px) { .masonry { columns: 3; } .masonry--4 { columns: 4; } }
-
-.card {
-  background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.18);
-  font: 11px/1.5 var(--font-ui); color: #222; text-align: center;
+/* Even rows: every image in a row comes out the same height and the row fills
+   the width, with nothing cropped. Each item carries its shape as --r
+   (width ÷ height, written into the HTML) so rows lay out before images load.
+   <div class="rows gallery"> <figure class="card" style="--r: 1.5"> … */
+.rows { display: flex; flex-wrap: wrap; gap: 26px 18px; }
+.rows > * { flex: var(--r, 1) 1 calc(var(--r, 1) * 150px); min-width: 0; margin: 0; }
+@media (min-width: 900px) { .rows > * { flex-basis: calc(var(--r, 1) * 250px); } }
+.rows::after { content: ""; flex: 999 1 0; } /* keeps a short last row from stretching */
+.rows img {
+  display: block; width: 100%; height: auto; border: 1px solid #e3e7ee; border-radius: 6px; background: #fff;
+  outline: 3px solid transparent; outline-offset: 3px; transition: transform .25s, box-shadow .25s, outline-color .25s;
 }
-.card img { width: 100%; }
-.card figcaption { padding: 14px 12px 16px; }
-.card figcaption small { display: block; margin-top: 8px; font-size: 11px; color: #444; }
-.card--left figcaption { text-align: left; }
+@media (hover: hover) {
+  .rows img:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(31, 53, 84, .18); outline-color: var(--blue-light); }
+}
+.rows figcaption { padding: 10px 2px 0; font: 400 14px/1.45 var(--font-body); color: #222; }
+.rows figcaption small {
+  display: inline-block; margin-top: 6px; padding: 2px 9px; border-radius: 999px; background: #eef2f8; color: #4a6283;
+  font: 500 10.5px var(--font-ui); letter-spacing: .06em; text-transform: uppercase;
+}
 figure { margin: 0; }
-
-/* 3D: tight mosaic */
-.mosaic { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-.mosaic img, .mosaic .slot { width: 100%; height: 100%; object-fit: cover; }
-.mosaic .slot { min-height: 120px; aspect-ratio: auto; }
-.mosaic .wide { grid-column: span 2; }
-@media (min-width: 760px) {
-  .mosaic { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 80px; }
-  .mosaic > * { grid-row: span 2; }
-  .mosaic .wide { grid-column: span 3; grid-row: span 1; }
-  .mosaic .tall { grid-row: span 2; }
-  .mosaic .big { grid-column: span 2; grid-row: span 2; }
-}
-
-/* Fine art: uniform portrait tiles */
-.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.tiles img, .tiles .slot { width: 100%; aspect-ratio: 5 / 8; object-fit: cover; border: 2px solid #444; }
-@media (min-width: 600px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (min-width: 960px) { .tiles { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 
 /* ==========================================================================
    Page: Storyboards
@@ -793,7 +800,6 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
   .site-nav .submenu a { padding-block: 12px; }
   .jump-nav a { padding: 10px 14px; }
   .carousel__btn { width: 44px; height: 64px; }
-  .lightbox button { width: 48px; height: 48px; }
 }
 @media (pointer: coarse) and (min-width: 1200px) {
   .jump-nav a { padding: 8px 0; font-size: 13px; }
@@ -801,8 +807,6 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
 
 /* ---- Tablet (iPad portrait ~768–1023px) ------------------------------- */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .masonry--4 { columns: 3; }
-  .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .vfx { grid-template-columns: 1fr; }               /* video full width, notes below */
   .vfx__notes { border-left: 0; }
   .ux-intro p, .case p { font-size: 17px; }
