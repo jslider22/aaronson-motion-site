@@ -188,8 +188,11 @@ p { margin: 0 0 1em; }
 .social a {
   display: grid; place-items: center; width: 28px; height: 28px; border-radius: 4px;
   background: var(--blue); color: #fff; font: 700 11px var(--font-ui); text-decoration: none;
+  transition: background .25s, transform .25s cubic-bezier(.3, .7, .4, 1);
 }
-.social a:hover { background: var(--blue); }
+/* Hover brightens to the logo's light-stroke blue, like the logo hovers */
+.social a:hover { background: #68aaf4; transform: translateY(-2px); }
+.social a:focus-visible { background: #68aaf4; }
 .social svg { width: 16px; height: 16px; fill: currentColor; }
 .social .ico-in { width: 15px; height: 15px; }
 .social a[href*="imdb.com"] { font-size: 9px; letter-spacing: -.01em; } /* wordmark, kept clear of the box edges */ /* the LinkedIn glyph runs edge to edge, so a touch smaller to match */
@@ -198,11 +201,20 @@ p { margin: 0 0 1em; }
 main:not(.motion-grid) > .wrap:last-child > :is(.rows, .col):last-child { margin-bottom: 64px; }
 
 /* Footer sign-off: the AM mark with the wordmark, linking home */
-.footer-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 400 16px var(--font-brand); letter-spacing: .02em; color: #bdbdbd; transform-origin: center; transition: transform .25s cubic-bezier(.3, .7, .3, 1); }
+.footer-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 400 16px var(--font-brand); letter-spacing: .02em; color: #bdbdbd; }
 .footer-brand img { height: 18px; width: auto; }
-.footer-brand b { font-weight: 400; color: var(--blue-logo); }
-/* Hover: mark and wordmark grow together, from the centre */
-@media (hover: hover) { .footer-brand:hover { transform: scale(1.06); } }
+.footer-brand b { font-weight: 400; color: var(--blue-logo); transition: color .25s; }
+.footer-brand i { font-style: normal; }
+.footer-brand i span { display: inline-block; transition: color .25s; }
+/* Hover matches the header logo: both words brighten and MOTION ripples */
+.footer-brand:hover b { color: #68aaf4; }
+.footer-brand:hover i span { color: #fff; animation: brand-wave .55s cubic-bezier(.3, .7, .4, 1) both; }
+.footer-brand:hover i span:nth-child(2) { animation-delay: .05s; }
+.footer-brand:hover i span:nth-child(3) { animation-delay: .10s; }
+.footer-brand:hover i span:nth-child(4) { animation-delay: .15s; }
+.footer-brand:hover i span:nth-child(5) { animation-delay: .20s; }
+.footer-brand:hover i span:nth-child(6) { animation-delay: .25s; }
+@media (prefers-reduced-motion: reduce) { .footer-brand:hover i span { animation: none; } }
 
 
 /* ---- Page headers and section labels --------------------------------- */
