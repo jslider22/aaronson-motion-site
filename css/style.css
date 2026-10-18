@@ -575,7 +575,7 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
   .motion-grid .work-section > .work:nth-last-child(-n+2 of .work):not(.work--split) > p:last-child { margin-bottom: 0; }
   .motion-grid .work-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; }
 }
-@media (min-width: 1024px) { .motion-grid .gif-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 600px) { .motion-grid .gif-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } } /* 3 x 2 */
 /* Sections: space + label, every other one on a light band across the window */
 .motion-grid .work-section { padding: 38px 0 56px; }
 .motion-grid .work-section:first-of-type { padding-top: 0; }
