@@ -176,6 +176,9 @@ p { margin: 0 0 1em; }
 /* ---- Footer ------------------------------------------------------------ */
 .site-footer { background: var(--ink); color: #bbb; padding-block: 28px 32px; font-size: 12px; }
 .site-footer__inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+/* keep the sign-off clear of the fixed back-to-top button at the bottom of the page */
+.site-footer .footer-brand { margin-right: 60px; }
+@media (max-width: 599px) { .site-footer .footer-brand { margin-right: 0; } }
 /* The motion trail opens the footer, like the page titles (pale tip on black) */
 .site-footer__inner::before {
   content: ""; flex: 0 0 100%; height: 5px; border-radius: 3px; margin-bottom: 4px;
