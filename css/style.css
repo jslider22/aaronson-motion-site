@@ -80,25 +80,26 @@ p { margin: 0 0 1em; }
   font-family: var(--font-brand); font-size: 22px; letter-spacing: .02em;
   text-decoration: none; color: #bdbdbd; white-space: nowrap;
 }
-/* Header logo: hover AARONSON -> it lights up; hover MOTION -> letters ripple in a wave and turn
-   the logo's mint green. Reduced-motion users get the colour change only. */
+/* Header logo: hovering anywhere on it brightens both words together:
+   AARONSON to the logo's light-stroke blue, MOTION to white, and the MOTION
+   letters ripple. Reduced-motion users get the colour change only. */
 .brand__a { color: var(--blue-logo); transition: color .25s; }
-.brand__a:hover { color: #fff; }
+.brand:hover .brand__a { color: #68aaf4; }
 .brand__m { display: inline-block; }
 .brand__m span { display: inline-block; transition: color .25s; }
-.brand__m:hover span { color: var(--mint); animation: brand-wave .55s cubic-bezier(.3, .7, .4, 1) both; }
-.brand__m:hover span:nth-child(2) { animation-delay: .05s; }
-.brand__m:hover span:nth-child(3) { animation-delay: .10s; }
-.brand__m:hover span:nth-child(4) { animation-delay: .15s; }
-.brand__m:hover span:nth-child(5) { animation-delay: .20s; }
-.brand__m:hover span:nth-child(6) { animation-delay: .25s; }
+.brand:hover .brand__m span { color: #fff; animation: brand-wave .55s cubic-bezier(.3, .7, .4, 1) both; }
+.brand:hover .brand__m span:nth-child(2) { animation-delay: .05s; }
+.brand:hover .brand__m span:nth-child(3) { animation-delay: .10s; }
+.brand:hover .brand__m span:nth-child(4) { animation-delay: .15s; }
+.brand:hover .brand__m span:nth-child(5) { animation-delay: .20s; }
+.brand:hover .brand__m span:nth-child(6) { animation-delay: .25s; }
 @keyframes brand-wave {
   0%   { transform: translateY(0); }
   35%  { transform: translateY(-.28em); }
   65%  { transform: translateY(.05em); }
   100% { transform: translateY(0); }
 }
-@media (prefers-reduced-motion: reduce) { .brand__m:hover span { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .brand:hover .brand__m span { animation: none; } }
 .tagline { display: none; margin: 0; font-size: 14px; letter-spacing: .04em; color: #fff; }
 .tagline span { color: var(--blue-logo); border-left: 1px solid #666; padding-left: 6px; margin-left: 4px; }
 
@@ -175,6 +176,14 @@ p { margin: 0 0 1em; }
 /* ---- Footer ------------------------------------------------------------ */
 .site-footer { background: var(--ink); color: #bbb; padding-block: 28px 32px; font-size: 12px; }
 .site-footer__inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+/* The motion trail opens the footer, like the page titles (pale tip on black) */
+.site-footer__inner::before {
+  content: ""; flex: 0 0 100%; height: 5px; border-radius: 3px; margin-bottom: 4px;
+  background:
+    linear-gradient(var(--blue-light), var(--blue-light)) 0 0 / 64px 5px no-repeat,
+    linear-gradient(var(--mint), var(--mint)) 72px 0 / 28px 5px no-repeat,
+    linear-gradient(var(--blue-pale), var(--blue-pale)) 108px 0 / 16px 5px no-repeat;
+}
 .social { display: flex; gap: 10px; list-style: none; margin: 0 0 14px; padding: 0; }
 .social a {
   display: grid; place-items: center; width: 28px; height: 28px; border-radius: 4px;
@@ -184,18 +193,17 @@ p { margin: 0 0 1em; }
 .social svg { width: 16px; height: 16px; fill: currentColor; }
 .social .ico-in { width: 15px; height: 15px; }
 .social a[href*="imdb.com"] { font-size: 9px; letter-spacing: -.01em; } /* wordmark, kept clear of the box edges */ /* the LinkedIn glyph runs edge to edge, so a touch smaller to match */
-.home-btn {
-  display: inline-flex; align-items: center; gap: 4px; background: #fff; color: var(--blue);
-  padding: 6px 10px; border: 2px solid #fff; border-radius: 6px; text-decoration: none; font: 500 13px var(--font-ui);
-  transition: background .2s, color .2s;
-}
-.home-btn img { height: 16px; width: auto; }
-@media (hover: hover) { .home-btn:hover { background: transparent; color: #fff; } }
-.home-btn:active { background: transparent; color: #fff; }
+/* Pages that end flush on their content (galleries, About, Resume) get the
+   same breathing room before the footer as the others (~64px) */
+main:not(.motion-grid) > .wrap:last-child > :is(.rows, .col):last-child { margin-bottom: 64px; }
 
-/* Grey swoosh that rises into the footer on many pages */
-.swoosh { display: block; width: 100%; height: clamp(40px, 8vw, 110px); margin-top: 40px; }
-.swoosh + .site-footer { margin-top: -1px; }
+/* Footer sign-off: the AM mark with the wordmark, linking home */
+.footer-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 400 16px var(--font-brand); letter-spacing: .02em; color: #bdbdbd; transform-origin: center; transition: transform .25s cubic-bezier(.3, .7, .3, 1); }
+.footer-brand img { height: 18px; width: auto; }
+.footer-brand b { font-weight: 400; color: var(--blue-logo); }
+/* Hover: mark and wordmark grow together, from the centre */
+@media (hover: hover) { .footer-brand:hover { transform: scale(1.06); } }
+
 
 /* ---- Page headers and section labels --------------------------------- */
 /* Brand accents: blues for text, mint (from the logo) as the one accent colour.
@@ -596,19 +604,20 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 }
 .gif-turn__anim.is-on { opacity: 1; }
 
-/* VFX rows: video left, notes right */
-.vfx { display: grid; gap: 16px; padding: 28px 0; }
-.vfx__notes h3 {
-  font: 400 16px var(--font-brand); color: var(--blue-light);
-  border-block: 1px solid var(--rule); padding: 4px 0; margin-bottom: 10px;
+/* VFX rows: video and notes side by side from 900px, the video switching
+   sides each row; stacked below that. Roles and tools are chips. */
+.vfx-rows .vfx { display: grid; gap: 18px 40px; align-items: center; padding: 44px 0; border-bottom: 1px solid #e3e9f2; }
+.vfx-rows .vfx:first-child { padding-top: 0; }
+.vfx-rows .vfx:last-child { border-bottom: 0; }
+@media (min-width: 900px) {
+  .vfx-rows .vfx { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .vfx-rows .vfx:nth-child(even) .embed { order: 2; }
 }
-.vfx__notes p { font-size: 14px; line-height: 1.5; }
-.vfx__notes .tools { color: var(--muted); }
-@media (min-width: 820px) {
-  .vfx { grid-template-columns: 1.7fr 1fr; gap: 24px; align-items: start; }
-  .vfx__notes { border-left: 1px solid #455a64; padding-left: 0; }
-  .vfx__notes > * { padding-left: 4px; }
-}
+.vfx h3 { font: 400 20px/1.3 var(--font-body); color: #111; margin: 0 0 10px; }
+.vfx p { color: var(--muted); font-weight: 300; font-size: 15.5px; margin: 0; }
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; }
+.chips li { font: 12.5px/1 var(--font-ui); padding: 6px 10px; border-radius: 99px; background: #e9f0f9; color: #2c4f80; }
+.chips li.is-tool { background: #fff; box-shadow: inset 0 0 0 1px var(--rule); color: #555; }
 
 /* ==========================================================================
    Page: Design galleries (2D, 3D, Line Drawings, Fine Art)
@@ -955,7 +964,7 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
   .social svg { width: 20px; height: 20px; }
   .social .ico-in { width: 19px; height: 19px; }
   .social a[href*="imdb.com"] { font-size: 12px; }
-  .home-btn { padding: 10px 14px; }
+  .footer-brand { padding-block: 10px; }
   .site-nav .submenu a { padding-block: 12px; }
   .jump-nav a { padding: 10px 14px; }
 }
@@ -965,8 +974,6 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
 
 /* ---- Tablet (iPad portrait ~768–1023px) ------------------------------- */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .vfx { grid-template-columns: 1fr; }               /* video full width, notes below */
-  .vfx__notes { border-left: 0; }
   .ux-intro p, .case p { font-size: 17px; }
 }
 /* Figma prototype frames: light grey border like Figma's own embed code */
