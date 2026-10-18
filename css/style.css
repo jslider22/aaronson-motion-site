@@ -958,6 +958,61 @@ figure { margin: 0; }
 .skills li::before { content: none; }
 @media (min-width: 640px) { .skills ul { columns: 3; } }
 
+
+/* ==========================================================================
+   Refresh (2026-10-17): About, Now, Resume and the Design hub
+   ========================================================================== */
+/* About */
+.about{font-family:var(--font-body)}
+@media (min-width:760px){.about{grid-template-columns:240px 1fr;gap:44px}
+}
+.about__photo{width:auto;max-width:240px}
+.about__photo img{border-radius:14px;box-shadow:0 10px 24px rgba(31,53,84,.15)}
+.about__links{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.about__li{background:#fff;color:#1f3554;box-shadow:inset 0 0 0 1.5px #c9d6ea;text-decoration:none}
+.about__li:hover{box-shadow:inset 0 0 0 1.5px var(--blue);color:var(--blue)}
+.about__links .sb-cta--full{text-decoration:none}
+.about__bio h2{font:400 22px var(--font-brand);color:#2c4f80;margin:0 0 14px}
+.about__bio p{font:400 17px/1.75 var(--font-body);color:#444}
+.about__mark{max-width:170px;margin:28px auto 0}
+@media (max-width:759px){.about__mark{display:none}
+}
+.about__rule{border:0;border-top:1px solid #e3e9f2;margin:48px 0 28px}
+.col:has(> .about) > p{font-family:var(--font-body)}
+.stat-card{border:2px solid #2c4f80;border-radius:18px}
+.stat-card th{background:#2c4f80}
+.stat-card td{background:#eaf1fa;color:#1f3554;border-top:0}
+.stat-card tbody tr:nth-child(even) td{background:#d3e1f2}
+/* Now */
+.now-sub{font:400 18px var(--font-brand);color:#2c4f80;margin:4px 0 0}
+.now-sub span{font:13px var(--font-ui);color:var(--muted);letter-spacing:.02em}
+.now h2{font:400 22px var(--font-brand);color:#2c4f80;margin:40px 0 12px}
+.now p{font:400 17px/1.75 var(--font-body);color:#444}
+.now-foot{border-top:1px solid #e3e9f2;color:var(--muted);font-family:var(--font-body)}
+/* Resume */
+.resume{--font-cv:var(--font-body);font:15.5px/1.7 var(--font-body);color:#444}
+.resume__head{align-items:flex-start}
+.resume__head h2{font:400 26px/1.25 var(--font-brand);color:#2c4f80}
+.resume__head h2 span{display:block;font-size:18px;color:#444}
+.resume__tagline{font-family:var(--font-body);margin:6px 0 10px}
+.cv-downloads{display:flex;gap:10px;flex-wrap:wrap}
+.cv-downloads a{text-decoration:none}
+.cv-word{background:#fff;color:#1f3554;box-shadow:inset 0 0 0 1.5px #c9d6ea}
+.cv-word:hover{box-shadow:inset 0 0 0 1.5px var(--blue);color:var(--blue)}
+.resume section{border-top:1px solid #e3e9f2;padding-top:28px;margin-top:32px}
+.resume h3{font:400 13px var(--font-ui);letter-spacing:.14em;text-decoration:none;color:#2c4f80;margin:0 0 18px;display:flex;align-items:center;gap:12px}
+.resume h3::after{content:"";width:57px;height:4px;flex:0 0 auto;background:linear-gradient(var(--blue-light),var(--blue-light)) 0 0/26px 4px no-repeat,linear-gradient(var(--mint),var(--mint)) 31px 0/13px 4px no-repeat,linear-gradient(#2c4f80,#2c4f80) 49px 0/8px 4px no-repeat}
+.resume h4{font:600 14px/1.5 var(--font-ui);letter-spacing:.04em;color:#222;margin-top:26px}
+.resume h5{font:400 17px/1.5 var(--font-brand);color:#2c4f80}
+.resume h5 span{color:var(--muted);font-family:var(--font-body);font-size:15px}
+.resume li::before{content:"–  ";color:var(--blue-light)}
+.skills li::before{content:none}
+.skills h4{text-decoration:none;font:400 17px var(--font-brand);color:#2c4f80}
+/* Design hub */
+.design-grid a img{border-radius:10px}
+.design-grid__label{font:400 18px var(--font-brand)!important;color:#2c4f80}
+.design-grid__sub{display:block;text-align:center;margin-top:10px;font:14px var(--font-body);color:var(--muted)}
+
 /* ---- 404 --------------------------------------------------------------- */
 .not-found { text-align: center; padding: 0 0 80px; }
 .not-found .page-title::after { margin-inline: auto; }
