@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,900&family=Questrial&family=Roboto:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=875b9997">
+  <link rel="stylesheet" href="css/style.css?v=f0bacccd">
   <script src="js/site.js?v=a9e74127" defer></script>
 </head>
 <body>
@@ -58,9 +58,16 @@
       <header class="page-head"><h1 class="page-title">UX Design</h1></header>
       <p>With a passion for creating intuitive and impactful user experiences, I specialize in designing digital products that are both functional and visually engaging.</p>
       <p>My approach is rooted in empathy for the user, ensuring each interaction feels seamless and natural. From wireframing to prototyping, I combine creativity and strategy to deliver designs that not only look good but also solve real-world problems.</p>
+    
+      <p class="ux-lead">Take a look at a case study and a few interface design examples below.</p>
+      <nav class="ux-overview" aria-label="Case studies">
+        <a href="#skips"><img src="assets/images/ux-design/skips-screen-map.jpg" alt=""><div><em>Case study · Mobile app</em><b>SkiPS</b><span>Mobile app for finding your friends on the mountain</span></div></a>
+        <a href="#autoexpreso"><img src="assets/images/ux-design/autoexpreso-kiosk-thumb.jpg" alt="" style="object-position:12% 50%"><div><em>Interactive prototype · Kiosk</em><b>AutoExpreso</b><span>Clickable kiosk interface for drivers in Puerto Rico</span></div></a>
+        <a href="#navient"><img src="assets/images/ux-design/navient-login-redesign.jpg" alt=""><div><em>Redesign · Web</em><b>Navient.com</b><span>Login page redesign and homepage hero animation</span></div></a>
+        <a href="#opentoon"><img src="assets/images/ux-design/opentoon-screens.jpg" alt=""><div><em>UI design · Mobile app</em><b>OpenToon</b><span>Companion app for guitarists: chord charts and a tuner</span></div></a>
+      </nav>
     </div>
   </section>
-  <svg class="mountains" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0H1440V30L1370 38 1310 30 1250 40 1200 26 1140 36 1080 30 1010 38 950 26 900 40 860 30 820 36 760 26 680 32 610 28 560 44 520 30 480 38 420 24 360 30 300 22 240 28 205 34 170 52 140 32 110 40 85 28 60 36 30 26 0 34Z" fill="#d4d4d4"/></svg>
   <!-- Section bar: pinned to the top on phone/iPad, dotted list on the right on desktop -->
   <nav class="jump-nav" aria-label="Jump to case study" style="margin:0">
     <ul>
@@ -139,25 +146,24 @@
         </figure>
       </div>
 
-      <div class="ux-block gallery">
+      <div class="ux-block">
         <h3>Sketches, Wireframing, and Prototyping</h3>
-        <figure class="gallery ux-slide">
-          <img src="assets/images/ux-design/skips-sketches-slide.jpg" alt="Design process and usability testing, from sketches to hi-fidelity including two rounds of usability tests, with early paper sketches of the SkiPS app" loading="lazy" style="--ar: 16/9">
-        </figure>
-        <figure class="gallery ux-slide">
-          <img src="assets/images/ux-design/skips-wireflow-slide.jpg" alt="SkiPS wireframe and wireflow" loading="lazy" style="--ar: 16/9">
-        </figure>
-        <figure class="gallery ux-slide">
-          <img src="assets/images/ux-design/skips-mid-fi-slide.jpg" alt="SkiPS mid-fidelity prototype and flow" loading="lazy" style="--ar: 16/9">
-        </figure>
-        <img src="assets/images/ux-design/skips-hi-fi-flow.jpg" alt="SkiPS hi-fidelity prototype flow" loading="lazy" style="--ar: 22/15; margin-top:16px">
+        <div class="carousel carousel--light gallery ux-carousel" aria-roledescription="carousel" aria-label="SkiPS sketches, wireframes and prototypes">
+          <button class="carousel__btn carousel__btn--prev" type="button" aria-label="Previous slide">&#8249;</button>
+          <div class="carousel__track">
+            <figure><img src="assets/images/ux-design/skips-sketches-slide.jpg" alt="Design process and usability testing, from sketches to hi-fidelity including two rounds of usability tests, with early paper sketches of the SkiPS app" loading="lazy" style="--ar: 16/9"></figure>
+            <figure><img src="assets/images/ux-design/skips-wireflow-slide.jpg" alt="SkiPS wireframe and wireflow" loading="lazy" style="--ar: 16/9"></figure>
+            <figure><img src="assets/images/ux-design/skips-mid-fi-slide.jpg" alt="SkiPS mid-fidelity prototype and flow" loading="lazy" style="--ar: 16/9"></figure>
+            <figure><img src="assets/images/ux-design/skips-hi-fi-flow.jpg" alt="SkiPS hi-fidelity prototype flow" loading="lazy" style="--ar: 22/15"></figure>
+          </div>
+          <button class="carousel__btn carousel__btn--next" type="button" aria-label="Next slide">&#8250;</button>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- =================================================================== AutoExpreso -->
-  <svg class="mountains" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V44L60 40 120 46 180 30 200 36 240 22 290 34 340 38 400 30 460 24 500 32 540 18 580 30 640 36 720 30 790 38 850 26 900 34 960 22 1010 32 1080 36 1150 30 1210 38 1280 30 1340 36 1400 32 1440 34V60Z" fill="#f4f4f4"/></svg>
-  <section id="autoexpreso" class="case case--light" style="padding-top:16px">
+  <section id="autoexpreso" class="case">
     <div class="wrap">
       <div class="split">
           <div>
@@ -177,7 +183,7 @@
   </section>
 
   <!-- =================================================================== Navient.com -->
-  <section id="navient" class="case case--grey">
+  <section id="navient" class="case">
     <div class="wrap">
       <h2>Navient.com</h2>
       <p style="max-width:62ch">A customer login page redesign was needed for navient.com.<br>
