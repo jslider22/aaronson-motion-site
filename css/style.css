@@ -223,6 +223,15 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
     linear-gradient(var(--mint), var(--mint)) 72px 0 / 28px 5px no-repeat,
     linear-gradient(#2c4f80, #2c4f80) 108px 0 / 16px 5px no-repeat;
 }
+/* On load the trail draws in, blue then mint then the dark tip; the title
+   slides in from the left on the same timing and settles as the trail lands */
+@media (prefers-reduced-motion: no-preference) {
+  .page-title { animation: title-in .95s cubic-bezier(.22, 1, .36, 1) .1s both; }
+  /* the trail sits inside the title, so it cancels the title's slide and only draws on */
+  .page-title::after { animation: trail-draw .95s cubic-bezier(.22, 1, .36, 1) .1s both; }
+}
+@keyframes trail-draw { from { clip-path: inset(0 100% 0 0); transform: translateX(28px); } to { clip-path: inset(0 0 0 0); transform: none; } }
+@keyframes title-in { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
 
 /* Section label: centred caps with the motion trail either side, mirrored
    (blue next to the word, then mint, then dark blue) */
