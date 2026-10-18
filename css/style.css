@@ -148,24 +148,36 @@ p { margin: 0 0 1em; }
   .tagline { display: block; }
   .nav-toggle { display: none; }
   .site-nav { display: block; border-top: 0; padding: 0; }
-  .site-nav > ul { display: grid; grid-template-columns: 1.4fr 2fr 2.3fr 1.5fr 1.5fr; }
-  .site-nav > ul > li { position: relative; border-left: 1px solid #777; }
-  .site-nav > ul > li:first-child { border-left: 0; }
-  .site-nav > ul > li > a { padding: 12px; font-size: 14px; line-height: 1.2; }
-  .site-nav > ul > li > a[aria-current="page"], .site-nav > ul > .is-active > a { background: var(--blue); color: #fff; }
+  /* Menu spread evenly across the bar; the current page is white with a thin blue line under it */
+  .site-nav > ul { display: flex; justify-content: space-between; margin-inline: -12px; }
+  .site-nav > ul > li { position: relative; }
+  .site-nav > ul > li > a { position: relative; padding: 12px; font-size: 14px; line-height: 1.2; color: #bbb; transition: color .2s; }
+  .site-nav > ul > li > a[aria-current="page"], .site-nav > ul > .is-active > a { color: #fff; }
+  .site-nav > ul > li > a[aria-current="page"]::before, .site-nav > ul > .is-active > a::before {
+    content: ""; position: absolute; left: 12px; right: 12px; bottom: 5px; height: 2px; border-radius: 1px; background: var(--blue-light);
+  }
+  /* Design and About show a small arrow that flips while their menu is open */
+  .site-nav > ul > li.has-submenu > a::after {
+    content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 0 2px 8px; opacity: .7;
+    border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); transition: transform .2s;
+  }
+  .site-nav > ul > li.has-submenu:focus-within > a::after, .site-nav > ul > li.has-submenu.is-open > a::after { transform: rotate(-135deg) translate(-2px, -2px); }
   /* Dropdowns: hover (mouse), keyboard focus, or .is-open (tap on iPad — see site.js) */
   .submenu {
-    position: absolute; top: 100%; left: -1px; min-width: 100%;
-    background: var(--blue); display: none; z-index: 60; box-shadow: 0 6px 16px rgba(0,0,0,.25);
+    position: absolute; top: 100%; left: 0; min-width: max(100%, 220px); padding: 6px 0;
+    background: var(--ink); border-top: 3px solid var(--blue); border-radius: 0 0 10px 10px;
+    display: none; z-index: 60; box-shadow: 0 14px 30px rgba(0,0,0,.35);
   }
+  .site-nav > ul > li:last-child > .submenu { left: auto; right: 0; } /* About opens leftward, staying on screen */
   .has-submenu:focus-within .submenu, .has-submenu.is-open .submenu { display: block; }
-  .site-nav .submenu a { color: #fff; padding: 6px 10px; font-size: 14px; border-top: 1px solid rgba(255,255,255,.25); }
-  .site-nav .submenu a[aria-current="page"] { background: #2d5089; }
+  .site-nav .submenu a { color: #ddd; padding: 10px 18px; font: 400 14px var(--font-ui); letter-spacing: .01em; transition: color .15s, background .15s, box-shadow .15s; }
+  .site-nav .submenu a[aria-current="page"] { color: #68aaf4; }
 }
 @media (min-width: 768px) and (hover: hover) {
-  .site-nav > ul > li > a:hover { background: #333; }
+  .site-nav > ul > li > a:hover { color: #fff; }
   .has-submenu:hover .submenu { display: block; }
-  .site-nav .submenu a:hover { background: #2d5089; }
+  .site-nav > ul > li.has-submenu:hover > a::after { transform: rotate(-135deg) translate(-2px, -2px); }
+  .site-nav .submenu a:hover { background: #262626; color: #fff; box-shadow: inset 3px 0 0 var(--blue-light); }
 }
 @media (min-width: 768px) and (max-width: 899px) {
   .brand { font-size: 24px; }
