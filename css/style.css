@@ -525,9 +525,10 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
    ========================================================================== */
 .with-jumpnav { position: relative; }
 .jump-nav {
-  position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.96);
-  border-bottom: 1px solid #eee; margin: 0 calc(-1 * var(--gutter)) 16px;
+  position: sticky; top: 0; z-index: 20; margin: 0 calc(-1 * var(--gutter)) 16px;
   overflow-x: auto; scrollbar-width: none;
+  /* white bar with a hairline underneath, painted across the whole window */
+  border-image: linear-gradient(to top, #e3e9f2 1px, rgba(255, 255, 255, .96) 1px) fill 0 / 0 / 0 100vmax;
 }
 .jump-nav::-webkit-scrollbar { display: none; }
 .jump-nav ul { display: flex; gap: 6px; list-style: none; margin: 0; padding: 10px var(--gutter); white-space: nowrap; }
