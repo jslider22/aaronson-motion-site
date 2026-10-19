@@ -1089,6 +1089,13 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
 /* Figma prototype frames: light grey border like Figma's own embed code */
 .embed--figma { background: #f5f5f5; border: 6px solid rgba(0, 0, 0, .1); }
 .try-grid .embed--figma { max-width: 600px; margin-inline: auto; }
+/* Side by side, the SkiPS prototype is exactly as tall as the feature cards beside it */
+@media (min-width: 760px) {
+  .try-grid { align-items: stretch; }
+  .try-grid .embed--figma { aspect-ratio: auto; height: 100%; min-height: 360px; }
+  .feature-list { gap: 18px; }
+  .feature-list li { min-height: 140px; }   /* taller cards, so the prototype beside them is bigger */
+}
 
 /* ==========================================================================
    Page: Design (landing grid of six sections)
