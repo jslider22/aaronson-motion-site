@@ -243,13 +243,12 @@ main { overflow-x: clip; } /* lets bands run edge to edge without a sideways scr
 /* Pages with a narrower centred column set --head-w on the header so the title
    lines up with the content below it (the band still runs edge to edge). */
 .motion-grid .page-head { --head-w: 940px; }
-@media (min-width: 1200px) { .motion-grid .page-head { --head-w: min(940px, calc(100vw - 400px)); } }
 .page-head::before {
   content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%);
   background: #e4ecf7; border-bottom: 1px solid #d2deef;
 }
 /* Phones/iPad: section buttons sit right under the band */
-@media (max-width: 1199px) { .page-head:has(+ .jump-nav) { margin-bottom: 10px; } }
+.page-head:has(+ .jump-nav) { margin-bottom: 10px; }
 .page-title { margin: 0; font: 400 clamp(30px, 4.6vw, 44px)/1.1 var(--font-brand); color: #2c4f80; letter-spacing: .01em; }
 .page-title::after {
   content: ""; display: block; width: 124px; height: 5px; margin-top: 14px; border-radius: 3px;
@@ -538,15 +537,9 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 }
 .jump-nav a.is-current { background: var(--blue); color: #fff; border-color: var(--blue); }
 @media (min-width: 1200px) {
-  /* Desktop: dotted list pinned to the right edge, like the old site */
-  .jump-nav {
-    position: fixed; top: 160px; right: 16px; margin: 0; border: 0; background: none; overflow: visible;
-  }
-  .jump-nav ul { flex-direction: column; align-items: flex-end; gap: 4px; padding: 0; }
-  .jump-nav a { border: 0; padding: 2px 0; font-size: 12px; display: flex; align-items: center; gap: 8px; }
-  .jump-nav a::after { content: ""; width: 9px; height: 9px; border: 2px solid currentColor; border-radius: 50%; }
-  .jump-nav a.is-current { background: none; color: var(--blue); }
-  .jump-nav a.is-current::after { background: currentColor; }
+  /* Desktop: the same pill bar, pinned to the top while you scroll, a touch larger */
+  .jump-nav ul { gap: 8px; padding-block: 12px; }
+  .jump-nav a { padding: 7px 14px; font-size: 14px; }
 }
 
 .work-section { scroll-margin-top: 64px; }
@@ -585,7 +578,6 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
    Promos opens with the full-width Lee Company block; everything else sits in
    pairs. Videos show a still until played (data-lite-embeds="stage" in site.js). */
 .motion-grid .col { max-width: 940px; }
-@media (min-width: 1200px) { .motion-grid .col { max-width: min(940px, calc(100vw - 400px)); } } /* clear the section list on the right */
 /* Pairs from 600px: every iPad and sideways phone gets two columns; phones
    held upright (under ~430px) stay one column. */
 @media (min-width: 600px) {
@@ -1057,7 +1049,6 @@ figure { margin: 0; }
 /* ---- Back-to-top button (added by site.js on every page) ---------------- */
 /* Anchor jumps land below the pinned section bar instead of under it */
 html:has(.jump-nav) { scroll-padding-top: 64px; }
-@media (min-width: 1200px) { html:has(.jump-nav) { scroll-padding-top: 16px; } }
 .to-top {
   position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
   z-index: 40; width: 44px; height: 44px; border: 0; border-radius: 50%;
@@ -1088,7 +1079,7 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
   .jump-nav a { padding: 10px 14px; }
 }
 @media (pointer: coarse) and (min-width: 1200px) {
-  .jump-nav a { padding: 8px 0; font-size: 13px; }
+  .jump-nav a { padding: 10px 16px; }
 }
 
 /* ---- Tablet (iPad portrait ~768–1023px) ------------------------------- */
