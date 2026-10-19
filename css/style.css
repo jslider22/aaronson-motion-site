@@ -569,7 +569,7 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 @media (min-width: 560px) {
   .work--split {
     column-gap: 24px;
-    grid-template-columns: minmax(150px, 23.4%) minmax(0, 1fr); /* tall video ends level with the TV video */
+    grid-template-columns: minmax(150px, 24.6%) minmax(0, 1fr); /* tall video ends level with the TV video */
     grid-template-areas: "tall text" "tall wide" "tall main";
   }
 }
