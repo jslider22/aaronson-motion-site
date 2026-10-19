@@ -576,7 +576,7 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 @media (min-width: 560px) {
   .work--split {
     column-gap: 24px;
-    grid-template-columns: minmax(150px, 30%) minmax(0, 1fr);
+    grid-template-columns: minmax(150px, 23.4%) minmax(0, 1fr); /* tall video ends level with the TV video */
     grid-template-areas: "tall text" "tall wide" "tall main";
   }
 }
@@ -1003,6 +1003,15 @@ figure { margin: 0; }
 .stat-card th{background:#2c4f80}
 .stat-card td{background:#eaf1fa;color:#1f3554;border-top:0}
 .stat-card tbody tr:nth-child(even) td{background:#d3e1f2}
+/* About on phones: a small headshot beside the two buttons, and a small
+   portrait beside the name in the stat card */
+@media (max-width: 759px) {
+  .about__photo { display: grid; grid-template-columns: 110px 1fr; gap: 16px; align-items: center; max-width: none; }
+  .about__photo img { width: 110px; border-radius: 12px; }
+  .about__links { flex-direction: column; align-items: flex-start; margin-top: 0; gap: 8px; }
+  .stat-card__head { grid-template-columns: 88px 1fr; gap: 14px; align-items: start; }
+  .stat-card__head img { width: 88px; }
+}
 /* Now */
 .now-sub{font:400 18px var(--font-brand);color:#2c4f80;margin:4px 0 0}
 .now-sub span{font:13px var(--font-ui);color:var(--muted);letter-spacing:.02em}
