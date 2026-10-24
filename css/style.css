@@ -1090,6 +1090,10 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
 /* Figma prototype frames: light grey border like Figma's own embed code */
 .embed--figma { background: #f5f5f5; border: 6px solid rgba(0, 0, 0, .1); }
 .try-grid .embed--figma { max-width: 600px; margin-inline: auto; }
+/* On phones, give the SkiPS prototype a taller frame so the whole screen fits without scrolling */
+@media (max-width: 759px) {
+  .try-grid .embed--figma { aspect-ratio: 9 / 17 !important; }
+}
 /* Side by side, the SkiPS prototype is exactly as tall as the feature cards beside it */
 @media (min-width: 760px) {
   .try-grid { align-items: stretch; }

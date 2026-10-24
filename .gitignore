@@ -5,3 +5,4 @@ assets-inbox/
 *.aep
 _*.html
 _*.json
+.claude/settings.local.json
