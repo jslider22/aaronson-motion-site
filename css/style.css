@@ -695,6 +695,12 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
   font: 500 12px/1.2 var(--font-ui); letter-spacing: .02em; text-decoration: none;
 }
 .rows .card .shop-links a:hover, .rows .card .shop-links a:focus-visible { background: #2c4f80; color: #fff; }
+@media not all and (hover: hover) and (pointer: fine) {
+  /* touch screens: the links sit under the caption instead of over the artwork */
+  .rows .card .shop-links { position: static; justify-content: flex-start; max-width: none; margin-top: 8px; }
+  .rows .card .shop-links span { color: #4a6283; text-shadow: none; padding-left: 2px; }
+  .rows .card .shop-links a { box-shadow: 0 0 0 1px #d6e0ee; }
+}
 @media (hover: hover) and (pointer: fine) {
   .rows .card .shop-links { opacity: 0; transform: translateY(-4px); transition: opacity .25s, transform .25s; }
   .rows .card:hover .shop-links, .rows .card .shop-links:focus-within { opacity: 1; transform: none; }
