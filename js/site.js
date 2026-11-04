@@ -492,7 +492,15 @@
       big.alt = it.alt;
       cap.textContent = it.cap;
       note.textContent = it.note || "";
-      note.hidden = !it.note;
+      note.hidden = !it.note && !it.shop;
+      if (it.shop) { // merch: store links under the caption
+        it.shop.forEach((s) => {
+          const a = document.createElement("a");
+          a.href = s.href; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Shop on " + s.label;
+          a.className = "lightbox__shop";
+          note.append(a);
+        });
+      }
       count.textContent = set.length > 1 ? (idx + 1) + " / " + set.length : "";
       dlg.classList.toggle("is-single", set.length < 2);
     };
@@ -527,7 +535,10 @@
           if (!img.naturalWidth) return; // still a placeholder
           // every real image in the gallery, loaded yet or not (placeholders are hidden)
           const imgs = [...g.querySelectorAll("img[data-zoomable]")].filter((i) => !i.hidden);
-          open(imgs.map((i) => ({ src: i.currentSrc || i.src, alt: i.alt, cap: captionOf(i) })), imgs.indexOf(img));
+          open(imgs.map((i) => {
+            const sl = i.closest("figure")?.querySelectorAll(".shop-links a");
+            return { src: i.currentSrc || i.src, alt: i.alt, cap: captionOf(i), shop: sl && sl.length ? [...sl].map((a) => ({ href: a.href, label: a.textContent })) : null };
+          }), imgs.indexOf(img));
         });
       });
     });
