@@ -404,6 +404,14 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
 .lightbox::backdrop { background: rgba(10, 16, 26, .92); }
 .lightbox__fig { margin: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 0 16px; }
 .lightbox__fig img { max-width: 100%; max-height: calc(100vh - 140px); width: auto; height: auto; object-fit: contain; border-radius: 3px; }
+.lightbox__sheet { display: flex; justify-content: center; max-width: 100%; min-height: 0; }
+.lightbox.is-drafting .lightbox__sheet {
+  padding: 24px; border-radius: 6px; background-color: #f7f4ec;
+  background-image: linear-gradient(rgba(79, 143, 216, .10) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(79, 143, 216, .10) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.lightbox.is-drafting .lightbox__fig img { mix-blend-mode: multiply; max-height: calc(100vh - 188px); }
 .lightbox__fig figcaption { display: flex; gap: 16px; align-items: baseline; justify-content: center; flex-wrap: wrap; margin-top: 12px; padding: 0 12px; text-align: center; font: 14px/1.5 var(--font-body); }
 .lightbox__note { flex-basis: 100%; max-width: 820px; margin: 2px auto 0; color: #e6eef8; font: italic 300 15px/1.55 var(--font-body); }
 .lightbox__note[hidden] { display: none; }

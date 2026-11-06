@@ -467,7 +467,7 @@
     dlg.innerHTML =
       '<button type="button" class="lightbox__close" aria-label="Close">×</button>' +
       '<button type="button" class="lightbox__nav lightbox__nav--prev" aria-label="Previous image">‹</button>' +
-      '<figure class="lightbox__fig"><img alt=""><figcaption><span class="lightbox__cap"></span><span class="lightbox__count"></span><span class="lightbox__note"></span></figcaption></figure>' +
+      '<figure class="lightbox__fig"><span class="lightbox__sheet"><img alt=""></span><figcaption><span class="lightbox__cap"></span><span class="lightbox__count"></span><span class="lightbox__note"></span></figcaption></figure>' +
       '<button type="button" class="lightbox__nav lightbox__nav--next" aria-label="Next image">›</button>';
     document.body.append(dlg);
     const big = dlg.querySelector("img");
@@ -507,6 +507,7 @@
     const open = (items, start, frames) => {
       set = items;
       dlg.classList.toggle("is-frames", !!frames);
+      dlg.classList.toggle("is-drafting", !!(items[0] && items[0].drafting)); // Line Drawings: keep the paper behind the drawing
       show(start);
       dlg.showModal();
     };
@@ -537,7 +538,7 @@
           const imgs = [...g.querySelectorAll("img[data-zoomable]")].filter((i) => !i.hidden);
           open(imgs.map((i) => {
             const sl = i.closest("figure")?.querySelectorAll(".shop-links a");
-            return { src: i.currentSrc || i.src, alt: i.alt, cap: captionOf(i), shop: sl && sl.length ? [...sl].map((a) => ({ href: a.href, label: a.textContent })) : null };
+            return { src: i.currentSrc || i.src, alt: i.alt, cap: captionOf(i), drafting: g.classList.contains("drafting"), shop: sl && sl.length ? [...sl].map((a) => ({ href: a.href, label: a.textContent })) : null };
           }), imgs.indexOf(img));
         });
       });
