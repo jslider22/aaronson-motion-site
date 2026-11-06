@@ -720,6 +720,16 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 }
 figure { margin: 0; }
 
+/* Line Drawings: each drawing sits on drafting paper; the drawing itself is untouched
+   (multiply lets only its white paper show the grid, the black lines stay as drawn) */
+.rows.drafting .card {
+  padding: 16px; background-color: #f7f4ec; box-shadow: 0 0 0 1px #e6e0cf;
+  background-image: linear-gradient(rgba(79, 143, 216, .10) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(79, 143, 216, .10) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.rows.drafting .card > img { mix-blend-mode: multiply; box-shadow: none; }
+
 /* ==========================================================================
    Page: Storyboards
    ========================================================================== */
