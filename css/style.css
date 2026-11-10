@@ -890,7 +890,7 @@ figure { margin: 0; }
 
 /* Case studies alternate white and the light band, straight edges */
 .case { padding: 48px 0; font-family: var(--font-body); scroll-margin-top: 64px; }
-#autoexpreso, #opentoon { background: #f2f5fa; }
+#skips, #navient { background: #f2f5fa; }
 /* Case titles: brand font with the motion trail under them, like the page titles */
 .case h2 { font: 400 clamp(30px, 4vw, 38px)/1.15 var(--font-brand); color: #2c4f80; margin: 0 0 18px; }
 .case h2::after {
