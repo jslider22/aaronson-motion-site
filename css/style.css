@@ -780,6 +780,7 @@ figure { margin: 0; }
   display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 0;
   scrollbar-width: none; background: #fff; border-radius: 8px; outline-offset: 4px;
 }
+.carousel__track { overflow-y: hidden; overscroll-behavior-x: contain; }
 .carousel__track::-webkit-scrollbar { display: none; }
 .carousel__track > * { flex: 0 0 100%; scroll-snap-align: start; padding: 16px; }
 .carousel__btn {
