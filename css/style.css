@@ -854,6 +854,9 @@ figure { margin: 0; }
 .sb-project h3 { margin: 0 0 12px; font: 400 18px var(--font-body); color: #222; text-align: center; }
 .sb-project .carousel { max-width: none; padding-inline: 56px; }
 .carousel--light .carousel__track > * { padding: 8px; }
+/* Fit: the box follows the current page's height (pages keep their own height) */
+.carousel--fit .carousel__track { align-items: flex-start !important; transition: height .35s ease; }
+@media (prefers-reduced-motion: reduce) { .carousel--fit .carousel__track { transition: none; } }
 .carousel--light .carousel__track { background: #3a3a3a; align-items: center; }
 .carousel--light .carousel__track img { width: 100%; height: auto; border-radius: 4px; }
 .carousel--light .carousel__btn { background: #e9eef6; color: #1f3554; }

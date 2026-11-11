@@ -691,8 +691,11 @@
     });
     c.append(bar);
     const count = bar.querySelector(".carousel__count");
+    // .carousel--fit: the box takes the height of the page it shows
+    const fit = c.classList.contains("carousel--fit");
     const sync = () => {
       const i = at();
+      if (fit) track.style.height = pages[i].offsetHeight + "px";
       count.textContent = (i + 1) + " / " + pages.length;
       dots.querySelectorAll("button").forEach((d, j) => d.setAttribute("aria-current", j === i ? "true" : "false"));
       if (prev) prev.disabled = i === 0;
@@ -701,6 +704,7 @@
     let q = false;
     track.addEventListener("scroll", () => { if (!q) { q = true; requestAnimationFrame(() => { q = false; sync(); }); } }, { passive: true });
     window.addEventListener("resize", sync);
+    if (fit) pages.forEach((p) => p.querySelectorAll("img").forEach((im) => im.addEventListener("load", sync)));
     sync();
   });
 
