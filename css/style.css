@@ -484,13 +484,15 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
   .home-stage > .rule-label { margin-bottom: 18px; }
 }
 /* Services on a light band across the window, like the Motion Design sections */
-.home-band { position: relative; isolation: isolate; margin-top: 48px; padding: 36px 0 48px; }
+/* Home sections below the reel: equal space above each label and between the
+   label and its content. Only the featured case study sits on the light band. */
+.home-sec { padding: 44px 0; }
+.home-sec > .rule-label { margin: 0 0 44px; }
+.home-band { position: relative; isolation: isolate; }
 .home-band::before {
   content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%);
   background: #f2f5fa; border-top: 1px solid #e3e9f2; border-bottom: 1px solid #e3e9f2;
 }
-.home-band > .rule-label { margin-top: 0; }
-.home-band + .rule-label { margin-top: 44px; }
 /* Home: featured case study card (Design to Motion) */
 .feature-card { display: grid; gap: 16px; max-width: 820px; margin: 0 auto 8px; text-decoration: none; color: inherit; }
 .feature-card img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 8px 24px rgba(20, 40, 80, .12); transition: transform .3s; }
@@ -501,6 +503,13 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 @media (hover: hover) { .feature-card:hover img { transform: translateY(-3px); } .feature-card:hover .feature-card__cta { text-decoration: underline; } }
 @media (min-width: 680px) { .feature-card { grid-template-columns: 1.4fr 1fr; align-items: center; gap: 32px; } }
 @media (prefers-reduced-motion: reduce) { .feature-card img { transition: none; } }
+/* Home below the reel alternates: Services on the light band, Featured on white,
+   Worked With on the light band again. */
+.home-feature { padding-bottom: 64px; } /* a little more room under the image */
+.home-feature .feature-card { margin-bottom: 0; }
+.home-clients + .connect { margin-top: 0; }
+/* Services cards sit on white now, so a soft shadow keeps them reading as cards */
+.home-sec:not(.home-band) .svc-card { box-shadow: 0 2px 10px rgba(20, 40, 80, .07); }
 /* Demo reel on a deep navy stage across the window. Spacing keeps the logo
    artwork centred between the menu bar and the stage (the logo box has a
    negative bottom margin and empty space around the drawing). */
@@ -522,8 +531,6 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
               linear-gradient(var(--blue-light), var(--blue-light)) 31px 0 / 26px 4px no-repeat;
 }
 .home-stage .home-reel .embed { border-color: rgba(0, 0, 0, .5); }
-.home-stage + .home-band { margin-top: 0; }
-.home-stage + .home-band::before { border-top: 0; }
 .home-reel .embed { border-color: #2c4f80; }
 
 .clients {
