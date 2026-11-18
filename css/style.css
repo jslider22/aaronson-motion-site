@@ -569,7 +569,7 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
    Phones: title/text across the top, tall video beside the two wide videos. */
 .work--split {
   display: grid; gap: 14px 16px; align-items: start;
-  grid-template-columns: minmax(0, 34%) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 20.4%) minmax(0, 1fr); /* tall video ends level with the TV video, no gap below */
   grid-template-areas: "text text" "tall wide" "tall main";
   grid-template-rows: auto auto 1fr;
 }
