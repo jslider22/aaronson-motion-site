@@ -807,6 +807,31 @@
     }, { rootMargin: "-30% 0px -60% 0px" });
     map.forEach((_, sec) => io.observe(sec));
   }
+  /* ---- 7b. Desktop: pin the header's menu row (see CSS) ------------------ */
+  const hdr = document.querySelector(".site-header"), hdrTop = hdr && hdr.querySelector(".site-header__top");
+  if (hdrTop) {
+    const pin = () => {
+      const r = document.documentElement.style;
+      r.setProperty("--hdr-top", -hdrTop.offsetHeight + "px");
+      r.setProperty("--hdr-pin", hdr.offsetHeight - hdrTop.offsetHeight + "px");
+    };
+    pin();
+    window.addEventListener("resize", pin);
+    // Logo mark at the left of the pinned menu, shown once the logo row is gone.
+    const navList = hdr.querySelector(".site-nav > ul");
+    if (navList) {
+      const li = document.createElement("li");
+      li.className = "nav-mark";
+      li.setAttribute("aria-hidden", "true");
+      li.innerHTML = '<span><img src="assets/images/brand/logo-mark.png" alt="" width="26" height="18"></span>';
+      navList.prepend(li);
+      let q = false;
+      const stuck = () => { q = false; hdr.classList.toggle("is-stuck", window.scrollY > hdrTop.offsetHeight - 1); };
+      window.addEventListener("scroll", () => { if (!q) { q = true; requestAnimationFrame(stuck); } }, { passive: true });
+      stuck();
+    }
+    if (document.fonts) document.fonts.ready.then(pin);
+  }
   /* ---- 8. Back-to-top button --------------------------------------------- */
   // Appears once you've scrolled about a screen and a half; one per page,
   // built here so no page needs extra markup.

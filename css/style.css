@@ -149,7 +149,7 @@ p { margin: 0 0 1em; }
   .nav-toggle { display: none; }
   .site-nav { display: block; border-top: 0; padding: 0; }
   /* Menu spread evenly across the bar; the current page is white with a thin blue line under it */
-  .site-nav > ul { display: flex; justify-content: space-between; margin-inline: -12px; }
+  .site-nav > ul { display: flex; justify-content: space-around; margin-inline: -12px; }
   .site-nav > ul > li { position: relative; }
   .site-nav > ul > li > a { position: relative; padding: 12px; font-size: 14px; line-height: 1.2; color: #bbb; transition: color .2s; }
   .site-nav > ul > li > a[aria-current="page"], .site-nav > ul > .is-active > a { color: #fff; }
@@ -1172,3 +1172,29 @@ html:has(.jump-nav) { scroll-padding-top: 64px; }
 }
 @media (min-width: 560px) { .design-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 900px) { .design-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 48px; } }
+
+/* Desktop only: the menu row stays pinned while scrolling so another page is always
+   one click away; the logo row above it scrolls away. site.js measures the rows
+   (--hdr-top, --hdr-pin). Starts where the desktop menu row appears (768px);
+   narrower screens keep the header scrolling away. */
+@media (min-width: 768px) {
+  .site-header { position: sticky; top: var(--hdr-top, -97px); }
+  .jump-nav { top: var(--hdr-pin, 41px); }
+  html { scroll-padding-top: var(--hdr-pin, 41px); }
+  html:has(.jump-nav) { scroll-padding-top: calc(var(--hdr-pin, 41px) + 64px); }
+  .work-section, .case { scroll-margin-top: calc(var(--hdr-pin, 41px) + 64px); }
+  /* Once the logo row has scrolled away, a small logo mark slides in at the
+     left of the pinned menu (built by site.js). */
+  /* The mark sits at the left end of the row; when it appears the row makes a
+     little room for it (padding), so the links shift only slightly and the mark
+     doesn't take a full share of the spacing. */
+  .site-nav > ul { position: relative; transition: padding-left .3s; }
+  .site-header.is-stuck .site-nav > ul { padding-left: 42px; }
+  .site-nav > ul > li.nav-mark { position: absolute; left: 12px; top: 0; bottom: 0; display: flex; align-items: center; opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .site-header.is-stuck .site-nav > ul > li.nav-mark { opacity: 1; }
+  .nav-mark img { width: 26px; max-width: none; height: auto; display: block; }
+  /* The menu is always in reach on these screens, so no back-to-top button. */
+  .to-top { display: none !important; }
+}
+@media (max-width: 767px) { .site-nav > ul > li.nav-mark { display: none; } }
+@media (prefers-reduced-motion: reduce) { .nav-mark, .site-nav > ul { transition: none !important; } }
