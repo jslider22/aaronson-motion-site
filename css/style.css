@@ -491,6 +491,16 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 }
 .home-band > .rule-label { margin-top: 0; }
 .home-band + .rule-label { margin-top: 44px; }
+/* Home: featured case study card (Design to Motion) */
+.feature-card { display: grid; gap: 16px; max-width: 820px; margin: 0 auto 8px; text-decoration: none; color: inherit; }
+.feature-card img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 8px 24px rgba(20, 40, 80, .12); transition: transform .3s; }
+.feature-card__text { display: flex; flex-direction: column; gap: 8px; }
+.feature-card__title { font: 400 26px var(--font-brand); color: var(--blue); }
+.feature-card__sub { font-size: 16px; line-height: 1.6; color: #555; }
+.feature-card__cta { font-size: 15px; color: var(--blue-light); }
+@media (hover: hover) { .feature-card:hover img { transform: translateY(-3px); } .feature-card:hover .feature-card__cta { text-decoration: underline; } }
+@media (min-width: 680px) { .feature-card { grid-template-columns: 1.4fr 1fr; align-items: center; gap: 32px; } }
+@media (prefers-reduced-motion: reduce) { .feature-card img { transition: none; } }
 /* Demo reel on a deep navy stage across the window. Spacing keeps the logo
    artwork centred between the menu bar and the stage (the logo box has a
    negative bottom margin and empty space around the drawing). */
