@@ -506,7 +506,8 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 /* Home below the reel alternates: Services on the light band, Featured on white,
    Worked With on the light band again. */
 .home-feature { padding-bottom: 64px; } /* a little more room under the image */
-.home-feature .feature-card { margin-bottom: 0; }
+.home-feature .feature-card { margin-bottom: 0; max-width: 1080px; }
+@media (min-width: 680px) { .home-feature .feature-card { grid-template-columns: 2fr 1fr; gap: 40px; } }
 .home-clients + .connect { margin-top: 0; }
 /* Services cards sit on white now, so a soft shadow keeps them reading as cards */
 .home-sec:not(.home-band) .svc-card { box-shadow: 0 2px 10px rgba(20, 40, 80, .07); }
