@@ -448,6 +448,7 @@
     img.addEventListener("load", () => { img.hidden = false; box.remove(); delete img.dataset.slotted; }, { once: true });
   }
   document.querySelectorAll("img").forEach((img) => {
+    if (!img.getAttribute("src")) return; // lazy frames (data-src) load later; not missing
     if (img.complete && img.naturalWidth === 0) toSlot(img);
     else img.addEventListener("error", () => toSlot(img), { once: true });
   });
