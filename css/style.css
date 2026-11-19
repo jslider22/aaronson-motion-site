@@ -755,6 +755,12 @@ figure { margin: 0; }
   background-size: 20px 20px;
 }
 .rows.drafting .card > img { mix-blend-mode: multiply; box-shadow: none; }
+/* Phones: the tall, thin drawings made cards narrower than their tool pill, so each card
+   keeps enough width for its caption (the row reflows; the drawing is only resized) */
+@media (max-width: 767px) {
+  .rows.drafting .card { min-width: 132px; padding: 12px; }
+  .rows.drafting figcaption small { max-width: 100%; }
+}
 
 /* ==========================================================================
    Page: Storyboards
