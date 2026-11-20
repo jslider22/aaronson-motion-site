@@ -1,24 +1,24 @@
-# Jonny Aaronson — Aaronson Motion
+# Jonny Aaronson | Aaronson Motion
 
-> Jonathan (Jonny) Aaronson is a Senior Motion Designer, Video Editor and UX Designer based in the Boston, MA area, working as Aaronson Motion since 2008. His work spans 2D/3D animation, motion graphics, visual effects, video editing, storyboarding and UX design for film/TV, marketing, education, healthcare, gaming and web clients. His video and animation work has appeared at the Grand Ole Opry in Nashville and on the Nasdaq Tower in Times Square, and at professional sporting events, including New York Mets and Nashville Predators games, and at large conferences. He holds a B.S. in Media Arts & Animation and a certificate in UX Design, and has taught motion design as a professor.
+> Jonny Aaronson is a Boston-area Motion Designer specializing in animation, video editing, visual effects and UI/UX integration. He brings technical proficiency and creative vision to multimedia projects across digital platforms, from motion and editing through sound design, working in After Effects, Cinema 4D, Blender, Premiere Pro, Illustrator and Figma, along with Logic Pro for audio and AI tools like Claude Code and Lovable. He has worked as Aaronson Motion since 2008. His credits include being part of a VFX team that earned an Academy Award nomination for Transformers: Dark of the Moon. His animations have appeared on the Nasdaq Tower in Times Square, at the Grand Ole Opry, and at New York Mets and Nashville Predators games. He has created work for Harvard Business School and FanDuel, and drove marketing campaigns at Northeastern University that boosted tuition revenue by $3.4B. He also led motion initiatives at Navient, contributing to $2B contracts, and received the Navient Team Leadership Award for his role in a website redesign. He has taught motion design at the college level and led animation instruction for young students, and enjoys helping emerging designers grow. He holds a B.S. in Media Arts & Animation and a certificate in UX Design.
 
 Last updated: 2026-11-20
 
 ## Work
 
 - [Home](https://aaronsonmotion.com/): Demo reel, services and the clients he has worked with.
-- [Motion Design](https://aaronsonmotion.com/motion-design.html): Promos, ads, explainers, logo and title animation, social media, courses and animated GIFs.
-- [VFX & Video Editing](https://aaronsonmotion.com/vfx-video-editing.html): Visual effects and video editing work.
-- [Design](https://aaronsonmotion.com/design.html): Overview of the design work: UX, storyboards, 2D and 3D design, line drawings and fine art.
-- [UX Design](https://aaronsonmotion.com/ux-design.html): Case studies: Design to Motion (D2M), SkiPS, AutoExpreso, Navient.com and OpenToon.
-- [2D Design](https://aaronsonmotion.com/2d-design.html): Logos, t-shirt designs, album art, game art and print.
-- [3D Design](https://aaronsonmotion.com/3d-design.html): 3D modeling, lighting and rendering.
-- [Storyboards](https://aaronsonmotion.com/storyboards.html): Storyboards and animatic boards for conference, promo and explainer videos.
-- [Line Drawings](https://aaronsonmotion.com/line-drawings.html): Technical drawings of light fixtures and housings, and architectural pre-construction drawings.
-- [Fine Art](https://aaronsonmotion.com/fine-art.html): Drawings and figure studies.
-- [About](https://aaronsonmotion.com/about.html): Bio, background and a fantasy-themed stat sheet.
-- [Now](https://aaronsonmotion.com/now.html): What Jonny has been doing lately.
-- [Resume](https://aaronsonmotion.com/resume.html): Experience, skills and software, with PDF and Word downloads.
+- [Motion Design](https://aaronsonmotion.com/motion-design): Promos, ads, explainers, logo and title animation, social media, courses and animated GIFs.
+- [VFX & Video Editing](https://aaronsonmotion.com/vfx-video-editing): Visual effects and video editing work.
+- [Design](https://aaronsonmotion.com/design): Overview of the design work: UX, storyboards, 2D and 3D design, line drawings and fine art.
+- [UX Design](https://aaronsonmotion.com/ux-design): Case studies: Design to Motion (D2M), SkiPS, AutoExpreso, Navient.com and OpenToon.
+- [2D Design](https://aaronsonmotion.com/2d-design): Logos, t-shirt designs, album art, game art and print.
+- [3D Design](https://aaronsonmotion.com/3d-design): 3D modeling, lighting and rendering.
+- [Storyboards](https://aaronsonmotion.com/storyboards): Storyboards and animatic boards for conference, promo and explainer videos.
+- [Line Drawings](https://aaronsonmotion.com/line-drawings): Technical drawings of light fixtures and housings, and architectural pre-construction drawings.
+- [Fine Art](https://aaronsonmotion.com/fine-art): Drawings and figure studies.
+- [About](https://aaronsonmotion.com/about): Bio, background and a fantasy-themed stat sheet.
+- [Now](https://aaronsonmotion.com/now): What Jonny has been doing lately.
+- [Resume](https://aaronsonmotion.com/resume): Experience, skills and software, with PDF and Word downloads.
 
 ## Contact
 

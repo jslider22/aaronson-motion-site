@@ -448,6 +448,9 @@ img + .slot, .slot--img { aspect-ratio: var(--ar, 4 / 3); height: auto; }
 .home-logo { padding-top: 22px; text-align: center; }
 .home-logo .lottie { width: min(220px, 50vw); aspect-ratio: 1; margin: -18px auto -22px; } /* logo renders ~178×150 on desktop (Wix was 258×218) */
 .home-logo .slot { width: 100%; height: 100%; }
+/* One-line intro under the logo: who Jonny is (same core line as About and the meta) */
+.home-intro { max-width: 46em; margin: 14px auto 0; padding: 0 8px; text-align: center; font: 400 16px/1.6 var(--font-body); color: #4a5568; text-wrap: balance; }
+.home-intro i { font-style: italic; }
 
 /* Home intro: main stays hidden until site.js has zoomed it in on the logo.
    If the script never runs, the page appears anyway after 3s. */
@@ -476,9 +479,9 @@ html.intro #main { opacity: 0; animation: intro-failsafe .01s 3s forwards; }
 
 .home-reel { max-width: 1000px; margin: 0 auto; }
 /* Desktop: size the reel to the window so all of it shows without scrolling
-   (it starts ~390–445px down: menu bar, logo, label). Never smaller than 520px. */
+   (it starts ~450–505px down: menu bar, logo, intro line, label). Never smaller than 460px. */
 @media (min-width: 900px) and (min-height: 500px) {
-  .home-reel { max-width: clamp(520px, calc((100vh - 456px) * 16 / 9), 1000px); }
+  .home-reel { max-width: clamp(460px, calc((100vh - 516px) * 16 / 9), 1000px); }
   .home-logo .lottie { width: min(220px, 50vw, 24vh); }
   .home-stage { margin-top: 14px; padding-top: 24px; }
   .home-stage > .rule-label { margin-bottom: 18px; }
