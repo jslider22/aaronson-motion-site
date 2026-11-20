@@ -1038,4 +1038,28 @@
     };
     start();
   }
+
+  /* ---- 12. Arriving with a #section link ---------------------------------
+     Coming from another page (e.g. the homepage case study card), the
+     browser can lose the jump while the page is still laying out. Jump
+     again once it's ready, unless the visitor has already scrolled. */
+  if (location.hash.length > 1) {
+    let target = null;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { /* bad hash */ }
+    if (target) {
+      let moved = false;
+      const stop = () => { moved = true; };
+      ["wheel", "touchstart", "keydown"].forEach((t) => window.addEventListener(t, stop, { once: true, passive: true }));
+      const jump = () => {
+        if (moved) return;
+        const root = document.documentElement, prev = root.style.scrollBehavior;
+        root.style.scrollBehavior = "auto";
+        target.scrollIntoView();
+        root.style.scrollBehavior = prev;
+      };
+      requestAnimationFrame(jump);
+      if (document.readyState === "complete") setTimeout(jump, 50);
+      else window.addEventListener("load", () => setTimeout(jump, 50), { once: true });
+    }
+  }
 })();
